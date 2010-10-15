@@ -17,6 +17,7 @@
 		<copy todir="${release.dir}">
 			<fileset dir=".">
 				<include name="**/*.php" />
+				<include name=".htaccess" />
 			</fileset>
 		</copy>
 	</target>
