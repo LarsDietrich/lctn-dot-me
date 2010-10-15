@@ -1,5 +1,5 @@
 <?php 
 
-echo("404 - Page not found");
+echo("The short url you supplied does not exist");
 
 ?>
