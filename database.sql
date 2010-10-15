@@ -11,6 +11,7 @@ CREATE TABLE `url` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `longurl` varchar(100) NOT NULL,
   `shorturl` varchar(30) NOT NULL,
+  `created` int(11) NOT NULL,
   `openid` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

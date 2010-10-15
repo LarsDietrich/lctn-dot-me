@@ -33,7 +33,7 @@ function getShortUrl($longUrl) {
 	$id = rand(10000,99999);
 	$shorturl = base_convert($id,20,36);
 	$now = microtime(true) * 1000;
-	$query = "insert into url (longurl, shorturl, openid) values ('" . $longurl . "','" . $shorturl . "', 'TEST')";
+	$query = "insert into url (longurl, shorturl, openid, created) values ('" . $longurl . "','" . $shorturl . "', 'TEST', $now)";
 	$sql->execute($query);
 	return $shorturl;
 }
