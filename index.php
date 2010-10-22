@@ -85,6 +85,8 @@
 			      map: map
 			  });
 
+			  setNewMarker(myLatlng);
+			  
 			  jx.load("nearest.php?lat=" + myLatlng.lat() + "&lng=" + myLatlng.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
 
 			  google.maps.event.addListener(map, 'click', function(event) {
