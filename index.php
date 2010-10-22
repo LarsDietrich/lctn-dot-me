@@ -91,7 +91,7 @@
 			  google.maps.event.addListener(map, 'click', function(event) {
 
 				  latLng = event.latLng
-				  url = "http://test.lctn.me/map.php?lat=" + event.latLng.lat() + "&lng=" + event.latLng.lng();
+				  url = "http://test.lctn.me/?lat=" + event.latLng.lat() + "&lng=" + event.latLng.lng();
 				  jx.load("shrink.php?url=" + escape(url), function(data) { document.getElementById('url').innerHTML=data; });
 				  jx.load("nearest.php?lat=" + event.latLng.lat() + "&lng=" + event.latLng.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
 
