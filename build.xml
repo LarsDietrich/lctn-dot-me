@@ -18,6 +18,9 @@
 			<fileset dir=".">
 				<include name="**/*.php" />
 				<include name=".htaccess" />
+				<include name="**/*.js"/>
+				<include name="**/*.css"/>
+				<include name="**/*.png"/>
 			</fileset>
 		</copy>
 	</target>
