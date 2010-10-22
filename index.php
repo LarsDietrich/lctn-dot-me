@@ -20,9 +20,10 @@
 			var map;
 			var streetview;
 			var panorama;
-			var latLng;
+			var location;
 			var position;
 			var sv = new google.maps.StreetViewService();
+  		    var geocoder;
 
 //			var initialLocation;
 //			var browserSupportFlag =  new Boolean();
@@ -70,8 +71,6 @@
 			function showMap(lat, lng) { 
 
 			  var myLatlng = new google.maps.LatLng(lat, lng);
-
-			  latLng = myLatlng;
 			  
 			  var myOptions = {
 			    zoom: 10,
@@ -89,17 +88,7 @@
 			  jx.load("nearest.php?lat=" + myLatlng.lat() + "&lng=" + myLatlng.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
 
 			  google.maps.event.addListener(map, 'click', function(event) {
-
-				  latLng = event.latLng
-				  url = "http://test.lctn.me/?lat=" + event.latLng.lat() + "&lng=" + event.latLng.lng();
-				  jx.load("shrink.php?url=" + escape(url), function(data) { document.getElementById('url').innerHTML=data; });
-				  jx.load("nearest.php?lat=" + event.latLng.lat() + "&lng=" + event.latLng.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
-
-				  setNewMarker(event.latLng)
-				  
-				  sv.getPanoramaByLocation(latLng, 50, processSVData);
-				  clearMessage();
-				  map.setCenter(event.latLng);
+				setNewMarker(event.latLng);				
 			  });
 
 			  var panoOptions = {
@@ -112,16 +101,26 @@
   			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
 
   			  google.maps.event.addListener(panorama, 'position_changed', function() {
-				setNewMarker(event.latLng);  			      
+  				setNewMarker(event.latLng);  			      
     			map.setCenter(event.latLng);
   			  });
 
 			}
 
 			function setNewMarker(latLng) {
-			  position.setMap(null);
-			  position.setPosition(latLng);
-			  position.setMap(map);
+
+				  url = "http://test.lctn.me/?lat=" + latLng.lat() + "&lng=" + latLng.lng();
+				  jx.load("shrink.php?url=" + escape(url), function(data) { document.getElementById('url').innerHTML=data; });
+				  jx.load("nearest.php?lat=" + latLng.lat() + "&lng=" + latLng.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
+
+				  position.setMap(null);
+				  position.setPosition(latLng);
+				  position.setMap(map);
+				  
+				  sv.getPanoramaByLocation(latLng, 50, processSVData);
+				  clearMessage();
+				  map.setCenter(latLng);
+
 			}
 
 			
@@ -136,7 +135,9 @@
 			        zoom: 1
 			      });
 				  panorama.setVisible(true);
-				  setNewMarker(data.location.latLng);
+				  position.setMap(null);
+				  position.setPosition(data.location.latLng);
+				  position.setMap(map);
 			  	} else {
 				  message = "Streetview not available at this location";
 				  jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
@@ -148,6 +149,21 @@
 				document.getElementById('message').innerHTML="";
 			}
 
+
+			function codeAddress() {
+			  geocoder = new google.maps.Geocoder();
+			  var address = document.getElementById("address").value;
+			  geocoder.geocode( { 'address': address}, function(results, status) {
+			    if (status == google.maps.GeocoderStatus.OK) {
+			      map.setCenter(results[0].geometry.location);
+				  setNewMarker(results[0].geometry.location);
+			    } else {
+				  message = "Geocode was not successful for the following reason: " + status;
+				  jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
+			    }
+			  });
+			}
+		
 		</script>
 	
 	</head>
@@ -155,6 +171,10 @@
 	<body onload="load()" onunload="GUnload()">
 		
 		<div class="container">
+			<div class="span-24">
+				<input type="text" class="title" name="address" id="address" value="Search for a place"/>
+				 <input type="button" value="Encode" onclick="codeAddress()"/>
+			</div>
 			<div class="span-24">
 			&nbsp;
 			</div>
