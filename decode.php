@@ -2,7 +2,7 @@
 
 require("includes/functions.php");
 
-$url= mysql_escape_string($_GET["decode"]);
+$_url= mysql_escape_string($_GET["decode"]);
 $_longUrl = getLongUrl($_url);
 
 if ($_longUrl == "") {
