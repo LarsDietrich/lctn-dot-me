@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `url`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `url` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `longurl` varchar(100) NOT NULL,
+  `longurl` varchar(200) NOT NULL,
   `shorturl` varchar(30) NOT NULL,
   `created` int(11) NOT NULL,
   `openid` varchar(200) NOT NULL,

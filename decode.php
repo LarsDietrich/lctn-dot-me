@@ -3,13 +3,13 @@
 require("includes/functions.php");
 
 $url= mysql_escape_string($_GET["decode"]);
-$longUrl = getLongUrl($url);
+$_longUrl = getLongUrl($_url);
 
-if ($longUrl == "") {
-	$longUrl = "404.php";
+if ($_longUrl == "") {
+	$_longUrl = "404.php";
 } 
 
-header("location:$longUrl");
+header("location:$_longUrl");
 
 
 ?>
