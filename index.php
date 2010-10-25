@@ -33,7 +33,6 @@
 //			var browserSupportFlag =  new Boolean();
 
 			function load() {
-				document.getElementById('url').innerHTML="<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h2>";
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
@@ -275,6 +274,7 @@
 			</div>
 			<div class="span-22">
 				<div id="url">
+					<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h3>
 				</div>
 			</div>
 			<div class="span-2 last">
@@ -293,7 +293,7 @@
 			<div class="span-3">
 				<div id="facebook">
 					<a href="http://www.facebook.com/sharer.php?u=" target="_blank">
-						<img height="80px" width="80px" border="0" src="images/facebook.jpg" alt="Twitter"></img>
+						<img height="80px" width="80px" border="0" src="images/facebook.jpg" alt="Facebook"></img>
 					</a>
 				</div>
 			</div>
