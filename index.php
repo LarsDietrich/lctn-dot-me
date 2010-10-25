@@ -34,13 +34,11 @@
 
 			function load() {
 				document.getElementById('url').innerHTML="<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h2>";
-
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-
 				if (latitude == 999 || longitude == 999) {
 					locateMeAndShowMap();
 				} else {
@@ -75,23 +73,20 @@
 			
 			// Show map at latitiude and longitude
 			function showMap(lat, lng) { 
-
 			  selectedLocation = new google.maps.LatLng(lat, lng);
-
 			  var myOptions = {
 			    zoom: zoom,
 			    center: selectedLocation,
 			    mapTypeId: google.maps.MapTypeId.ROADMAP,
 			    streetViewControl: false
 			  }
-			  
-			  map = new google.maps.Map(document.getElementById("map"), myOptions);
 
+			  map = new google.maps.Map(document.getElementById("map"), myOptions);
 			  position = new google.maps.Marker({
 			      position: selectedLocation, 
 			      map: map
 			  });
-				
+
 			  var panoOptions = {
 			      navigationControl: true,
 				  navigationControlOptions: {
@@ -122,13 +117,10 @@
 
   			  repositionMarker();
 	  			  
-			  //jx.load("more_info.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
-
 			}
 
 			// Moves the marker to a new location, saves the location to the database
 			function repositionMarker() {
-//				  jx.load("nearest.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) { document.getElementById('nearest').innerHTML=data; });
 			  position.setMap(null);
 			  position.setPosition(selectedLocation);
 			  position.setMap(map);
@@ -210,13 +202,29 @@
 				  root = "http://test.lctn.me/";
 				  longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				  shorturl = "";
-				  jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById('url').innerHTML=data; });
-				}
+				  jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(data); updateSocialBar(data); });
+			  }
+
+			  function updateUrl(link) {
+				  data = "<h3 class='info'>http://test.lctn.me/" + link + "</h3>"; 
+				  document.getElementById("url").innerHTML=data;
+		      }
+
+			  function updateSocialBar(link) {
+					data = "<a href=\"http://twitter.com/home/?status=";
+					data = data + "Find me here! http://test.lctn.me/" + link + "\"";
+					data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/twitter.jpg\" alt=\"Twitter\"></img></a>";
+					document.getElementById("twitter").innerHTML=data;
+					data = "<a href=\"http://www.facebook.com/sharer.php?u=";
+					data = data + "Find me here! http://test.lctn.me/" + link + "\"";
+					data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/facebook.jpg\" alt=\"Facebook\"></img></a>";
+					document.getElementById("facebook").innerHTML=data;
+			  }
 
 		</script>
 	
 	</head>
-	
+
 	<body onload="load()" onunload="GUnload()">
 		<div class="container">
 			<div class="span-24">
@@ -224,11 +232,15 @@
 			</div>			
 			<div class="span-10">
 				<input type="text" class="title" name="address" id="address" value="Search for a place" onkeypress="if (event.keyCode == 13) { codeAddress(); }"/>
-				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Find" onclick="codeAddress()"/>
+				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="codeAddress()"/>
 			</div>
-			<div class="span-14 last">
+			<div class="span-12">
 			&nbsp;
 			</div>
+			<div class="span-2 last">
+			<b>ALPHA</b>
+			</div>			
+			
 <!-- 
 			<div class="span-3">
 				<h3>Custom URL</h3>
@@ -266,8 +278,29 @@
 				</div>
 			</div>
 			<div class="span-2 last">
-				<input style="height: 45px" type="button" name="generate" value="Generate" onclick="shortenUrl()"/>
+				<input style="height: 45px" type="button" name="generate" value="Generate" onclick="shortenUrl();"/>
 			</div>
+			<div class="span-4">
+			<h1 class="info">Share</h1>
+			</div>
+			<div class="span-3 prepend-1">
+				<div id="twitter">
+					<a href="http://twitter.com/home/?status=" target="_blank">
+						<img height="80px" width="80px" border="0" src="images/twitter.jpg" alt="Twitter"></img>
+					</a>
+				</div>
+			</div>
+			<div class="span-3">
+				<div id="facebook">
+					<a href="http://www.facebook.com/sharer.php?u=" target="_blank">
+						<img height="80px" width="80px" border="0" src="images/facebook.jpg" alt="Twitter"></img>
+					</a>
+				</div>
+			</div>
+			
+			<div class="span-18 last">
+			</div>
+			
 		</div>
 
 

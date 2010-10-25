@@ -3,7 +3,8 @@ require("includes/sql.php");
 
 $result = getShortUrl($_GET["url"], $_GET["shorturl"]);
 
-echo "<h3 class='info'>http://test.lctn.me/" . $result . "</h3>";
+//echo "<h3 class='info'>http://test.lctn.me/" . $result . "</h3>";
+echo $result;
 
 /**
  * Check is longUrl exists, return the shortened version from the database (or, if
