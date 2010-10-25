@@ -211,11 +211,11 @@
 
 			  function updateSocialBar(link) {
 					data = "<a href=\"http://twitter.com/home/?status=";
-					data = data + "Find me here! http://test.lctn.me/" + link + "\"";
+					data = data + "http://test.lctn.me/" + link + "\"";
 					data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/twitter.jpg\" alt=\"Twitter\"></img></a>";
 					document.getElementById("twitter").innerHTML=data;
 					data = "<a href=\"http://www.facebook.com/sharer.php?u=";
-					data = data + "Find me here! http://test.lctn.me/" + link + "\"";
+					data = data + "http://test.lctn.me/" + link + "\"";
 					data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/facebook.jpg\" alt=\"Facebook\"></img></a>";
 					document.getElementById("facebook").innerHTML=data;
 			  }
