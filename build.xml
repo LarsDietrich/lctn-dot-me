@@ -21,6 +21,7 @@
 				<include name="**/*.js"/>
 				<include name="**/*.css"/>
 				<include name="**/*.png"/>
+				<include name="**/*.jpg"/>
 			</fileset>
 		</copy>
 	</target>
