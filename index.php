@@ -13,8 +13,8 @@
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-		<script type="text/javascript" src="script/jx_compressed.js"> </script>
-
+		<script type="text/javascript" src="js/jx_compressed.js"> </script>
+		
 		<script type="text/javascript">
 
 			var map;
@@ -27,6 +27,7 @@
 			var heading = 0;
 			var pitch = 0;
 			var zoom = 12;
+			var input;
 			
 //			var initialLocation;
 //			var browserSupportFlag =  new Boolean();
@@ -173,8 +174,7 @@
 			// Reverse geocodes the address, moves the marker to the new location
 			function codeAddress() {
 			  var address = document.getElementById("address").value;
-			  
-			  geocoder.geocode( { 'address': address}, function(results, status) {
+  			  geocoder.geocode( { 'address': address}, function(results, status) {
 			    if (status == google.maps.GeocoderStatus.OK) {
 			      selectedLocation = results[0].geometry.location;
 				  repositionMarker();
@@ -185,46 +185,45 @@
 			  });
 			}
 
-			// returns the reverse geocoded address of the current location
-		 function reverseCodeLatLng() {
-			geocoder.geocode({'latLng': selectedLocation}, function(results, status) {
-				output = "";
-	  			if (status == google.maps.GeocoderStatus.OK) {
-				    if (results.length > 0) {
-				    	for ( var i = 0, len = results.length; i < 5 && i < len; ++i ){
-					    	address = results[i].formatted_address;
-							output = output + "<div class='info'>" + address + "</div>";
-				    	}
+			 // returns the reverse geocoded address of the current location
+			 function reverseCodeLatLng() {
+				geocoder.geocode({'latLng': selectedLocation}, function(results, status) {
+					output = "";
+		  			if (status == google.maps.GeocoderStatus.OK) {
+					    if (results.length > 0) {
+					    	for ( var i = 0, len = results.length; i < 5 && i < len; ++i ){
+						    	address = results[i].formatted_address;
+								output = output + "<div class='info'>" + address + "</div>";
+					    	}
+					    } else {
+			   		      output = "<div class='error'>No Addresses Found</div>";
+					    }
 				    } else {
-		   		      output = "<div class='error'>No Addresses Found</div>";
-				    }
-			    } else {
-			        message = "Geocoder failed due to: " + status;
-				    jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
-	  	        }
-	  		    document.getElementById('other_info').innerHTML=output;
-  		    });
-		  }
+				        message = "Geocoder failed due to: " + status;
+					    jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
+		  	        }
+		  		    document.getElementById('other_info').innerHTML=output;
+	  		    });
+			  }
 
-		  function shortenUrl() {
-			  root = "http://test.lctn.me/";
-			  longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
-			  shorturl = "";
-			  jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById('url').innerHTML=data; });
-			}
+			  function shortenUrl() {
+				  root = "http://test.lctn.me/";
+				  longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
+				  shorturl = "";
+				  jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById('url').innerHTML=data; });
+				}
+
 		</script>
 	
 	</head>
 	
 	<body onload="load()" onunload="GUnload()">
-		
-		
 		<div class="container">
 			<div class="span-24">
 			&nbsp;
 			</div>			
 			<div class="span-10">
-				<input type="text" class="title" name="address" id="address" value="Search for a place"/>
+				<input type="text" class="title" name="address" id="address" value="Search for a place" onkeypress="if (event.keyCode == 13) { codeAddress(); }"/>
 				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Find" onclick="codeAddress()"/>
 			</div>
 			<div class="span-14 last">
