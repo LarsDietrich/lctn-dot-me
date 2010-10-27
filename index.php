@@ -14,9 +14,12 @@
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
 		<script type="text/javascript" src="js/jx_compressed.js"> </script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+		<script type="text/javascript" src="js/custom/locate.js"> </script>
+		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		
 		<script type="text/javascript">
-
 			var map;
 			var streetview;
 			var panorama;
@@ -28,10 +31,8 @@
 			var pitch = 0;
 			var zoom = 12;
 			var input;
+			var twitter_filter = "";
 			
-//			var initialLocation;
-//			var browserSupportFlag =  new Boolean();
-
 			function load() {
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
@@ -39,30 +40,15 @@
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
 				if (latitude == 999 || longitude == 999) {
-					locateMeAndShowMap();
+					locateMe();
+					if (!locateResponse.success)  {
+						setMessage("Geolocation not supported", "error");
+					}
+					selectedLocation = locateResponse.location;
 				} else {
-					showMap(latitude, longitude);
-					showStreetViewMap(latitude, longitude);
+  				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 				} 
-			}
-			
-			// Locate me and load map
-			function locateMeAndShowMap() {
-				
-			//TODO: Fix this, doesnt seem to work in FF
-			  // Try W3C Geolocation (Preferred)
-//				if(navigator.geolocation) {
-//				    browserSupportFlag = true;
-//				    navigator.geolocation.getCurrentPosition(showMap(position));
-			//  // Try Google Gears Geolocation
-//				} else if (google.gears) {
-//				    browserSupportFlag = true;
-//				    var geo = google.gears.factory.create('beta.geolocation');
-//				    geo.getCurrentPosition(showMap);
-//				} else {
-//					alert("Geolocation not supported");
-//				}
-				showMap(0,0);
+				showMap();
 			}
 
 			// Show map at current position
@@ -70,9 +56,8 @@
 				showMap(position.latitude, position.longitude);
 			}
 			
-			// Show map at latitiude and longitude
-			function showMap(lat, lng) { 
-			  selectedLocation = new google.maps.LatLng(lat, lng);
+			// Show the map at latitiude and longitude
+			function showMap() { 
 			  var myOptions = {
 			    zoom: zoom,
 			    center: selectedLocation,
@@ -118,7 +103,8 @@
 	  			  
 			}
 
-			// Moves the marker to a new location, saves the location to the database
+			// Moves the marker to a new location specified by selectedLocation. Refreshes screen for anything
+			// that uses the location (like tweets and streetview)
 			function repositionMarker() {
 			  position.setMap(null);
 			  position.setPosition(selectedLocation);
@@ -126,10 +112,10 @@
 			  sv.getPanoramaByLocation(selectedLocation, 50, processSVData);
 			  clearMessage();
 			  map.setCenter(selectedLocation);
-			  reverseCodeLatLng();
+			  refreshTweets();
 			}
 
-			// Try find street view data and load appropriate panel
+			// Try find street view data and load appropriate panel and set selected location
 			function processSVData(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
 			      var markerPanoID = data.location.pano;
@@ -145,23 +131,26 @@
 				  position.setPosition(selectedLocation);
 				  position.setMap(map);
 			  	} else {
-				  message = "Streetview not available at this location";
-				  jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
+				  setMessage("Streetview not available at this location", "info");
 			  }
 			  
 			}
 
-			// Determines if supplied shortened url is available and sets it as the url to use
-			function customUrl() {
-				var url = document.getElementById("shorturl").value;
-				jx.load("custom_url.php?url=" + url, function(data) {document.getElementById('custom_url_message').innerHTML=data; });
-			}
+//			// Determines if supplied shortened url is available and sets it as the url to use
+//			function customUrl() {
+//				var url = document.getElementById("shorturl").value;
+//				jx.load("custom_url.php?url=" + url, function(data) {document.getElementById('custom_url_message').innerHTML=data; });
+//			}
 
 			// Clears the message field
 			function clearMessage() {
-				document.getElementById('message').innerHTML="";
+				document.getElementById('message').innerHTML=" ";
 			}
-		
+
+			function setMessage(message, type) {
+				jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
+			}
+			
 			// Reverse geocodes the address, moves the marker to the new location
 			function codeAddress() {
 			  var address = document.getElementById("address").value;
@@ -170,8 +159,7 @@
 			      selectedLocation = results[0].geometry.location;
 				  repositionMarker();
 			    } else {
-				  message = "Geocode was not successful for the following reason: " + status;
-				  jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
+				  setMessage("Geocode was not successful for the following reason: " + status, "error");
 			    }
 			  });
 			}
@@ -190,13 +178,12 @@
 			   		      output = "<div class='error'>No Addresses Found</div>";
 					    }
 				    } else {
-				        message = "Geocoder failed due to: " + status;
-					    jx.load("message.php?message=" + message + "&type=error", function(data) { document.getElementById('message').innerHTML=data; });
+				        setMessage("Geocoder failed due to: " + status, "error");
 		  	        }
-		  		    document.getElementById('other_info').innerHTML=output;
 	  		    });
 			  }
-
+			  
+			  // Determine the shortened URL based on the current location, saves to DB
 			  function shortenUrl() {
 				  root = "http://test.lctn.me/";
 				  longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
@@ -204,11 +191,13 @@
 				  jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(data); updateSocialBar(data); });
 			  }
 
+			  // update the url block with the supplied link, should be a shortened link
 			  function updateUrl(link) {
 				  data = "<h3 class='info'>http://test.lctn.me/" + link + "</h3>"; 
 				  document.getElementById("url").innerHTML=data;
 		      }
 
+			  // update the social bar with new shortened link
 			  function updateSocialBar(link) {
 					data = "<a href=\"http://twitter.com/home/?status=";
 					data = data + "http://test.lctn.me/" + link + "\"";
@@ -220,8 +209,12 @@
 					document.getElementById("facebook").innerHTML=data;
 			  }
 
+  			  	function refreshTweets() {
+  				  if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+  				  	tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
+  				  }
+  			  	}
 		</script>
-	
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
@@ -234,10 +227,11 @@
 				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="codeAddress()"/>
 			</div>
 			<div class="span-12">
-			&nbsp;
+				<div id="message">
+				</div>
 			</div>
 			<div class="span-2 last">
-			<b>ALPHA</b>
+				<b>ALPHA</b>
 			</div>			
 			
 <!-- 
@@ -254,24 +248,24 @@
 			<div class="span-24">
 			&nbsp;
 			</div>
-			<div class="span-9">
-				<div id="map" style="width: 350px; height: 350px"></div>
+			<div class="span-12">
+				<div id="map" style="width: 400px; height: 400px"></div>
 			</div>
-			<div class="span-9">
-				<div id="streetview" style="width: 350px; height: 350px"></div>
+			<div class="span-12 last">
+				<div id="streetview" style="width: 400px; height: 400px"></div>
 			</div>
-			<div class="span-6 last">
-				<div class="large">
-				Name(s) for this place
+			<div class="span-24">&nbsp;</div>
+			<div class="span-14">
+				<div class="info">
+					<span>Tweets in the area</span> 
+					<br/>Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/>
+					in <input type="text" name="range" id="range" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/> km
+					<input type="button" id="filter_now" name="filter_now" value="Filter" onclick="refreshTweets()"/>
 				</div>
-				<div id="other_info">
-				</div>
-				<div id="message">
-				</div>
+				<div id="tweet_stream"></div>
 			</div>
-			<div class="span-24">
-			&nbsp;
-			</div>
+			<div class="span-10 last"></div>
+			<div class="span-24">&nbsp;</div>
 			<div class="span-22">
 				<div id="url">
 					<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h3>
@@ -297,10 +291,8 @@
 					</a>
 				</div>
 			</div>
-			
 			<div class="span-18 last">
 			</div>
-			
 		</div>
 
 
