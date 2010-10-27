@@ -28,7 +28,7 @@ function processTheseTweets(jsonData) {
 					+ "<a target= '_blank' href='http://twitter.com/"
 					+ value.from_user.substring(0, value.from_user.length) + "'>"
 					+ value.from_user + "</a>" + "</span>: "
-					+ formatText(value.text) + "</p>";
+					+ formatText(value.text) + " " + getLocation(value.location) +  "</p>";
 		});
 		if (shtml.length == 0) {
 			shtml = "No results found";
@@ -51,5 +51,12 @@ function formatText(text) {
 		}
 		result = result + " " + value;
 	}
+	return result;
+}
+
+function getLocation(text) {
+	result = text.replace("\u00dcT: ", "");
+	result = result.replace("iPhone: ", "");
+	result = "<img src=\"images/find.png\" onclick=\"locationFromAddress('" + result + "')\"/>";
 	return result;
 }

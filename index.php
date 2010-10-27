@@ -110,10 +110,11 @@
 			  position.setMap(null);
 			  position.setPosition(selectedLocation);
 			  position.setMap(map);
-			  sv.getPanoramaByLocation(selectedLocation, 50, processSVData);
+			  sv.getPanoramaByLocation(selectedLocation, 70, processSVData);
 			  clearMessage();
 			  map.setCenter(selectedLocation);
 			  refreshTweets();
+			  scroll(0,0);
 			}
 
 			// Try find street view data and load appropriate panel and set selected location
@@ -151,18 +152,23 @@
 			function setMessage(message, type) {
 				jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
 			}
+
+			function locationFromAddr() {
+				var address = document.getElementById("address").value;
+				geocoder.geocode( { 'address': address}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+				      selectedLocation = results[0].geometry.location;
+				      repositionMarker();
+				    } else {
+					  setMessage("Geocode was not successful for the following reason: " + status, "error");
+				    }
+				});
+			}
 			
 			// Reverse geocodes the address, moves the marker to the new location
-			function locationFromAddress() {
-			  var address = document.getElementById("address").value;
-  			  geocoder.geocode( { 'address': address}, function(results, status) {
-			    if (status == google.maps.GeocoderStatus.OK) {
-			      selectedLocation = results[0].geometry.location;
-			      repositionMarker();
-			    } else {
-				  setMessage("Geocode was not successful for the following reason: " + status, "error");
-			    }
-			  });
+			function locationFromAddress(address) {
+				document.getElementById("address").value = address;
+				locationFromAddr();
 			}
 
 			 // returns the reverse geocoded address of the current location
@@ -225,8 +231,8 @@
 			&nbsp;
 			</div>			
 			<div class="span-10">
-				<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddress();}"/>
-				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="locationFromAddress();"/>
+				<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
+				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="locationFromAddr();"/>
 			</div>
 			<div class="span-12">
 				<div id="message">
