@@ -13,12 +13,13 @@
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-		<script type="text/javascript" src="js/jx_compressed.js"> </script>
+		<script type="text/javascript" src="js/jxs.js"> </script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
+		<script type="text/javascript" src="js/custom/ajax.js"> </script>
 		
 		<script type="text/javascript">
 			var map;
@@ -113,8 +114,9 @@
 			  sv.getPanoramaByLocation(selectedLocation, 70, processSVData);
 			  clearMessage();
 			  map.setCenter(selectedLocation);
-			  refreshTweets();
+			  refreshWhat();
 			  scroll(0,0);
+			  reverseCodeLatLng();
 			}
 
 			// Try find street view data and load appropriate panel and set selected location
@@ -133,7 +135,7 @@
 				  position.setPosition(selectedLocation);
 				  position.setMap(map);
 			  	} else {
-				  setMessage("Streetview not available at this location", "info");
+				  setMessage("Streetview not available at this location, try clicking on a road, or searching for another place", "info");
 			  }
 			  
 			}
@@ -146,7 +148,7 @@
 
 			// Clears the message field
 			function clearMessage() {
-				document.getElementById('message').innerHTML=" ";
+				setMessage("This is an experimental app, a fun idea I've been toying with. <a href='mailto:rick@tonoli.co.za?subject=Tell me more about lctn.me'>Email me</a> for more info.", "info");
 			}
 
 			function setMessage(message, type) {
@@ -160,7 +162,7 @@
 				      selectedLocation = results[0].geometry.location;
 				      repositionMarker();
 				    } else {
-					  setMessage("Geocode was not successful for the following reason: " + status, "error");
+					  setMessage("Unable to determine location from address: " + status, "error");
 				    }
 				});
 			}
@@ -177,16 +179,14 @@
 					output = "";
 		  			if (status == google.maps.GeocoderStatus.OK) {
 					    if (results.length > 0) {
-					    	for ( var i = 0, len = results.length; i < 5 && i < len; ++i ){
-						    	address = results[i].formatted_address;
-								output = output + "<div class='info'>" + address + "</div>";
-					    	}
+					    	address = results[0].formatted_address;
+							document.getElementById("address").value = address;
 					    } else {
-			   		      output = "<div class='error'>No Addresses Found</div>";
+			   		      setMessage("No Addresses Found");
 					    }
 				    } else {
-				        setMessage("Geocoder failed due to: " + status, "error");
-		  	        }
+					    setMessage("Unable to determined address: " + status, "error");
+				    }
 	  		    });
 			  }
 			  
@@ -216,9 +216,11 @@
 					document.getElementById("facebook").innerHTML=data;
 			  }
 
-  			  	function refreshTweets() {
+  			  	function refreshWhat() {
   				  if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-  				  	tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
+					document.getElementById("tweet_stream").innerHTML="Loading..";
+					document.getElementById("wiki_stream").innerHTML="Loading..";
+    				tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
   				  	articles(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
   				  }
   			  	}
@@ -227,20 +229,18 @@
 
 	<body onload="load()" onunload="GUnload()">
 		<div class="container">
-			<div class="span-24">
-			&nbsp;
+			<div class="span-24 error">
+				<center><h3>ALPHA RELEASE</h3></center>
 			</div>			
-			<div class="span-10">
+			<div class="span-10 colborder">
 				<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
-				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="locationFromAddr();"/>
+				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
 			</div>
-			<div class="span-12">
+			<div class="span-13 last">
 				<div id="message">
 				</div>
 			</div>
-			<div class="span-2 last">
-				<b>ALPHA</b>
-			</div>			
+			<div class="span-24"><hr/></div>
 			
 <!-- 
 			<div class="span-3">
@@ -253,35 +253,35 @@
 				<div id="custom_url_message"><div id="custom_url_available"></div></div>
 			</div>
  -->
-			<div class="span-24">
-			&nbsp;
-			</div>
 			<div class="span-12">
 				<div id="map" style="width: 400px; height: 400px"></div>
 			</div>
 			<div class="span-12 last">
 				<div id="streetview" style="width: 400px; height: 400px"></div>
 			</div>
-			<div class="span-24">&nbsp;</div>
+			<div class="span-11 colborder">
+			&nbsp;
+			</div>
+			<div class="span-12 last">
+			&nbsp;
+			</div>
+			<div class="span-24"><hr/></div>
 			<div class="span-22">
 				<div id="url">
-					<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h3>
+					<h3 class='info'><i>Select a position on the map or search for it, orientate your streetview (if available) and click Generate to get a short link</i></h3>
 				</div>
 			</div>
 			<div class="span-2 last">
 				<input style="height: 45px" type="button" name="generate" value="Generate" onclick="shortenUrl();"/>
 			</div>
-			<div class="span-4">
-			<h1 class="info">Share</h1>
-			</div>
-			<div class="span-3 prepend-1">
+			<div class="span-2">
 				<div id="twitter">
 					<a href="http://twitter.com/home/?status=" target="_blank">
 						<img height="80px" width="80px" border="0" src="images/twitter.jpg" alt="Twitter"></img>
 					</a>
 				</div>
 			</div>
-			<div class="span-3">
+			<div class="span-2">
 				<div id="facebook">
 					<a href="http://www.facebook.com/sharer.php?u=" target="_blank">
 						<img height="80px" width="80px" border="0" src="images/facebook.jpg" alt="Facebook"></img>
@@ -290,23 +290,25 @@
 			</div>
 			<div class="span-18 last">
 			</div>
-			<div class="large info span-24">
+			<div class="span-24">&nbsp;</div>
+			<div class="span-24"><hr/></div>
+			<div class="large info span-23">
 				<div>
 				<center>What's Happening in the Area?</center>
 					<center>
-						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/>
-						in <input type="text" name="range" id="range" value="1" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/> km
-						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="refreshTweets()"/>
+						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { refreshWhat(); }"/>
+						in <input type="text" name="range" id="range" value="1" onkeypress="if (event.keyCode == 13) { refreshWhat(); }"/> km
+						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="refreshWhat();"/>
 					</center>
 				</div>
 			</div>
-			<div class="notice span-11">
+			<div class="span-11 colborder">
 				<center><span class="large">Twitter</span></center>
 				<div id="tweet_stream"></div>
 			</div>
-			<div class="notice span-11 last">
-				<center><span class="large">WikiPedia</span></center>
-				<div id="wiki_stream">Coming soon..</div>
+			<div class="span-10 last colborder">
+				<center><span class="large">Wikipedia</span></center>
+				<div id="wiki_stream">Loading..</div>
 			</div>
 
 		</div>

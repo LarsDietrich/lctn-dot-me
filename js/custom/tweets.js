@@ -2,7 +2,6 @@
  * Generate tweets based on location
  */
 function tweets(selectedLocation, filter, range) {
-	range = range * 0.621371192237334;
 	jQuery(function() {
 		// Execute this code when the page is ready to work
 		// Create a Script Tag
@@ -10,7 +9,7 @@ function tweets(selectedLocation, filter, range) {
 		script.type = 'text/javascript';
 		script.src = "http://search.twitter.com/search.json?&q=" + filter + "&geocode="
 				+ selectedLocation.lat() + "," + selectedLocation.lng()
-				+ "," + range + "mi&callback=processTheseTweets&_=" + new Date().getTime();
+				+ "," + range + "km&callback=processTheseTweets&_=" + new Date().getTime();
 		// Add the Script to the Body element, which will in turn load the
 		// script and run it.
 		$("body").append(script);
