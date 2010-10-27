@@ -18,6 +18,7 @@
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
+		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
 		
 		<script type="text/javascript">
 			var map;
@@ -39,6 +40,7 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
+
 				if (latitude == 999 || longitude == 999) {
 					locateMe();
 					if (!locateResponse.success)  {
@@ -48,15 +50,11 @@
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 				} 
+
 				showMap();
 			}
 
-			// Show map at current position
-			function showMap(position) {
-				showMap(position.latitude, position.longitude);
-			}
-			
-			// Show the map at latitiude and longitude
+			// show the map
 			function showMap() { 
 			  var myOptions = {
 			    zoom: zoom,
@@ -80,7 +78,14 @@
 
   			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
 
-			  google.maps.event.addListener(map, 'click', function(event) {
+		      setupListeners();
+  			  
+  			  repositionMarker();
+	  			  
+			}
+
+		   function setupListeners() {
+			 google.maps.event.addListener(map, 'click', function(event) {
   			    selectedLocation = event.latLng;
 				repositionMarker();
 			  });
@@ -98,11 +103,7 @@
   			      heading = panorama.getPov().heading;
   			      pitch = panorama.getPov().pitch;
   			  });
-
-  			  repositionMarker();
-	  			  
 			}
-
 			// Moves the marker to a new location specified by selectedLocation. Refreshes screen for anything
 			// that uses the location (like tweets and streetview)
 			function repositionMarker() {
@@ -152,12 +153,12 @@
 			}
 			
 			// Reverse geocodes the address, moves the marker to the new location
-			function codeAddress() {
+			function locationFromAddress() {
 			  var address = document.getElementById("address").value;
   			  geocoder.geocode( { 'address': address}, function(results, status) {
 			    if (status == google.maps.GeocoderStatus.OK) {
 			      selectedLocation = results[0].geometry.location;
-				  repositionMarker();
+			      repositionMarker();
 			    } else {
 				  setMessage("Geocode was not successful for the following reason: " + status, "error");
 			    }
@@ -212,6 +213,7 @@
   			  	function refreshTweets() {
   				  if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
   				  	tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
+  				  	articles(selectedLocation, document.getElementById("filter").value, document.getElementById("range").value);
   				  }
   			  	}
 		</script>
@@ -223,8 +225,8 @@
 			&nbsp;
 			</div>			
 			<div class="span-10">
-				<input type="text" class="title" name="address" id="address" value="Search for a place" onkeypress="if (event.keyCode == 13) { codeAddress(); }"/>
-				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="codeAddress()"/>
+				<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddress();}"/>
+				<input style="height: 33px; padding-top: 2px" type="button" name="find" value="Locate" onclick="locationFromAddress();"/>
 			</div>
 			<div class="span-12">
 				<div id="message">
@@ -255,17 +257,6 @@
 				<div id="streetview" style="width: 400px; height: 400px"></div>
 			</div>
 			<div class="span-24">&nbsp;</div>
-			<div class="span-14">
-				<div class="info">
-					<span>Tweets in the area</span> 
-					<br/>Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/>
-					in <input type="text" name="range" id="range" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/> km
-					<input type="button" id="filter_now" name="filter_now" value="Filter" onclick="refreshTweets()"/>
-				</div>
-				<div id="tweet_stream"></div>
-			</div>
-			<div class="span-10 last"></div>
-			<div class="span-24">&nbsp;</div>
 			<div class="span-22">
 				<div id="url">
 					<h3 class='info'><i>Select a position on the map or search for it, then click Generate to get your short link</i></h3>
@@ -293,9 +284,26 @@
 			</div>
 			<div class="span-18 last">
 			</div>
+			<div class="large info span-24">
+				<div>
+				<center>What's Happening in the Area?</center>
+					<center>
+						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/>
+						in <input type="text" name="range" id="range" value="1" onkeypress="if (event.keyCode == 13) { refreshTweets(); }"/> km
+						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="refreshTweets()"/>
+					</center>
+				</div>
+			</div>
+			<div class="notice span-11">
+				<center><span class="large">Twitter</span></center>
+				<div id="tweet_stream"></div>
+			</div>
+			<div class="notice span-11 last">
+				<center><span class="large">WikiPedia</span></center>
+				<div id="wiki_stream">Coming soon..</div>
+			</div>
+
 		</div>
-
-
 	</body>
 
 </html>
