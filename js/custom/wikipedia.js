@@ -21,11 +21,11 @@ function process(data) {
 			shtml += "<a target= '_blank' href='" + _articles[i].url + "'>" + _articles[i].title + "</a>&nbsp;";
 			shtml += getWikiLocation(_articles[i]);
 			shtml += "<br><br>";
-			if (shtml.length == 0) {
-				shtml = "No results found";
-			}
-			document.getElementById("wiki_stream").innerHTML = shtml;
 		}
+		if (shtml.length == 0) {
+			shtml = "No results found";
+		}
+		document.getElementById("wiki_stream").innerHTML = shtml;
 	}
 }
 
