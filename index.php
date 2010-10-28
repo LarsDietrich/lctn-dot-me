@@ -132,18 +132,20 @@
 				positionMarker.setMap(null);
 				positionMarker.setPosition(selectedLocation);
 				positionMarker.setMap(map);
-				setMessage("This is an experimental app, a fun idea I've been toying with. <a href='mailto:rick@tonoli.co.za?subject=Tell me more about lctn.me'>Email me</a> for more info.", "info");
 				streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				map.setCenter(selectedLocation);
 				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
 				reverseCodeLatLng();
 				scroll(0,0);
+				document.getElementById("url").value="";
+				setMessage("Location updated. You can view area specific tweets / wiki entries by paging down", "success");
 			}
 
 			// Try find street view data and load appropriate panorama panel and set selectedLocation
 			function processSVData(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
+				  document.getElementById("streetview_title").innerHTML="Streetview avialable, after it loads, drag the map to look around";
 			      var markerPanoID = data.location.pano;
 			      panorama.setPano(markerPanoID);
 			      panorama.setPov({
@@ -157,7 +159,9 @@
 				  positionMarker.setPosition(selectedLocation);
 				  positionMarker.setMap(map);
 			  	} else {
-				  setMessage("Streetview not available at this location, try clicking on a road, or searching for another place", "info");
+				  setMessage("Streetview not available at this location, click on a road, or search for a place", "notice");
+				  document.getElementById("streetview_title").innerHTML="Streetview not available in this area";
+				  panorama.setVisible(false);
 				}
 			}
 
@@ -213,6 +217,7 @@
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
 				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateSocialBar(root + data); });
+				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
 			}
 
 			// Update the url block with the supplied link, should be a shortened link
@@ -247,11 +252,6 @@
 				data = data + "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
 				document.getElementById("email").innerHTML=data;
 				
-
-				
-				
-
-				
 			}
 
  		  	function updateTwitterLocationInformation() {
@@ -273,14 +273,21 @@
 
 	<body onload="load()" onunload="GUnload()">
 		<div class="container">
-			<div class="span-24">
-				<h3>ALPHA</h3>
+			<div class="span-3">
+				<h1>lctn.me</h1>
 			</div>
+			<div class="span-9">
+				<h4><i>Your one stop location shortening and link service</i></h4>
+			</div>
+			<div class="span-12 last">
+				<div id="message"></div>
+			</div>
+			<div class="span-24"><hr/></div>
 			<div class="span-12">
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Find a place</th>
+			              	<th class="span-12">Search using an address, or place name</th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -299,15 +306,15 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Create short url</th>
+			              	<th class="span-12">Create short url for this location</th>
 			            </tr>
 		           </thead>
  		           <tbody>
 						<tr>
 							<td>
 							<center>
+								<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
 								<input type="text" class="title large" name="url" id="url" value="" readonly="readonly"/>
-								<input style="height: 33px;"  class="large" type="button" name="generate" value="Generate" onclick="shortenUrl();"/>
 							</center>
 							</td>
 						</tr>
@@ -330,7 +337,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Map</th>
+			              	<th class="span-12">Click anywhere to select a location</th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -348,7 +355,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Streetview of current location</th>
+			              	<th class="span-12"><div id="streetview_title">Streetview</div></th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -366,7 +373,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-20">Share with your friends</th>
+			              	<th class="span-20">Share the link with your friends</th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -393,7 +400,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Twitter</th>
+			              	<th class="span-12">What people are tweeting in the area</th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -423,7 +430,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Wikipedia</th>
+			              	<th class="span-12">Wikipedia articles in the area</th>
 			            </tr>
 		           </thead>
  		           <tbody>

@@ -62,14 +62,14 @@ function getTweetLocation(text) {
 	result = result.replace("iPhone: ", "");
 	var image = "find.png";
 	
-	
 	splitResult = result.split(",");
 	if (splitResult.length == 2) {
 		if (isNumeric(splitResult[0]) && isNumeric(splitResult[1])) {
-			image = "find-hilite.png"; 
+			image = "find-hilite.png";
 		}
 	}
-	output = "<img src=\"images/" + image + "\" onclick=\"locationFromAddress('" + result + "')\"/>";
+	title = "Reposition map to " + result;
+	output = "<img title=\"" + title + "\" src=\"images/" + image + "\" onclick=\"locationFromAddress('" + result + "')\"/>";
 
 	return output;
 }

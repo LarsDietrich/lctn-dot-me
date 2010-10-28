@@ -31,7 +31,7 @@ function process(data) {
 
 function getWikiLocation(_articles) {
 	var result = _articles.lat + "," + _articles.lng;
-	result = "<img src=\"images/find-hilite.png\" onclick=\"locationFromAddress('" + result + "')\"/>";
+	result = "<img title=\"Reposition map to article location\"src=\"images/find-hilite.png\" onclick=\"locationFromAddress('" + result + "')\"/>";
 	return result;
 }
 
