@@ -283,7 +283,7 @@
 						<tr>
 							<td>
 							<center>
-								<input type="text" class="title large" name="url" id="url" value="" disabled="disabled"/>
+								<input type="text" class="title large" name="url" id="url" value="" readonly="readonly"/>
 								<input style="height: 33px;"  class="large" type="button" name="generate" value="Generate" onclick="shortenUrl();"/>
 							</center>
 							</td>
