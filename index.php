@@ -49,6 +49,7 @@
 
 			// load the necessary data, parse command line for location information and show map
 			function load() {
+				updateSocialBar("");
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
@@ -221,14 +222,36 @@
 
 			  // Update the social bar with new shortened link
 			function updateSocialBar(link) {
+				size="70px";
 				data = "<a href=\"http://twitter.com/home/?status=";
 				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/twitter.jpg\" alt=\"Twitter\"></img></a>";
+				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
 				document.getElementById("twitter").innerHTML=data;
+
 				data = "<a href=\"http://www.facebook.com/sharer.php?u=";
 				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"80px\" width=\"80px\" border=\"0\" src=\"images/facebook.jpg\" alt=\"Facebook\"></img></a>";
+				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
 				document.getElementById("facebook").innerHTML=data;
+
+				data = "<a href=\"http://del.icio.us/post?url=";
+				data = data + link + "\"";
+				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
+				document.getElementById("delicious").innerHTML=data;
+
+				data = "<a href=\"http://www.google.com/bookmarks/mark?op=edit&output=popup&bkmk=";
+				data = data + link + "\"";
+				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/google.jpg\" title=\"Add to Google Bookmarks\" alt=\"Google Bookmarks\"></img></a>";
+				document.getElementById("google").innerHTML=data;
+
+				data = "<a href=\"mailto:?subject=" + link + "\"";
+				data = data + "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
+				document.getElementById("email").innerHTML=data;
+				
+
+				
+				
+
+				
 			}
 
  		  	function updateTwitterLocationInformation() {
@@ -350,15 +373,15 @@
 						<tr>
 							<td>
 								<center>
+									<div class="span-2" id="email">
+									</div>
 									<div class="span-2" id="twitter">
-										<a href="http://twitter.com/home/?status=" target="_blank">
-											<img height="80px" width="80px" border="0" src="images/twitter.jpg" alt="Twitter"></img>
-										</a>
 									</div>
 									<div class="span-2" id="facebook">
-										<a href="http://www.facebook.com/sharer.php?u=" target="_blank">
-											<img height="80px" width="80px" border="0" src="images/facebook.jpg" alt="Facebook"></img>
-										</a>
+									</div>
+									<div class="span-2" id="delicious">
+									</div>
+									<div class="span-2" id="google">
 									</div>
 								</center>
 							</td>
