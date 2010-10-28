@@ -208,7 +208,7 @@
 			  
 			// Determine the shortened URL based on the current location, saves to DB
 			function shortenUrl() {
-				root = "http://test.lctn.me/";
+				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
 				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateSocialBar(root + data); });

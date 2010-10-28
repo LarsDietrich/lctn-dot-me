@@ -1,9 +1,6 @@
 <?php
 require("includes/sql.php");
-
 $result = getShortUrl($_GET["url"], $_GET["shorturl"]);
-
-//echo "<h3 class='info'>http://test.lctn.me/" . $result . "</h3>";
 echo $result;
 
 /**
