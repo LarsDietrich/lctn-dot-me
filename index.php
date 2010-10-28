@@ -408,7 +408,7 @@
 							<td>
 								<center>
 									Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
-									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateLocationWikiInformation();"/>								
+									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 								</center>
 							</td>
 						</tr>
