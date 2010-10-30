@@ -163,12 +163,6 @@
 				}
 			}
 
-//			// Determines if supplied shortened url is available and sets it as the url to use
-//			function customUrl() {
-//				var url = document.getElementById("shorturl").value;
-//				jx.load("custom_url.php?url=" + url, function(data) {document.getElementById('custom_url_message').innerHTML=data; });
-//			}
-
 			function setMessage(message, type) {
 				jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
 			}
@@ -240,11 +234,6 @@
 				data = data + link + "\"";
 				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
 				document.getElementById("delicious").innerHTML=data;
-
-				data = "<a href=\"http://www.google.com/bookmarks/mark?op=edit&output=popup&bkmk=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/google.jpg\" title=\"Add to Google Bookmarks\" alt=\"Google Bookmarks\"></img></a>";
-				document.getElementById("google").innerHTML=data;
 
 				data = "<a href=\"mailto:?subject=" + link + "\"";
 				data = data + "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
@@ -320,18 +309,6 @@
           		   </tbody>
 				</table>
 			</div>
-			
-<!-- 
-			<div class="span-3">
-				<h3>Custom URL</h3>
-			</div>
-			<div class="span-8">
-				<input type="text" class="title" name="shorturl" id="shorturl" value="" onkeyup="customUrl()"/>
-			</div>
-			<div class="span-3 last">
-				<div id="custom_url_message"><div id="custom_url_available"></div></div>
-			</div>
- -->
 			<div class="span-12">
 				<table>
 					<thead>
@@ -386,8 +363,6 @@
 									<div class="span-2" id="facebook">
 									</div>
 									<div class="span-2" id="delicious">
-									</div>
-									<div class="span-2" id="google">
 									</div>
 								</center>
 							</td>
