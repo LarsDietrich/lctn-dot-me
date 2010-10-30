@@ -460,7 +460,8 @@
 			<div class="span-24"><hr/></div>
 			<div class="span-1"><a href="about.html">About</a></div>
 			<div class="span-1"><a href="contact.html">Contact</a></div>
-			<div class="span-22 last"></div>
+			<div class="span-21"></div>
+			<div class="span-1 last">v0.0.1</div>
 			<div class="span-24">&nbsp;</div>
 		</div>
 
