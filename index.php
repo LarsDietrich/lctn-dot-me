@@ -139,13 +139,12 @@
 				reverseCodeLatLng();
 				scroll(0,0);
 				document.getElementById("url").value="";
-				setMessage("Location updated. You can view area specific tweets / wiki entries by paging down", "success");
+				setMessage("Location updated. See bottom of page for area specific tweets / wiki's", "success");
 			}
 
 			// Try find street view data and load appropriate panorama panel and set selectedLocation
 			function processSVData(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
-				  document.getElementById("streetview_title").innerHTML="Streetview avialable, after it loads, drag the map to look around";
 			      var markerPanoID = data.location.pano;
 			      panorama.setPano(markerPanoID);
 			      panorama.setPov({
@@ -153,14 +152,13 @@
 			        pitch: pitch,
 			        zoom: 1
 			      });
-				  panorama.setVisible(true);
 				  positionMarker.setMap(null);
 				  selectedLocation = data.location.latLng;
 				  positionMarker.setPosition(selectedLocation);
 				  positionMarker.setMap(map);
+				  panorama.setVisible(true);
 			  	} else {
-				  setMessage("Streetview not available at this location, click on a road, or search for a place", "notice");
-				  document.getElementById("streetview_title").innerHTML="Streetview not available in this area";
+				  setMessage("Streetview not available at this location, try clicking on a nearby road", "notice");
 				  panorama.setVisible(false);
 				}
 			}
@@ -273,6 +271,7 @@
 
 	<body onload="load()" onunload="GUnload()">
 		<div class="container">
+			<div class="span-24"><center><h1>ALPHA RELEASE</h1></center></div>
 			<div class="span-3">
 				<h1>lctn.me</h1>
 			</div>
@@ -287,7 +286,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Search using an address, or place name</th>
+			              	<th class="span-12">Start by searching for an address, or place name</th>
 			            </tr>
 		           </thead>
  		           <tbody>
@@ -314,7 +313,7 @@
 							<td>
 							<center>
 								<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
-								<input type="text" class="title large" name="url" id="url" value="" readonly="readonly"/>
+								<input type="text" class="title" name="url" id="url" value="" readonly="readonly"/>
 							</center>
 							</td>
 						</tr>
@@ -355,7 +354,7 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12"><div id="streetview_title">Streetview</div></th>
+			              	<th class="span-12"><div id="streetview_title">This shows you the streetview, if it's available</div></th>
 			            </tr>
 		           </thead>
  		           <tbody>
