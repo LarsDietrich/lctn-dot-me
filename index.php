@@ -47,6 +47,14 @@
 			var pitch = 0;
 			var zoom = 12;
 
+			// tweet array to hold all tweets in area
+			var listOfTweets = [];
+			var tweetsPerPage = 5;
+			
+			// wiki array to hold all wikis in area
+			var listOfWikis = [];
+			var wikisPerPage = 8;
+			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
 				updateSocialBar("");
@@ -57,7 +65,7 @@
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
 
 				if (latitude == 999 || longitude == 999) {
-					locateMe();
+					var locateResponse = locateMe();
 					if (!locateResponse.success)  {
 						setMessage("Geolocation not supported", "error");
 					}
@@ -243,24 +251,96 @@
 
  		  	function updateTwitterLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("tweet_stream").innerHTML="Loading..";
-					tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("tweet_range").value);
+					document.getElementById("tweet_stream").innerHTML="Searching..";
+					getTweets(selectedLocation, document.getElementById("filter").value, document.getElementById("tweet_range").value);
 				}
 			}
 
+ 		  	// Load the twitter display based on whats in tweets array
+			function updateTwitterDisplay(page) {
+				var startItem = (page - 1) * tweetsPerPage;
+				var endItem = page * tweetsPerPage;
+				var output = "";
+
+				if (endItem > listOfTweets.length) {
+					endItem = listOfTweets.length;
+				}
+				
+				for (i = startItem; i < endItem; i++) {
+					output += listOfTweets[i];	
+				}				
+				document.getElementById("tweet_stream").innerHTML = output;
+				updateTwitterPaging(page);
+ 		  	}
+
+			function updateTwitterPaging(page) {
+				var totalPages = Math.round(listOfTweets.length / tweetsPerPage);
+				if (totalPages < (listOfTweets.length / tweetsPerPage)) {
+					totalPages++;
+				}
+				var next = "";
+				var previous = "";
+				
+				if ((page + 1) <= totalPages) {				
+					next += "<span onclick=\"updateTwitterDisplay(" + (page + 1) + ")\">Next</span>";
+				}
+				if ((page - 1) >= 1) { 
+					previous += "<span onclick=\"updateTwitterDisplay(" + (page - 1) + ")\">Prev</span>";
+				}				
+				document.getElementById("twitter_footer_prev").innerHTML = previous;
+				document.getElementById("twitter_footer_next").innerHTML = next;
+				document.getElementById("twitter_pages").innerHTML = "Page " + page + " of " + totalPages;
+			}
+ 		  	
  		  	function updateWikiLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("wiki_stream").innerHTML="Loading..";
+					document.getElementById("wiki_stream").innerHTML="Searching..";
 					articles(selectedLocation, document.getElementById("wiki_range").value);
 				}
 			}
 
+ 		  	// Load the twitter display based on whats in tweets array
+			function updateWikiDisplay(page) {
+				var startItem = (page - 1) * wikisPerPage;
+				var endItem = page * wikisPerPage;
+				var output = "";
+				if (endItem > listOfWikis.length) {
+					endItem = listOfWikis.length;
+				}
+				for (i = startItem; i < endItem; i++) {
+					output += listOfWikis[i];	
+				}				
+				document.getElementById("wiki_stream").innerHTML = output;
+				updateWikiPaging(page);
+ 		  	}
+
+			function updateWikiPaging(page) {
+				var totalPages = Math.round(listOfWikis.length / wikisPerPage);
+				if (totalPages < (listOfWikis.length / wikisPerPage)) {
+					totalPages++;
+				}
+				var next = "";
+				var previous = "";
+				if ((page + 1) <= totalPages) {				
+					next += "<span onclick=\"updateWikiDisplay(" + (page + 1) + ")\">Next</span>";
+				}
+				if ((page - 1) >= 1) { 
+					previous += "<span onclick=\"updateWikiDisplay(" + (page - 1) + ")\">Prev</span>";
+				}				
+
+				document.getElementById("wiki_footer_prev").innerHTML = previous;
+				document.getElementById("wiki_footer_next").innerHTML = next;
+				document.getElementById("wiki_pages").innerHTML = "Page " + page + " of " + totalPages;
+			}
+ 		  	
 		</script>
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
 		<div class="container">
-			<div class="span-24"><center><h1>ALPHA RELEASE</h1></center></div>
+			<div class="span-21">&nbsp;</div>
+			<div class="span-2"><h1><i>BETA</i></h1></div>
+			<div class="span-24"><center><hr/></center></div>
 			<div class="span-3">
 				<h1>lctn.me</h1>
 			</div>
@@ -370,16 +450,17 @@
           		   </tbody>
 				</table>
 			</div>
+			<div class="span-24"><hr/></div>
 			<div class="span-12 ">
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">What people are tweeting in the area</th>
+			              	<th colspan="3" class="span-10">What people are tweeting in the area</th>
 			            </tr>
 		           </thead>
  		           <tbody>
 						<tr>
-							<td>
+							<td colspan="3">
 								<center>
 									Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
 									in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
@@ -388,14 +469,16 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td colspan="3">
 								<div id="tweet_stream">Tweets close to your selected location</div>
 							</td>
 						</tr>
           		   </tbody>
 					<tfoot>
 			            <tr>
-			              	<th class="span-12"><div id="wiki_paging"></div></th>
+			              	<th class="span-1"><div id="twitter_footer_prev"></div></th>
+			              	<th class="span-10"><center><div id="twitter_pages"></div></center></th>
+			              	<th class="span-1"><div id="twitter_footer_next"></div></th>
 			            </tr>
 		           </tfoot>
 				</table>
@@ -404,12 +487,12 @@
 				<table>
 					<thead>
 			            <tr>
-			              	<th class="span-12">Wikipedia articles in the area</th>
+			              	<th colspan="3" class="span-12">Wikipedia articles in the area</th>
 			            </tr>
 		           </thead>
  		           <tbody>
 						<tr>
-							<td>
+							<td colspan="3">
 								<center>
 									Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
 									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
@@ -417,7 +500,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td colspan="3">
 								<center>
 									<div id="wiki_stream">Wikipedia entries close to your location</div>
 								</center>
@@ -426,16 +509,20 @@
           		   </tbody>
 					<tfoot>
 			            <tr>
-			              	<th class="span-12"><div id="wiki_paging"></div></th>
+			              	<th class="span-1"><div id="wiki_footer_prev"></div></th>
+			              	<th class="span-10"><center><div id="wiki_pages"></div></center></th>
+			              	<th class="span-1"><div id="wiki_footer_next"></div></th>
 			            </tr>
 		           </tfoot>
 				</table>
 			</div>
 			<div class="span-24">&nbsp;</div>
 			<div class="span-24"><hr/></div>
+<!-- 
 			<div class="span-1"><a href="about.html">About</a></div>
 			<div class="span-1"><a href="contact.html">Contact</a></div>
-			<div class="span-21">&nbsp;</div>
+-->
+			<div class="span-23">&nbsp;</div>
 			<div class="span-1 last">v0.0.1</div>
 			<div class="span-24">&nbsp;</div>
 		</div>
