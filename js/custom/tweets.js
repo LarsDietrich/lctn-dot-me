@@ -1,12 +1,13 @@
 /**
  * Generate tweets based on location
  */
+
 function getTweets(selectedLocation, filter, range) {
 	listOfTweets = [];
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://search.twitter.com/search.json?&q=" + filter
+		script.src = "http://search.twitter.com/search.json?rpp=100&q=" + filter
 				+ "&geocode=" + selectedLocation.lat() + ","
 				+ selectedLocation.lng() + "," + range
 				+ "km&callback=processTheseTweets&_=" + new Date().getTime();
@@ -40,6 +41,7 @@ function processTheseTweets(jsonData) {
 function formatText(text) {
 	var splitString = text.split(" ");
 	var result = "";
+	
 	for (i = 0; i < splitString.length; i++) {
 		value = splitString[i];
 		if (!(value.match("http") == null)) {
@@ -49,7 +51,7 @@ function formatText(text) {
 			value = "<a target= '_blank' href='http://twitter.com/"
 				
 				+ value.substring(1) + "'>" + value + "</a>";
-		}
+		} 
 		result = result + " " + value;
 	}
 	return result;
