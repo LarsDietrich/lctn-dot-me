@@ -8,9 +8,9 @@ function response() {
 	this.success = false;
 }
 
-var locateResponse = new response();
 
 function locateMe() {
+	var locateResponse = new response();
 	try {
 		// Try W3C Geolocation (Preferred)
 		if (navigator.geolocation) {
