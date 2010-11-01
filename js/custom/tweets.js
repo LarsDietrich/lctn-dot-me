@@ -1,7 +1,8 @@
 /**
  * Generate tweets based on location
  */
-function tweets(selectedLocation, filter, range) {
+function getTweets(selectedLocation, filter, range) {
+	listOfTweets = [];
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
@@ -16,19 +17,23 @@ function tweets(selectedLocation, filter, range) {
 function processTheseTweets(jsonData) {
 	var shtml = '';
 	var results = jsonData.results;
+	var i = 0;
+	var tweet = "";
 	if (results) {
 		$.each(results, function(index, value) {
-			shtml += "<p class='title'><span class='author'>"
-					+ "<a target= '_blank' href='http://twitter.com/"
-					+ value.from_user.substring(0, value.from_user.length)
-					+ "'>" + value.from_user + "</a>" + "</span>: "
-					+ formatText(value.text) + "&nbsp;"
-					+ getTweetLocation(value.location) + "</p>";
+			tweet = "<p class='title'><span class='author'>"
+				+ "<a target= '_blank' href='http://twitter.com/"
+				+ value.from_user.substring(0, value.from_user.length)
+				+ "'>" + value.from_user + "</a>" + "</span>: "
+				+ formatText(value.text) + "&nbsp;"
+				+ getTweetLocation(value.location) + "</p>";
+			listOfTweets[i] = tweet;
+			i++;
 		});
-		if (shtml.length == 0) {
-			shtml = "No results found";
+		if (listOfTweets.length == 0) {
+			listOfTweets[0] = "No tweets found";
 		}
-		$("#tweet_stream").html(shtml);
+		updateTwitterDisplay(1);
 	}
 }
 
