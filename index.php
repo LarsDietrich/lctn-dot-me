@@ -10,12 +10,13 @@
 		<!--[if lt IE 8]>
 		<link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/>
 		<![endif]-->
-		<link rel="stylesheet" href="css/main.css" type="text/css"/>
+		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-		<script type="text/javascript" src="js/jxs.js"> </script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+		<script type="text/javascript" src="js/jxs.js"> </script>
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
@@ -49,11 +50,11 @@
 
 			// tweet array to hold all tweets in area
 			var listOfTweets = [];
-			var tweetsPerPage = 5;
+			var tweetsPerPage = 8;
 			
 			// wiki array to hold all wikis in area
 			var listOfWikis = [];
-			var wikisPerPage = 8;
+			var wikisPerPage = 10;
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
@@ -227,25 +228,25 @@
 
 			  // Update the social bar with new shortened link
 			function updateSocialBar(link) {
-				size="70px";
-				data = "<a href=\"http://twitter.com/home/?status=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
-				document.getElementById("twitter").innerHTML=data;
+				var size="70px";
+				var output = "";
+				  
+				output += "<a href=\"http://twitter.com/home/?status=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
 
-				data = "<a href=\"http://www.facebook.com/sharer.php?u=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
-				document.getElementById("facebook").innerHTML=data;
+				output += "<a href=\"http://www.facebook.com/sharer.php?u=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
 
-				data = "<a href=\"http://del.icio.us/post?url=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
-				document.getElementById("delicious").innerHTML=data;
+				output += "<a href=\"http://del.icio.us/post?url=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
 
-				data = "<a href=\"mailto:?subject=" + link + "\"";
-				data = data + "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
-				document.getElementById("email").innerHTML=data;
+				output += "<a href=\"mailto:?subject=";
+				output += link + "\"";
+				output += "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
+				document.getElementById("social").innerHTML=output;
 				
 			}
 
@@ -278,18 +279,16 @@
 				if (totalPages < (listOfTweets.length / tweetsPerPage)) {
 					totalPages++;
 				}
-				var next = "";
-				var previous = "";
+				var next = "&nbsp;";
+				var previous = "&nbsp;";
 				
 				if ((page + 1) <= totalPages) {				
-					next += "<span onclick=\"updateTwitterDisplay(" + (page + 1) + ")\">Next</span>";
+					next = "<span onclick=\"updateTwitterDisplay(" + (page + 1) + ")\">\></span>";
 				}
 				if ((page - 1) >= 1) { 
-					previous += "<span onclick=\"updateTwitterDisplay(" + (page - 1) + ")\">Prev</span>";
+					previous = "<span onclick=\"updateTwitterDisplay(" + (page - 1) + ")\">\<</span>";
 				}				
-				document.getElementById("twitter_footer_prev").innerHTML = previous;
-				document.getElementById("twitter_footer_next").innerHTML = next;
-				document.getElementById("twitter_pages").innerHTML = "Page " + page + " of " + totalPages;
+				document.getElementById("twitter_footer").innerHTML = previous + "&nbsp;&nbsp;&nbsp;" + next;
 			}
  		  	
  		  	function updateWikiLocationInformation() {
@@ -319,18 +318,16 @@
 				if (totalPages < (listOfWikis.length / wikisPerPage)) {
 					totalPages++;
 				}
-				var next = "";
-				var previous = "";
+				var next = "&nbsp;";
+				var previous = "&nbsp;";
 				if ((page + 1) <= totalPages) {				
-					next += "<span onclick=\"updateWikiDisplay(" + (page + 1) + ")\">Next</span>";
+					next = "<span onclick=\"updateWikiDisplay(" + (page + 1) + ")\">\></span>";
 				}
 				if ((page - 1) >= 1) { 
-					previous += "<span onclick=\"updateWikiDisplay(" + (page - 1) + ")\">Prev</span>";
+					previous = "<span onclick=\"updateWikiDisplay(" + (page - 1) + ")\">\<</span>";
 				}				
 
-				document.getElementById("wiki_footer_prev").innerHTML = previous;
-				document.getElementById("wiki_footer_next").innerHTML = next;
-				document.getElementById("wiki_pages").innerHTML = "Page " + page + " of " + totalPages;
+				document.getElementById("wiki_footer").innerHTML = previous + "&nbsp;&nbsp;&nbsp;" + next;
 			}
  		  	
 		</script>
@@ -345,176 +342,108 @@
 				<h1>lctn.me</h1>
 			</div>
 			<div class="span-9">
-				<h4><i>Your one stop location shortening and link service</i></h4>
+				<h4><i>Find it, share it</i></h4>
 			</div>
 			<div class="span-12 last">
 				<div id="message"></div>
 			</div>
 			<div class="span-24"><hr/></div>
 			<div class="span-12">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Start by searching for an address, or place name</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
-									<input style="height: 33px;" class="large" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+				Start by searching for an address, or place name
+				</div>
+				<div class="detail">
+					<center>
+						<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
+						<input style="height: 33px;" class="large" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
 			<div class="span-12 last">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Create short url for this location</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-							<center>
-								<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
-								<input type="text" class="title" name="url" id="url" value="" readonly="readonly"/>
-							</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+				Create short url for this location
+				</div>
+				<div class="detail">
+					<center>
+						<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
+						<input type="text" class="title" name="url" id="url" value="" readonly="readonly"/>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
+			<div class="span-24">&nbsp;</div>
 			<div class="span-12">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Click anywhere to select a location</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-								<div id="map" style="width: 460px; height: 460px;"></div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+				Click anywhere to select a location
+				</div>
+				<div class="detail">
+					<center>
+						<div id="map" style="width: 460px; height: 460px;"></div>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
 			<div class="span-12 last">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12"><div id="streetview_title">This shows you the streetview, if it's available</div></th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-								<div id="streetview" style="width: 460px; height: 460px"></div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+				This shows you the streetview, if it's available
+				</div>
+				<div class="detail">
+					<center>
+						<div id="streetview" style="width: 460px; height: 460px"></div>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
+			<div class="span-24">&nbsp;</div>
 			<div class="span-24">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-20">Share the link with your friends</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									<div class="span-2" id="email">
-									</div>
-									<div class="span-2" id="twitter">
-									</div>
-									<div class="span-2" id="facebook">
-									</div>
-									<div class="span-2" id="delicious">
-									</div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+	              	Share the link with your friends
+			    </div>
+				<div class="detail">
+						<div id="social"></div>
+				</div>
+				<div class="footer-clear"></div>
+
 			</div>
-			<div class="span-24"><hr/></div>
+			<div class="span-24">&nbsp;</div>
 			<div class="span-12 ">
-				<table>
-					<thead>
-			            <tr>
-			              	<th colspan="3" class="span-10">What people are tweeting in the area</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td colspan="3">
-								<center>
-									Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-									in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
-									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
-								</center>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<div id="tweet_stream">Tweets close to your selected location</div>
-							</td>
-						</tr>
-          		   </tbody>
-					<tfoot>
-			            <tr>
-			              	<th class="span-1"><div id="twitter_footer_prev"></div></th>
-			              	<th class="span-10"><center><div id="twitter_pages"></div></center></th>
-			              	<th class="span-1"><div id="twitter_footer_next"></div></th>
-			            </tr>
-		           </tfoot>
-				</table>
+				<div class="header">
+	              	What people are tweeting in the area
+				</div>
+ 				<div class="detail">
+					<center>
+						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
+						in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
+					</center>
+				</div>
+				<div class="detail fixed-height-social">
+					<div id="tweet_stream">Tweets close to your selected location</div>
+				</div>
+				<div class="footer-text fixed-height-footer">
+	              	<div id="twitter_footer"></div>
+				</div>
 			</div>
 			<div class="span-12 last ">
-				<table>
-					<thead>
-			            <tr>
-			              	<th colspan="3" class="span-12">Wikipedia articles in the area</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td colspan="3">
-								<center>
-									Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
-									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
-								</center>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<center>
-									<div id="wiki_stream">Wikipedia entries close to your location</div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-					<tfoot>
-			            <tr>
-			              	<th class="span-1"><div id="wiki_footer_prev"></div></th>
-			              	<th class="span-10"><center><div id="wiki_pages"></div></center></th>
-			              	<th class="span-1"><div id="wiki_footer_next"></div></th>
-			            </tr>
-		           </tfoot>
-				</table>
+
+				<div class="header">
+	              	Wikipedia articles in the area
+				</div>
+ 				<div class="detail">
+					<center>
+						Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
+						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
+					</center>
+				</div>
+				<div class="detail fixed-height-social">
+					<center>
+						<div id="wiki_stream">Wikipedia entries close to your location</div>
+					</center>
+				</div>
+				<div class="footer-text fixed-height-footer">
+	              	<div id="wiki_footer"></div>
+				</div>
 			</div>
 			<div class="span-24">&nbsp;</div>
 			<div class="span-24"><hr/></div>

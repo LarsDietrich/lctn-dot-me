@@ -1,0 +1,43 @@
+.detail {
+	background: transparent;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	padding:4px 10px 4px 5px;
+}
+
+.header {
+	background: #c3d9ff;
+	border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	padding:4px 10px 4px 5px;
+	font-weight: bold;
+}
+
+.footer-text {
+	background: #c3d9ff;
+	border-radius: 0px 0px 10px 10px;
+	-moz-border-radius: 0px 0px 10px 10px;
+	border: 1px solid black;
+	padding:4px 10px 4px 5px;
+}
+
+.footer-clear {
+	border-radius: 0px 0px 10px 10px;
+	-moz-border-radius: 0px 0px 10px 10px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	padding:4px 10px 4px 5px;
+}
+
+.fixed-height-social {
+	height: 450px;
+}
+
+.fixed-height-footer {
+	height: 13px;
+}
