@@ -15,7 +15,10 @@
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-
+		
+		<!-- http://lctn -->
+		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
+		
 		<script type="text/javascript" src="js/jxs.js"> </script>
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
@@ -23,7 +26,7 @@
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
 		
 		<script type="text/javascript">
-
+			
 			// reference to the main map
 			var map;
 			// reference to the streetview
@@ -283,12 +286,15 @@
 				var previous = "&nbsp;";
 				
 				if ((page + 1) <= totalPages) {				
-					next = "<span onclick=\"updateTwitterDisplay(" + (page + 1) + ")\">\></span>";
+					next = "<img src=\"images/arrow_right.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
 				}
 				if ((page - 1) >= 1) { 
-					previous = "<span onclick=\"updateTwitterDisplay(" + (page - 1) + ")\">\<</span>";
+					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
 				}				
-				document.getElementById("twitter_footer").innerHTML = previous + "&nbsp;&nbsp;&nbsp;" + next;
+
+
+
+				document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center";
 			}
  		  	
  		  	function updateWikiLocationInformation() {
@@ -321,10 +327,10 @@
 				var next = "&nbsp;";
 				var previous = "&nbsp;";
 				if ((page + 1) <= totalPages) {				
-					next = "<span onclick=\"updateWikiDisplay(" + (page + 1) + ")\">\></span>";
+					next = "<img src=\"images/arrow_right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
 				}
 				if ((page - 1) >= 1) { 
-					previous = "<span onclick=\"updateWikiDisplay(" + (page - 1) + ")\">\<</span>";
+					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
 				}				
 
 				document.getElementById("wiki_footer").innerHTML = previous + "&nbsp;&nbsp;&nbsp;" + next;
