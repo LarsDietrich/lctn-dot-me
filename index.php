@@ -291,10 +291,7 @@
 				if ((page - 1) >= 1) { 
 					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
 				}				
-
-
-
-				document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center";
+				document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
  		  	
  		  	function updateWikiLocationInformation() {
@@ -333,7 +330,7 @@
 					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
 				}				
 
-				document.getElementById("wiki_footer").innerHTML = previous + "&nbsp;&nbsp;&nbsp;" + next;
+				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
  		  	
 		</script>
