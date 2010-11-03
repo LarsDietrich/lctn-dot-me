@@ -7,7 +7,7 @@ body {
 }
 
 .header {
-	background: #FDB813;
+	background: #62C2CC;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
 	border-top: 1px solid black;
@@ -31,7 +31,7 @@ body {
 }
 
 .footer-text {
-	background: #FDB813;
+	background: #62C2CC;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
 	border-left: 1px solid black;
