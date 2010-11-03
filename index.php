@@ -23,6 +23,7 @@
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
+		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
 		
 		<script type="text/javascript">
@@ -58,6 +59,9 @@
 			// wiki array to hold all wikis in area
 			var listOfWikis = [];
 			var wikisPerPage = 10;
+
+			// weather array
+			var listOfWeather = [];
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
@@ -148,6 +152,7 @@
 				map.setCenter(selectedLocation);
 				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
+				updateWeatherLocationInformation();
 				reverseCodeLatLng();
 				scroll(0,0);
 				document.getElementById("url").value="";
@@ -253,6 +258,23 @@
 				
 			}
 
+			function updateWeatherLocationInformation() {
+				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+					document.getElementById("weather_stream").innerHTML="Searching..";
+					getWeather(selectedLocation, 5);
+				}
+			}
+
+ 		  	// Load the weather display based on whats in tweets array
+			function updateWeatherDisplay() {
+				var output = "";
+				for (i = 0; i < listOfWeather.length; i++) {
+					output += listOfWeather[i];
+					output += "&nbsp;";	
+				}				
+				document.getElementById("weather_stream").innerHTML = output;
+ 		  	}
+			
  		  	function updateTwitterLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 					document.getElementById("tweet_stream").innerHTML="Searching..";
@@ -332,8 +354,8 @@
 
 				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
- 		  	
-		</script>
+			
+			</script>
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
@@ -363,6 +385,7 @@
 				</div>
 				<div class="footer-clear"></div>
 			</div>
+
 			<div class="span-12 last">
 				<div class="header">
 				Create short url for this location
@@ -375,71 +398,88 @@
 				</div>
 				<div class="footer-clear"></div>
 			</div>
+
 			<div class="span-24">&nbsp;</div>
-			<div class="span-12">
+
+			<div id="map_container" class="span-12">
+
 				<div class="header">
 				Click anywhere to select a location
 				</div>
 				<div class="detail">
 					<center>
-						<div id="map" style="width: 460px; height: 460px;"></div>
+						<div id="map" style="width: 468px; height: 465px;"></div>
 					</center>
 				</div>
-				<div class="footer-clear"></div>
+				<div class="footer-straight"></div>
 			</div>
-			<div class="span-12 last">
+
+			<div id="view-container" class="span-12 last">
 				<div class="header">
-				This shows you the streetview, if it's available
+				Streetview
 				</div>
 				<div class="detail">
 					<center>
-						<div id="streetview" style="width: 460px; height: 460px"></div>
+						<div id="streetview" style="width: 468px; height: 465px"></div>
 					</center>
 				</div>
-				<div class="footer-clear"></div>
+				<div class="footer-straight"></div>
 			</div>
+
 			<div class="span-24">&nbsp;</div>
-			<div class="span-24">
+
+			<div class="span-12">
 				<div class="header">
 	              	Share the link with your friends
 			    </div>
-				<div class="detail">
-						<div id="social"></div>
+				<div class="detail-padded fixed-height-small">
+						<center><div id="social"></div></center>
 				</div>
 				<div class="footer-clear"></div>
-
 			</div>
+
+			<div class="span-12 last">
+				<div class="header">
+	              	Weather (under development)
+			    </div>
+				<div class="detail-padded fixed-height-small">
+						<div id="weather_stream"></div>
+				</div>
+				<div class="footer-clear"></div>
+			</div>
+
 			<div class="span-24">&nbsp;</div>
+
 			<div class="span-12 ">
 				<div class="header">
-	              	What people are tweeting in the area
+	              	Tweets
 				</div>
- 				<div class="detail">
+ 				<div class="detail-padded">
 					<center>
 						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
 						in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
 						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
 					</center>
 				</div>
-				<div class="detail fixed-height-social">
+				<div class="detail-padded fixed-height-social">
 					<div id="tweet_stream">Tweets close to your selected location</div>
 				</div>
 				<div class="footer-text fixed-height-footer">
 	              	<div id="twitter_footer"></div>
 				</div>
 			</div>
-			<div class="span-12 last ">
 
+			<div class="span-12 last ">
 				<div class="header">
-	              	Wikipedia articles in the area
+	              	Wiki Articles
 				</div>
- 				<div class="detail">
+ 				<div class="detail-padded">
 					<center>
 						Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
 						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 					</center>
 				</div>
-				<div class="detail fixed-height-social">
+				<div class="detail-padded fixed-height-social">
 					<center>
 						<div id="wiki_stream">Wikipedia entries close to your location</div>
 					</center>
@@ -448,7 +488,9 @@
 	              	<div id="wiki_footer"></div>
 				</div>
 			</div>
+
 			<div class="span-24">&nbsp;</div>
+
 			<div class="span-24"><hr/></div>
 <!-- 
 			<div class="span-1"><a href="about.html">About</a></div>
