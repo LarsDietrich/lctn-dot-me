@@ -47,7 +47,13 @@ function processResults(jsonData) {
 		for (i = 0; i < weather.length; i++) {	
 			description = weather[i].weatherDesc[0].value;
 			icon = weather[i].weatherIconUrl[0].value;
-			output = "<img title=\"" + description + "\" src=\"" + icon + "\"/>";
+			output =  "<td>" + getDayOfWeek(weather[i].date) + "<br/>";
+			output += "<img class=\"weather-icon\" title=\"" + description + "\" src=\"" + icon + "\"/>";
+			output += "</td>";
+			output += "<td>";
+			output += weather[i].tempMinC + "/" + weather[i].tempMaxC + "<br/>";
+			output += weather[i].winddirection + "/" + weather[i].windspeedKmph + "<br/>";
+			output += "</td>";
 			listOfWeather[i] = output;
 		}
 	}
@@ -56,4 +62,10 @@ function processResults(jsonData) {
 		listOfWeather[0] = "No weather data found";
 	}
 	updateWeatherDisplay();
+}
+
+function getDayOfWeek(date) {
+	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+	var myDate=new Date(eval('"' + date + '"'));
+	return days[myDate.getDay()];
 }

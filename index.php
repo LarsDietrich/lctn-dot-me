@@ -267,11 +267,11 @@
 
  		  	// Load the weather display based on whats in tweets array
 			function updateWeatherDisplay() {
-				var output = "";
+				var output = "<table><tr>";
 				for (i = 0; i < listOfWeather.length; i++) {
 					output += listOfWeather[i];
-					output += "&nbsp;";	
 				}				
+				output += "</tr></table>";
 				document.getElementById("weather_stream").innerHTML = output;
  		  	}
 			
@@ -443,7 +443,7 @@
 	              	Weather (under development)
 			    </div>
 				<div class="detail-padded fixed-height-small">
-						<div id="weather_stream"></div>
+					<div id="weather_stream"></div>
 				</div>
 				<div class="footer-clear"></div>
 			</div>
