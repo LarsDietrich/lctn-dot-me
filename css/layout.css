@@ -1,5 +1,5 @@
 body {
-	background-color: #E4F6F8;
+	background-color: #FFFFFF;
 }
 
 .view-position {
@@ -7,7 +7,7 @@ body {
 }
 
 .header {
-	background: #62C2CC;
+	background: #AFD775;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
 	border-top: 1px solid black;
@@ -31,7 +31,7 @@ body {
 }
 
 .footer-text {
-	background: #62C2CC;
+	background: #AFD775;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
 	border-left: 1px solid black;
