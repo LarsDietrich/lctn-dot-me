@@ -7,7 +7,7 @@ function getTweets(selectedLocation, filter, range) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://search.twitter.com/search.json?rpp=100&q=" + filter
+		script.src = "http://search.twitter.com/search.json?lang=en&rpp=100&q=" + filter
 				+ "&geocode=" + selectedLocation.lat() + ","
 				+ selectedLocation.lng() + "," + range
 				+ "km&callback=processTheseTweets&_=" + new Date().getTime();
