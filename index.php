@@ -25,7 +25,9 @@
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
-		
+		<script type="text/javascript" src="js/browser_detect.js"></script>		
+		<script type="text/javascript" src="js/popup.js"></script>		
+
 		<script type="text/javascript">
 			
 			// reference to the main map
@@ -282,6 +284,11 @@
 				}
 			}
 
+ 		  	function updateTwitterLocationInformationFromHashTag(value) {
+ 		  		document.getElementById("filter").value = value;
+				updateTwitterLocationInformation();
+ 		  	}
+ 		  	
  		  	// Load the twitter display based on whats in tweets array
 			function updateTwitterDisplay(page) {
 				var startItem = (page - 1) * tweetsPerPage;
@@ -354,6 +361,16 @@
 
 				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
+
+	function showhelp(element) {
+		if (element == "wiki-title") {
+			text = "Wikipedia entries relative to the chosen location, within the range specified.";
+		}
+		if (element == "wiki-range") {
+			text = "Enter a range to search for articles, maximum of 5km.";
+		}
+		popup(text);	
+	}
 			
 			</script>
 	</head>
@@ -408,7 +425,10 @@
 				</div>
 				<div class="detail">
 					<center>
-						<div id="map" style="width: 468px; height: 465px;"></div>
+<!-- 						
+					<div id="map" style="width: 40px; height: 40px;"></div>
+-->
+					<div id="map" style="width: 468px; height: 465px;"></div>
 					</center>
 				</div>
 				<div class="footer-straight"></div>
@@ -420,8 +440,11 @@
 				</div>
 				<div class="detail">
 					<center>
+<!-- 
+						<div id="streetview" style="width: 40px; height: 40px"></div>
+ -->
 						<div id="streetview" style="width: 468px; height: 465px"></div>
-					</center>
+ 					</center>
 				</div>
 				<div class="footer-straight"></div>
 			</div>
@@ -471,11 +494,11 @@
 
 			<div class="span-12 last ">
 				<div class="header">
-	              	Wiki Articles
+	              	<span onmouseover="showhelp('wiki-title')" onmouseout="kill()" title="">Wiki Articles</span>
 				</div>
  				<div class="detail-padded">
 					<center>
-						Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
+						Find me articles within <input onmouseover="showhelp('wiki-range')" onmouseout="kill()" title="" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
 						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 					</center>
 				</div>

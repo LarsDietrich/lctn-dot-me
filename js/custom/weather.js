@@ -47,10 +47,10 @@ function processResults(jsonData) {
 		for (i = 0; i < weather.length; i++) {	
 			description = weather[i].weatherDesc[0].value;
 			icon = weather[i].weatherIconUrl[0].value;
-			output =  "<td>" + getDayOfWeek(weather[i].date) + "<br/>";
-			output += "<img class=\"weather-icon\" title=\"" + description + "\" src=\"" + icon + "\"/>";
+			output =  "<td class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
+			output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
 			output += "</td>";
-			output += "<td>";
+			output += "<td class='weather-text'>";
 			output += weather[i].tempMinC + "/" + weather[i].tempMaxC + "<br/>";
 			output += weather[i].winddirection + "/" + weather[i].windspeedKmph + "<br/>";
 			output += "</td>";
