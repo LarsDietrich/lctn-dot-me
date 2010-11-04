@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-   "DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 	<head>
@@ -67,6 +66,7 @@
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
+				clicker();
 				updateSocialBar("");
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
@@ -84,7 +84,8 @@
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 				} 
 				showMap();
-			}
+
+				}
 
 			function clearElements() {
 				document.getElementById("address").value="";
@@ -362,20 +363,35 @@
 				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
 
-	function showhelp(element) {
-		if (element == "wiki-title") {
-			text = "Wikipedia entries relative to the chosen location, within the range specified.";
-		}
-		if (element == "wiki-range") {
-			text = "Enter a range to search for articles, maximum of 5km.";
-		}
-		popup(text);	
-	}
-			
-			</script>
+			function showhelp(element) {
+				if (element == "wiki-title") {
+					text = "Wikipedia entries relative to the chosen location, within the range specified.";
+				}
+				if (element == "wiki-range") {
+					text = "Enter a range to search for articles, maximum of 5km.";
+				}
+				popup(text);	
+			}
+
+			function clicker(){
+				var thediv=document.getElementById('displaybox');
+				if(thediv.style.display == "none"){
+					thediv.style.display = "";
+					thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>This site is still under heavy development, feel free to use it but bugs are to be expected. I take no responsibility for the stability and accuracy of data being displayed.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
+				}else{
+					thediv.style.display = "none";
+					thediv.innerHTML = '';
+				}
+				return false;
+			}
+						
+		</script>
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
+
+		<div id="displaybox" onclick="clicker();" style="display: none;"></div>
+
 		<div class="container">
 			<div class="span-21">&nbsp;</div>
 			<div class="span-2"><h1><i>BETA</i></h1></div>
