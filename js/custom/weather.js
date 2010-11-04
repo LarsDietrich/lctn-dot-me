@@ -54,7 +54,7 @@ function processResults(jsonData) {
 			output += "<td class='weather-text'>";
 			output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
 			output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
-			output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/> " + weather[i].precipMM + "mm<br/>";
+			output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
 			output += "</td>";
 			
 			
