@@ -263,7 +263,7 @@
 			function updateWeatherLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 					document.getElementById("weather_stream").innerHTML="Searching..";
-					getWeather(selectedLocation, 5);
+					getWeather(selectedLocation, 3);
 				}
 			}
 
@@ -463,7 +463,7 @@
 
 			<div class="span-12 last">
 				<div class="header">
-	              	Weather (under development)
+	              	Weather in the area
 			    </div>
 				<div class="detail-padded fixed-height-small">
 					<div id="weather_stream"></div>

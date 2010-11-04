@@ -29,8 +29,8 @@ function getWeather(selectedLocation, days) {
 				+ selectedLocation.lat()
 				+ ","
 				+ selectedLocation.lng()
-				+ "&callback=processResults"
-				+ "&num_of_days=" + days;
+				+ "&num_of_days=" + days
+				+ "&callback=processResults";
 		$("body").append(script);
 	});
 }
@@ -46,14 +46,18 @@ function processResults(jsonData) {
 	if (weather) {
 		for (i = 0; i < weather.length; i++) {	
 			description = weather[i].weatherDesc[0].value;
-			icon = weather[i].weatherIconUrl[0].value;
-			output =  "<td class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
+			//icon = weather[i].weatherIconUrl[0].value;
+			icon = "images/weather/" + description + ".png";
+			output =  "<td width='50px' class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
 			output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
 			output += "</td>";
 			output += "<td class='weather-text'>";
-			output += weather[i].tempMinC + "/" + weather[i].tempMaxC + "<br/>";
-			output += weather[i].winddirection + "/" + weather[i].windspeedKmph + "<br/>";
+			output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
+			output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
+			output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/> " + weather[i].precipMM + "mm<br/>";
 			output += "</td>";
+			
+			
 			listOfWeather[i] = output;
 		}
 	}

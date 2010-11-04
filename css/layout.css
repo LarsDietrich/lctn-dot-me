@@ -76,13 +76,37 @@ td {
 }
 
 .weather-icon {
-	height: 50px;
-	width: 50x;
+	height: 55px;
+	width: 55x;
+}
+
+.wind-direction-icon {
+	height: 12px;
+	width: 12x;
+}
+
+.precipitation-icon {
+	height: 12px;
+	width: 12x;
+}
+
+.thermometer-icon {
+	height: 15px;
+	width: 18x;
 }
 
 .weather-text {
 	font-weight: bold;
-	font-size: xx-small;
+	font-size: small;
+	padding-bottom: 2px;
+}
+
+.weather-text-min-temp {
+	color:blue;
+}
+
+.weather-text-max-temp {
+	color:red;
 }
 
 .hashtag {
@@ -122,3 +146,5 @@ input {
   color: black;
   font-size: 0.95em;
 }
+
+	
