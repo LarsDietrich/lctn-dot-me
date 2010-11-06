@@ -264,7 +264,7 @@
 			function updateWeatherLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 					document.getElementById("weather_stream").innerHTML="Searching..";
-					getWeather(selectedLocation, 3);
+					getWeather(selectedLocation, 2);
 				}
 			}
 

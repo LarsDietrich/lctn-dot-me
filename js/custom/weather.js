@@ -11,6 +11,7 @@
  * SAMPLE: 
  * 
  * { "data": {
+ * "current_condition": [ {"cloudcover": "4", "humidity": "73", "observation_time": "08:49 PM", "precipMM": "0.5", "pressure": "1023", "temp_C": "19", "temp_F": "66", "visibility": "10", "weatherCode": "113",  "weatherDesc": [ {"value": "Clear" } ],  "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0008_clear_sky_night.png" } ], "winddir16Point": "ENE", "winddirDegree": "70", "windspeedKmph": "9", "windspeedMiles": "6" } ],  
  * "request": [ {"query": "Lat 48.83 and Lon 2.39", "type": "LatLon" } ],
  * "weather": [
  * {"date": "2010-11-03", "precipMM": "0.4", "tempMaxC": "16", "tempMaxF": "60", "tempMinC": "10", "tempMinF": "51", "weatherCode": "116", "weatherDesc": [ {"value": "Partly Cloudy" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0002_sunny_intervals.png" } ], "winddir16Point": "SW", "winddirDegree": "231", "winddirection": "SW", "windspeedKmph": "18", "windspeedMiles": "11" },
@@ -25,7 +26,7 @@ function getWeather(selectedLocation, days) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://www.worldweatheronline.com/feed/weather.ashx?cc=no&format=json&key=f7d8c40a98131239100311&q="
+		script.src = "http://www.worldweatheronline.com/feed/weather.ashx?format=json&key=f7d8c40a98131239100311&q="
 				+ selectedLocation.lat()
 				+ ","
 				+ selectedLocation.lng()
@@ -40,13 +41,29 @@ function processResults(jsonData) {
 	var description = "";
 	var icon = "";
 	var weather = jsonData.data.weather;
+	var current = jsonData.data.current_condition;
 	var i = 0;
 	var output = "";
 
+	if (current) {
+		description = current[0].weatherDesc[0].value;
+		icon = "images/weather/" + description + ".png";
+		output =  "<td width='10px' class='weather-text'>Current<br/>";
+		output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
+		output += "</td>";
+		output += "<td class='weather-text'>";
+		output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-max-temp'>" + current[0].temp_C + "C</span><br/>";
+		output += "<img title='Wind direction' src='images/weather/wind-direction/" + current[0].winddir16Point + ".gif' class='wind-direction-icon'/> " + current[0].windspeedKmph + "km/h<br/>";
+		output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + current[0].precipMM + "mm<br/>";
+		output += "Time: " + current[0].observation_time + "<br/>";
+		output += "</td>";
+	}
+
+	listOfWeather[0] = output;
+	
 	if (weather) {
-		for (i = 0; i < weather.length; i++) {	
+		for (i = 0; i < weather.length - 1; i++) {	
 			description = weather[i].weatherDesc[0].value;
-			//icon = weather[i].weatherIconUrl[0].value;
 			icon = "images/weather/" + description + ".png";
 			output =  "<td width='50px' class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
 			output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
@@ -56,9 +73,7 @@ function processResults(jsonData) {
 			output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
 			output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
 			output += "</td>";
-			
-			
-			listOfWeather[i] = output;
+			listOfWeather[i+1] = output;
 		}
 	}
 
