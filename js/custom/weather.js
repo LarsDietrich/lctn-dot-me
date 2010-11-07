@@ -21,7 +21,7 @@
  * {"date": "2010-11-07", "precipMM": "5.4", "tempMaxC": "8", "tempMaxF": "47", "tempMinC": "4", "tempMinF": "38", "weatherCode": "296", "weatherDesc": [ {"value": "Light rain" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0017_cloudy_with_light_rain.png" } ], "winddir16Point": "NE", "winddirDegree": "39", "winddirection": "NE", "windspeedKmph": "16", "windspeedMiles": "10" }
  * ] }}
  */
-function getWeather(selectedLocation, days) {
+function getWeather(selectedLocation) {
 	listOfWeather = [];
 	jQuery(function() {
 		var script = document.createElement('script');
@@ -30,7 +30,7 @@ function getWeather(selectedLocation, days) {
 				+ selectedLocation.lat()
 				+ ","
 				+ selectedLocation.lng()
-				+ "&num_of_days=" + days
+				+ "&num_of_days=4"
 				+ "&callback=processResults";
 		$("body").append(script);
 	});
@@ -62,18 +62,20 @@ function processResults(jsonData) {
 	listOfWeather[0] = output;
 	
 	if (weather) {
-		for (i = 0; i < weather.length - 1; i++) {	
-			description = weather[i].weatherDesc[0].value;
-			icon = "images/weather/" + description + ".png";
-			output =  "<td width='50px' class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
-			output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
-			output += "</td>";
-			output += "<td class='weather-text'>";
-			output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
-			output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
-			output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
-			output += "</td>";
-			listOfWeather[i+1] = output;
+		for (i = 0; i < 2; i++) {	
+			if (weather[i]) {
+				description = weather[i].weatherDesc[0].value;
+				icon = "images/weather/" + description + ".png";
+				output =  "<td width='50px' class='weather-text'>" + getDayOfWeek(weather[i].date) + "<br/>";
+				output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
+				output += "</td>";
+				output += "<td class='weather-text'>";
+				output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
+				output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
+				output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
+				output += "</td>";
+				listOfWeather[i+1] = output;
+			}
 		}
 	}
 

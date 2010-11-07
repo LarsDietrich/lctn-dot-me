@@ -28,7 +28,7 @@ function process(data) {
 			j++;
 		}
 		if (listOfWikis.length == 0) {
-			listOfWikis[0] = "No results found";
+			listOfWikis[0] = "No entries found, try a bigger search area";
 		}
 		updateWikiDisplay(1);
 	}

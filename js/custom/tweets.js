@@ -32,7 +32,7 @@ function processTheseTweets(jsonData) {
 			i++;
 		});
 		if (listOfTweets.length == 0) {
-			listOfTweets[0] = "No tweets found";
+			listOfTweets[0] = "No tweets found, try a bigger search area or search for something different";
 		}
 		updateTwitterDisplay(1);
 	}

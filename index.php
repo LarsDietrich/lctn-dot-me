@@ -501,7 +501,7 @@
 					</center>
 				</div>
 				<div class="detail-padded fixed-height-social">
-					<div id="tweet_stream">Tweets close to your selected location</div>
+					<div id="tweet_stream">No tweets found, try a bigger search area or search for something different</div>
 				</div>
 				<div class="footer-text fixed-height-footer">
 	              	<div id="twitter_footer"></div>
@@ -520,7 +520,7 @@
 				</div>
 				<div class="detail-padded fixed-height-social">
 					<center>
-						<div id="wiki_stream">Wikipedia entries close to your location</div>
+						<div id="wiki_stream">No entries found, try a bigger search area</div>
 					</center>
 				</div>
 				<div class="footer-text fixed-height-footer">
