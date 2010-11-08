@@ -12,12 +12,13 @@
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		
 		<!-- http://lctn -->
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 		
+		<script type="text/javascript" src="js/gears_init.js"></script>
+
 		<script type="text/javascript" src="js/jxs.js"> </script>
 
 		<script type="text/javascript" src="js/custom/locate.js"> </script>
@@ -67,7 +68,7 @@
 			// load the necessary data, parse command line for location information and show map
 			function load() {
 				clicker();
-				updateSocialBar("");
+				updateUrlWindow("");
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
@@ -76,10 +77,6 @@
 
 				if (latitude == 999 || longitude == 999) {
 					var locateResponse = locateMe();
-					if (!locateResponse.success)  {
-						setMessage("Geolocation not supported", "error");
-					}
-					selectedLocation = locateResponse.location;
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 				} 
@@ -228,36 +225,40 @@
 				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
-				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateSocialBar(root + data); });
+				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateUrlWindow(root + data); });
 				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
 			}
 
 			// Update the url block with the supplied link, should be a shortened link
-			function updateUrl(link) {
+			function updateUrlWindow(link) {
 				document.getElementById("url").value=link;
 			}
 
+			
 			  // Update the social bar with new shortened link
-			function updateSocialBar(link) {
-				var size="70px";
+			function updateUrlWindow(link) {
 				var output = "";
-				  
+
+				output += "<input style=\"height: 33px;\"  class=\"large\" type=\"button\" name=\"generate\" value=\"Go\" onclick=\"shortenUrl();\"/>";
+				output += "<input onmouseover=\"showhelp('url')\" onmouseout=\"kill()\" title=\"\" type=\"text\" class=\"url-text\" name=\"url\" id=\"url\" value=\"\" readonly=\"readonly\"/>";
+				output += "&nbsp;";
+				
 				output += "<a href=\"http://twitter.com/home/?status=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
 
 				output += "<a href=\"http://www.facebook.com/sharer.php?u=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
 
 				output += "<a href=\"http://del.icio.us/post?url=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
 
 				output += "<a href=\"mailto:?subject=";
 				output += link + "\"";
-				output += "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
-				document.getElementById("social").innerHTML=output;
+				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
+				document.getElementById("url-window").innerHTML=output;
 				
 			}
 
@@ -364,12 +365,22 @@
 			}
 
 			function showhelp(element) {
-				if (element == "wiki-title") {
-					text = "Wikipedia entries relative to the chosen location, within the range specified.";
-				}
 				if (element == "wiki-range") {
 					text = "Enter a range to search for articles, maximum of 5km.";
 				}
+				if (element == "tweet-filter") {
+					text = "Enter a search term to filter area specific tweets, or blank for all.";
+				}
+				if (element == "tweet-range") {
+					text = "Enter a range to search for tweets.";
+				}
+				if (element == "address") {
+					text = "Enter an address or place name to search for.";
+				}
+				if (element == "url") {
+					text = "Click Go to generate a url of this location that will reload the map and streetview as you see it.";
+				}
+				
 				popup(text);	
 			}
 
@@ -407,12 +418,12 @@
 			</div>
 			<div class="span-24"><hr/></div>
 			<div class="span-12">
-				<div class="header">
+					<div class="header">
 				Start by searching for an address, or place name
 				</div>
 				<div class="detail">
 					<center>
-						<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
+						<input onmouseover="showhelp('address')" onmouseout="kill()" title="" type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
 						<input style="height: 33px;" class="large" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
 					</center>
 				</div>
@@ -425,8 +436,7 @@
 				</div>
 				<div class="detail">
 					<center>
-						<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
-						<input type="text" class="title" name="url" id="url" value="" readonly="readonly"/>
+						<div id="url-window"></div>
 					</center>
 				</div>
 				<div class="footer-clear"></div>
@@ -472,7 +482,6 @@
 	              	Share the link with your friends
 			    </div>
 				<div class="detail-padded fixed-height-small">
-						<center><div id="social"></div></center>
 				</div>
 				<div class="footer-clear"></div>
 			</div>
@@ -495,8 +504,8 @@
 				</div>
  				<div class="detail-padded">
 					<center>
-						Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-						in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+						Search for <input onmouseover="showhelp('tweet-filter')" onmouseout="kill()" title="" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
+						in <input onmouseover="showhelp('tweet-range')" onmouseout="kill()" title="" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
 						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
 					</center>
 				</div>
@@ -510,7 +519,7 @@
 
 			<div class="span-12 last ">
 				<div class="header">
-	              	<span onmouseover="showhelp('wiki-title')" onmouseout="kill()" title="">Wiki Articles</span>
+	              	<span>Wiki Articles</span>
 				</div>
  				<div class="detail-padded">
 					<center>

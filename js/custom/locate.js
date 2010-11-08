@@ -30,9 +30,11 @@ function locateMe() {
 }
 
 function successCallback(position) {
-	locateResponse.location = new google.maps.LatLng(position.latitude, position.longitude);
+	locateResponse.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	locateResponse.message = "Success";
 	locateResponse.success = true;
+	selectedLocation = locateResponse.location;
+	repositionMarker();
 }
 
 function errorCallback(error) {
