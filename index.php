@@ -21,7 +21,6 @@
 
 		<script type="text/javascript" src="js/jxs.js"> </script>
 
-		<script type="text/javascript" src="js/custom/locate.js"> </script>
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
@@ -67,8 +66,9 @@
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
-				clicker();
+				beta();
 				updateUrlWindow("");
+
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
@@ -76,14 +76,37 @@
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
 
 				if (latitude == 999 || longitude == 999) {
-					var locateResponse = locateMe();
+					locateMe();
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
+					showMap();
 				} 
-				showMap();
+			}
 
-				}
+			function locateMe() {
+				// Try W3C Geolocation (Preferred)
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {	
+							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+							showMap();
+						}, function(error) {
+							selectedLocation = new google.maps.LatLng(0, 0);
+							showMap();
+						});
+					// Try Google Gears Geolocation
+				} else if (google.gears) {
+					var geo = google.gears.factory.create('beta.geolocation');
+					geo.getCurrentPosition(function(position) {	
+						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+						showMap();
+					}, function(error) {
+						selectedLocation = new google.maps.LatLng(0, 0);
+						showMap();
+					});
+				} 
+			}
 
+			
 			function clearElements() {
 				document.getElementById("address").value="";
 				document.getElementById("url").value="";
@@ -91,7 +114,6 @@
 
 			// show the map
 			function showMap() { 
-
 			  var myOptions = {
 				  zoom: zoom,
 				  center: selectedLocation,
@@ -115,9 +137,8 @@
   			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
 
 		      setupListeners();
-  			  
-  			  repositionMarker();
-	  			  
+
+		      repositionMarker();
 			}
 
 		   // Various listeners to catch changes on the map(s)
@@ -145,6 +166,9 @@
 			// Moves the marker to a new location specified by selectedLocation. Refreshes screen for anything
 			// that uses the location (like tweets and streetview)
 			function repositionMarker() {
+				if (!map) {
+					showMap();
+				}
 				positionMarker.setMap(null);
 				positionMarker.setPosition(selectedLocation);
 				positionMarker.setMap(map);
@@ -195,7 +219,7 @@
 					  setMessage("Unable to determine location from address: " + status, "error");
 				    }
 				});
-			}
+				}
 			
 			// Reverse geocodes the address, moves the marker to the new location
 			function locationFromAddress(address) {
@@ -384,7 +408,7 @@
 				popup(text);	
 			}
 
-			function clicker(){
+			function beta(){
 				var thediv=document.getElementById('displaybox');
 				if(thediv.style.display == "none"){
 					thediv.style.display = "";
@@ -401,7 +425,7 @@
 
 	<body onload="load()" onunload="GUnload()">
 
-		<div id="displaybox" onclick="clicker();" style="display: none;"></div>
+		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
 		<div class="container">
 			<div class="span-21">&nbsp;</div>
