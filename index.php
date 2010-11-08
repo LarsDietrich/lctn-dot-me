@@ -246,6 +246,7 @@
 			  
 			// Determine the shortened URL based on the current location, saves to DB
 			function shortenUrl() {
+				alert("test");
 				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
@@ -263,10 +264,6 @@
 			function updateUrlWindow(link) {
 				var output = "";
 
-				output += "<input style=\"height: 33px;\"  class=\"large\" type=\"button\" name=\"generate\" value=\"Go\" onclick=\"shortenUrl();\"/>";
-				output += "<input onmouseover=\"showhelp('url')\" onmouseout=\"kill()\" title=\"\" type=\"text\" class=\"url-text\" name=\"url\" id=\"url\" value=\"\" readonly=\"readonly\"/>";
-				output += "&nbsp;";
-				
 				output += "<a href=\"http://twitter.com/home/?status=";
 				output += link + "\"";
 				output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
@@ -460,6 +457,8 @@
 				</div>
 				<div class="detail">
 					<center>
+						<input style="eight: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
+						<input onmouseover="showhelp('url')" onmouseout="kill()" title="" type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
 						<div id="url-window"></div>
 					</center>
 				</div>
