@@ -26,7 +26,6 @@ function locateMe() {
 	} catch (err) {
 		locateResponse.message = "Error: " + err.description;
 	}
-	alert(locateResponse.message);
 	return locateResponse;
 }
 
