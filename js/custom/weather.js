@@ -62,7 +62,7 @@ function processResults(jsonData) {
 	listOfWeather[0] = output;
 	
 	if (weather) {
-		for (i = 0; i < 2; i++) {	
+		for (i = 1; i < 3; i++) {	
 			if (weather[i]) {
 				description = weather[i].weatherDesc[0].value;
 				icon = "images/weather/" + description + ".png";
@@ -74,7 +74,7 @@ function processResults(jsonData) {
 				output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
 				output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
 				output += "</td>";
-				listOfWeather[i+1] = output;
+				listOfWeather[i] = output;
 			}
 		}
 	}

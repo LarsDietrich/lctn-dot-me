@@ -2,6 +2,8 @@
  * Javascript to attempt to locate a person using built in browser geolocation.
  */
 
+var locateResponse = new response();
+
 function response() {
 	this.location = new google.maps.LatLng(0, 0);
 	this.message = "Unavailable";
@@ -10,7 +12,6 @@ function response() {
 
 
 function locateMe() {
-	var locateResponse = new response();
 	try {
 		// Try W3C Geolocation (Preferred)
 		if (navigator.geolocation) {
@@ -25,6 +26,7 @@ function locateMe() {
 	} catch (err) {
 		locateResponse.message = "Error: " + err.description;
 	}
+	alert(locateResponse.message);
 	return locateResponse;
 }
 
