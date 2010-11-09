@@ -106,6 +106,29 @@
 				} 
 			}
 
+			function findMe() {
+				// Try W3C Geolocation (Preferred)
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {	
+							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+							showMap();
+						}, function(error) {
+							selectedLocation = new google.maps.LatLng(0, 0);
+							repositionMap();
+						});
+					// Try Google Gears Geolocation
+				} else if (google.gears) {
+					var geo = google.gears.factory.create('beta.geolocation');
+					geo.getCurrentPosition(function(position) {	
+						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+						repositionMap();
+					}, function(error) {
+						selectedLocation = new google.maps.LatLng(0, 0);
+						repositionMap();
+					});
+				} 
+			}
+			
 			
 			function clearElements() {
 				document.getElementById("address").value="";
@@ -246,17 +269,11 @@
 			  
 			// Determine the shortened URL based on the current location, saves to DB
 			function shortenUrl() {
-				alert("test");
 				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
-				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateUrlWindow(root + data); });
+				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data;} );
 				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
-			}
-
-			// Update the url block with the supplied link, should be a shortened link
-			function updateUrlWindow(link) {
-				document.getElementById("url").value=link;
 			}
 
 			
@@ -279,6 +296,7 @@
 				output += "<a href=\"mailto:?subject=";
 				output += link + "\"";
 				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
+
 				document.getElementById("url-window").innerHTML=output;
 				
 			}
@@ -399,7 +417,11 @@
 					text = "Enter an address or place name to search for.";
 				}
 				if (element == "url") {
-					text = "Click Go to generate a url of this location that will reload the map and streetview as you see it.";
+					text = "Click Go to generate a url of this location and share it.";
+					element.style.width="400px";
+				}
+				if (element == "findme") {
+					text = "Find me!";
 				}
 				
 				popup(text);	
@@ -416,7 +438,7 @@
 				}
 				return false;
 			}
-						
+
 		</script>
 	</head>
 
@@ -439,13 +461,13 @@
 			</div>
 			<div class="span-24"><hr/></div>
 			<div class="span-12">
-					<div class="header">
-				Start by searching for an address, or place name
+				<div class="header">
+					Start by searching for an address, or place name
 				</div>
 				<div class="detail">
 					<center>
 						<input onmouseover="showhelp('address')" onmouseout="kill()" title="" type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
-						<input style="height: 33px;" class="large" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
+						<input class="large button" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
 					</center>
 				</div>
 				<div class="footer-clear"></div>
@@ -457,9 +479,9 @@
 				</div>
 				<div class="detail">
 					<center>
-						<input style="eight: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
+						<input class="large button" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
 						<input onmouseover="showhelp('url')" onmouseout="kill()" title="" type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
-						<div id="url-window"></div>
+						<div class="inline" id="url-window"></div>
 					</center>
 				</div>
 				<div class="footer-clear"></div>
@@ -470,8 +492,9 @@
 			<div id="map_container" class="span-12">
 
 				<div class="header">
-				Click anywhere to select a location
+				Click anywhere to select a location&nbsp;<img onmouseover="showhelp('findme')" onmouseout="kill()" title="" src="images/find.png" onclick="findMe();" alt="Find me!"/>
 				</div>
+
 				<div class="detail">
 					<center>
 <!-- 						
@@ -496,27 +519,6 @@
  					</center>
 				</div>
 				<div class="footer-straight"></div>
-			</div>
-
-			<div class="span-24">&nbsp;</div>
-
-			<div class="span-12">
-				<div class="header">
-	              	Share the link with your friends
-			    </div>
-				<div class="detail-padded fixed-height-small">
-				</div>
-				<div class="footer-clear"></div>
-			</div>
-
-			<div class="span-12 last">
-				<div class="header">
-	              	Weather in the area
-			    </div>
-				<div class="detail-padded fixed-height-small">
-					<div id="weather_stream"></div>
-				</div>
-				<div class="footer-clear"></div>
 			</div>
 
 			<div class="span-24">&nbsp;</div>
@@ -558,6 +560,22 @@
 				<div class="footer-text fixed-height-footer">
 	              	<div id="wiki_footer"></div>
 				</div>
+			</div>
+
+			<div class="span-24">&nbsp;</div>
+
+			<div class="span-12">
+				&nbsp;
+			</div>
+
+			<div class="span-12 last">
+				<div class="header">
+	              	Weather in the area
+			    </div>
+				<div class="detail-padded">
+					<div id="weather_stream"></div>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
 
 			<div class="span-24">&nbsp;</div>
