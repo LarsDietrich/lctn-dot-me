@@ -278,7 +278,7 @@
 				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
 				shorturl = "";
-				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data;} );
+				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root+data);} );
 				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
 			}
 
