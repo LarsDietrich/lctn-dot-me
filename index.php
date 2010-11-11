@@ -28,7 +28,10 @@
 		<script type="text/javascript" src="js/popup.js"></script>		
 
 		<script type="text/javascript">
-			
+
+			// Current containers supported
+			var containers = ["general_container", "wiki_container", "tweet_container", "streetview_container"];
+		
 			// reference to the main map
 			var map;
 			// reference to the streetview
@@ -68,7 +71,7 @@
 			function load() {
 				beta();
 				updateUrlWindow("");
-
+				
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
@@ -80,7 +83,10 @@
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 					showMap();
-				} 
+				}
+
+				document.getElementById("general_container").style.display="inline";
+				 
 			}
 
 			function locateMe() {
@@ -199,11 +205,11 @@
 				map.setCenter(selectedLocation);
 				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
-				updateWeatherLocationInformation();
+				updateGeneralLocationInformation();
 				reverseCodeLatLng();
 				scroll(0,0);
 				document.getElementById("url").value="";
-				setMessage("Location updated. See bottom of page for area specific tweets / wiki's", "success");
+				setMessage("Location updated", "success");
 			}
 
 			// Try find street view data and load appropriate panorama panel and set selectedLocation
@@ -301,21 +307,21 @@
 				
 			}
 
-			function updateWeatherLocationInformation() {
+			function updateGeneralLocationInformation() {
 				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("weather_stream").innerHTML="Searching..";
+					document.getElementById("general_stream").innerHTML="Searching..";
 					getWeather(selectedLocation, 2);
 				}
 			}
 
  		  	// Load the weather display based on whats in tweets array
-			function updateWeatherDisplay() {
+			function updateGeneralDisplay() {
 				var output = "<table><tr>";
 				for (i = 0; i < listOfWeather.length; i++) {
 					output += listOfWeather[i];
 				}				
 				output += "</tr></table>";
-				document.getElementById("weather_stream").innerHTML = output;
+				document.getElementById("general_stream").innerHTML = output;
  		  	}
 			
  		  	function updateTwitterLocationInformation() {
@@ -356,10 +362,10 @@
 				var previous = "&nbsp;";
 				
 				if ((page + 1) <= totalPages) {				
-					next = "<img src=\"images/arrow_right.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
+					next = "<img class='footer-icon' src=\"images/arrow_right.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
 				}
 				if ((page - 1) >= 1) { 
-					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
+					previous = "<img class='footer-icon' src=\"images/arrow_left.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
 				}				
 				document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
@@ -394,10 +400,10 @@
 				var next = "&nbsp;";
 				var previous = "&nbsp;";
 				if ((page + 1) <= totalPages) {				
-					next = "<img src=\"images/arrow_right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
+					next = "<img class='footer-icon' src=\"images/arrow_right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
 				}
 				if ((page - 1) >= 1) { 
-					previous = "<img src=\"images/arrow_left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
+					previous = "<img class='footer-icon' src=\"images/arrow_left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
 				}				
 
 				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
@@ -439,6 +445,40 @@
 				return false;
 			}
 
+			function nextContainer(container) {
+				position = 0;
+				for (i = 0; i < containers.length; i++) {
+					if (containers[i] == container) {
+						position = i;
+					}
+				}
+				if (position == containers.length-1) {
+					position = 0;
+				} else {
+					position++;
+				}
+				
+				document.getElementById(container).style.display="none";
+				document.getElementById(containers[position]).style.display="inline";
+			}
+
+			function prevContainer(container) {
+				position = 0;
+				for (i = 0; i < containers.length; i++) {
+					if (containers[i] == container) {
+						position = i;
+					}
+				}
+				if (position == 0) {
+					position = containers.length-1;
+				} else {
+					position--;
+				}
+				
+				document.getElementById(container).style.display="none";
+				document.getElementById(containers[position]).style.display="inline";
+			}
+			
 		</script>
 	</head>
 
@@ -460,6 +500,7 @@
 				<div id="message"></div>
 			</div>
 			<div class="span-24"><hr/></div>
+			
 			<div class="span-12">
 				<div class="header">
 					Start by searching for an address, or place name
@@ -490,9 +531,8 @@
 			<div class="span-24">&nbsp;</div>
 
 			<div id="map_container" class="span-12">
-
 				<div class="header">
-				Click anywhere to select a location&nbsp;<img onmouseover="showhelp('findme')" onmouseout="kill()" title="" src="images/find.png" onclick="findMe();" alt="Find me!"/>
+				Click anywhere to select a location&nbsp;<img width="14px" height="14px" onmouseover="showhelp('findme')" onmouseout="kill()" title="" src="images/find.png" onclick="findMe();" alt="Find me!"/>
 				</div>
 
 				<div class="detail">
@@ -507,90 +547,76 @@
 			</div>
 
 			<div id="view-container" class="span-12 last">
-				<div class="header">
-				Streetview
-				</div>
-				<div class="detail">
-					<center>
-<!-- 
-						<div id="streetview" style="width: 40px; height: 40px"></div>
- -->
+
+				<div id="streetview_container" class="child">
+	
+					<div class="header">
+						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('streetview_container')"/>
+						<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('streetview_container')"/>&nbsp;
+						Streetview
+					</div>
+					<div class="detail">
 						<div id="streetview" style="width: 468px; height: 465px"></div>
- 					</center>
+					</div>
+					<div class="footer-straight"></div>
+	
 				</div>
-				<div class="footer-straight"></div>
+	
+				<div id="tweet_container" class="child">
+	
+					<div class="header">
+						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('tweet_container')"/>
+		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('tweet_container')"/>&nbsp;Tweets
+					</div>
+	 				<div class="detail-padded">
+						<center>
+							Search for <input onmouseover="showhelp('tweet-filter')" onmouseout="kill()" title="" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
+							in <input onmouseover="showhelp('tweet-range')" onmouseout="kill()" title="" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
+						</center>
+					</div>
+					<div class="detail-padded fixed-height-block">
+						<div id="tweet_stream">No tweets found, try a bigger search area or search for something different</div>
+					</div>
+					<div class="footer-text fixed-height-footer">
+		              	<div id="twitter_footer"></div>
+					</div>
+				
+				</div>
+
+				<div id="wiki_container" class="child">
+					<div class="header">
+						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('wiki_container')"/>
+		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('wiki_container')"/>&nbsp;Wiki Articles
+					</div>
+	 				<div class="detail-padded">
+						<center>
+							Find me articles within <input onmouseover="showhelp('wiki-range')" onmouseout="kill()" title="" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
+							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
+						</center>
+					</div>
+					<div class="detail-padded fixed-height-block">
+						<center>
+							<div id="wiki_stream">No entries found, try a bigger search area</div>
+						</center>
+					</div>
+					<div class="footer-text fixed-height-footer">
+		              	<div id="wiki_footer"></div>
+					</div>
+				</div>
+
+				<div id="general_container" class="child">
+					<div class="header">
+						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('general_container')"/>
+		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('general_container')"/>&nbsp;General location information
+				    </div>
+					<div class="detail-padded fixed-height-block">
+						<div id="general_stream"></div>
+					</div>
+					<div class="footer-clear"></div>
+				</div>
 			</div>
-
-			<div class="span-24">&nbsp;</div>
-
-			<div class="span-12 ">
-				<div class="header">
-	              	Tweets
-				</div>
- 				<div class="detail-padded">
-					<center>
-						Search for <input onmouseover="showhelp('tweet-filter')" onmouseout="kill()" title="" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-						in <input onmouseover="showhelp('tweet-range')" onmouseout="kill()" title="" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
-						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
-					</center>
-				</div>
-				<div class="detail-padded fixed-height-social">
-					<div id="tweet_stream">No tweets found, try a bigger search area or search for something different</div>
-				</div>
-				<div class="footer-text fixed-height-footer">
-	              	<div id="twitter_footer"></div>
-				</div>
-			</div>
-
-			<div class="span-12 last ">
-				<div class="header">
-	              	<span>Wiki Articles</span>
-				</div>
- 				<div class="detail-padded">
-					<center>
-						Find me articles within <input onmouseover="showhelp('wiki-range')" onmouseout="kill()" title="" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
-						<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
-					</center>
-				</div>
-				<div class="detail-padded fixed-height-social">
-					<center>
-						<div id="wiki_stream">No entries found, try a bigger search area</div>
-					</center>
-				</div>
-				<div class="footer-text fixed-height-footer">
-	              	<div id="wiki_footer"></div>
-				</div>
-			</div>
-
-			<div class="span-24">&nbsp;</div>
-
-			<div class="span-12">
-				&nbsp;
-			</div>
-
-			<div class="span-12 last">
-				<div class="header">
-	              	Weather in the area
-			    </div>
-				<div class="detail-padded">
-					<div id="weather_stream"></div>
-				</div>
-				<div class="footer-clear"></div>
-			</div>
-
-			<div class="span-24">&nbsp;</div>
-
-			<div class="span-24"><hr/></div>
-<!-- 
-			<div class="span-1"><a href="about.html">About</a></div>
-			<div class="span-1"><a href="contact.html">Contact</a></div>
--->
-			<div class="span-23">&nbsp;</div>
-			<div class="span-1 last">v0.0.1</div>
-			<div class="span-24">&nbsp;</div>
 		</div>
-
-
 
 	</body>
 

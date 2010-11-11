@@ -82,7 +82,7 @@ function processResults(jsonData) {
 	if (listOfWeather.length == 0) {
 		listOfWeather[0] = "No weather data found";
 	}
-	updateWeatherDisplay();
+	updateGeneralDisplay();
 }
 
 function getDayOfWeek(date) {

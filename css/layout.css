@@ -18,23 +18,23 @@ td {
 	background: #AFD775;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
-	border-top: 1px solid black;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-top: 1px solid #AFD775;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
 }
 
 .detail {
 	background: #FFFFFF;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 }
 
 .detail-padded {
 	background: #FFFFFF;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -42,9 +42,9 @@ td {
 	background: #AFD775;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
+	border-bottom: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -52,18 +52,18 @@ td {
 	background: #FFFFFF;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
+	border-bottom: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 }
 
 .footer-straight {
 	background: transparent;
-	border-top: 1px solid black;
+	border-top: 1px solid #AFD775;
 }
 
-.fixed-height-social {
+.fixed-height-block {
 	height: 450px;
 }
 
@@ -121,17 +121,12 @@ td {
 
 a:link {
 	font-weight: bold;
-	color: #2c5700;
+	color: #2C5700;
 	text-decoration: none;
 }
 
 input {
 	cursor: pointer;
-}
-
-.help-icon {
-	cursor: pointer;
-	color: red;
 }
 
 #pup {
@@ -143,7 +138,8 @@ input {
 	width: 200px;
 	border: 1px solid black;
 	background-color: #AFD775;
-	filter:alpha(opacity=80);opacity:.8;
+	filter: alpha(opacity = 80);
+	opacity: .8;
 	color: black;
 	font-size: 0.95em;
 	font-weight: bold;
@@ -153,8 +149,9 @@ input {
 
 #displaybox {
 	z-index: 10000;
-	filter: alpha(opacity = 50); /*older IE*/
-	filter: progid : DXImageTransform.Microsoft.Alpha ( opacity = 50 );
+	filter: alpha(opacity =   50); /*older IE*/
+	filter: progid :   DXImageTransform.Microsoft.Alpha (   opacity =   50 )
+		;
 	/* IE */
 	-moz-opacity: .50; /*older Mozilla*/
 	-khtml-opacity: 0.5; /*older Safari*/
@@ -171,14 +168,14 @@ input {
 }
 
 .displaybox-large {
-	color:red;
+	color: red;
 	font-size: 100px;
 	font-weight: bold;
 	vertical-align: middle;
 }
 
 .displaybox-normal {
-	color:red;
+	color: red;
 	font-size: 20px;
 	font-weight: bold;
 	vertical-align: middle;
@@ -194,16 +191,16 @@ input {
 
 .url-text {
 	width: 100px;
-	background-color:#fff;
-	border:1px solid #bbb;
-	border-color:#666;
-	background-color:#fff;
-	border-width:1px;
-	border-style:solid;
-	margin:0.5em 0;
-	width:200px;
-	padding:5px;
-	font-size:1.5em;
+	background-color: #fff;
+	border: 1px solid #bbb;
+	border-color: #666;
+	background-color: #fff;
+	border-width: 1px;
+	border-style: solid;
+	margin: 0.5em 0;
+	width: 200px;
+	padding: 5px;
+	font-size: 1.5em;
 }
 
 .inline {
@@ -212,4 +209,26 @@ input {
 
 .button {
 	height: 33px;
+}
+
+.child {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	float: left;
+	width: 468px;
+	height: 465px;
+	display: none;
+}
+
+.header-icon {
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
+}
+
+.footer-icon {
+	height: 16px;
+	width: 16px;
+	cursor: pointer;
 }
