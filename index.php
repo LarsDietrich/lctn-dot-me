@@ -305,7 +305,7 @@
 
 				output += "<a href=\"http://del.icio.us/post?url=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"\Add the link to Del.icio.us.\" alt=\"Del.icio.us\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
 
 				output += "<a href=\"mailto:?subject=";
 				output += link + "\"";
