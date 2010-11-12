@@ -501,10 +501,10 @@
 			</div>
 
 			<div class="span-12 last">
-				<div class="header">
+				<div class="header" title="Share this location with friends, generate the link and click on one of the social icons.">
 				Share
 				</div>
-				<div class="detail"  title="Share this location with friends, generate the link and click on one of the social icons." >
+				<div class="detail" >
 					<center>
 						<input class="large button" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
 						<input title="Click Go to generate a short url. The link will point back to this location and open the page as you see it." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
