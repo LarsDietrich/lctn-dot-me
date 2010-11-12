@@ -79,7 +79,7 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-				activeContainer = <?php if (isset($_GET["container"])) { echo $_GET["container"]; } else { echo "\"general_container\""; }?>;
+				activeContainer = <?php if (isset($_GET["container"])) { echo "\"" . $_GET["container"] . "\""; } else { echo "\"general_container\""; }?>;
 
 				if (latitude == 999 || longitude == 999) {
 					findMe();
