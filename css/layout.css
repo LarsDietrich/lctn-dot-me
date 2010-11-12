@@ -2,18 +2,6 @@ body {
 	background-color: #FFFFFF;
 }
 
-td {
-	padding: 0px 0px 1px 1px;
-	margin: 0px 0px 0px 0px;
-}
-
-.view-position {
-	position: absolute;
-	top: 240px;
-	left: 640px;
-	width: 470px;
-}
-
 .header {
 	background: #AFD775;
 	border-radius: 10px 10px 0px 0px;
@@ -58,17 +46,12 @@ td {
 	padding: 4px 10px 4px 5px;
 }
 
-.footer-straight {
-	background: transparent;
-	border-top: 1px solid #AFD775;
-}
-
 .fixed-height-block {
-	height: 450px;
+	height: 457px;
 }
 
-.fixed-height-small {
-	height: 65px;
+.fixed-height-block-with-title {
+	height: 422px;
 }
 
 .fixed-height-footer {
@@ -115,10 +98,6 @@ td {
 	cursor: pointer;
 }
 
-.reposition-image {
-	cursor: pointer;
-}
-
 a:link {
 	font-weight: bold;
 	color: #2C5700;
@@ -145,40 +124,6 @@ input {
 	font-weight: bold;
 	border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
-}
-
-#displaybox {
-	z-index: 10000;
-	filter: alpha(opacity =   50); /*older IE*/
-	filter: progid :   DXImageTransform.Microsoft.Alpha (   opacity =   50 )
-		;
-	/* IE */
-	-moz-opacity: .50; /*older Mozilla*/
-	-khtml-opacity: 0.5; /*older Safari*/
-	opacity: 0.5; /*supported by current Mozilla, Safari, and Opera*/
-	background-color: #000000;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	color: #FFFFFF;
-	text-align: center;
-	vertical-align: middle;
-}
-
-.displaybox-large {
-	color: red;
-	font-size: 100px;
-	font-weight: bold;
-	vertical-align: middle;
-}
-
-.displaybox-normal {
-	color: red;
-	font-size: 20px;
-	font-weight: bold;
-	vertical-align: middle;
 }
 
 .social-button {
@@ -222,13 +167,15 @@ input {
 }
 
 .header-icon {
-	height: 16px;
-	width: 16px;
+	height: 14px;
+	width: 14px;
 	cursor: pointer;
 }
 
 .footer-icon {
-	height: 16px;
-	width: 16px;
+	height: 14px;
+	width: 14px;
 	cursor: pointer;
 }
+
+

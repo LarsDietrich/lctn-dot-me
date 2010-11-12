@@ -1,0 +1,9 @@
+.tooltip {
+	display:none;
+	background:transparent url(/images/tooltip.png);
+	font-size:10px;
+	height:70px;
+	width:160px;
+	padding:25px;
+	color:#000;	
+}

@@ -10,28 +10,30 @@
 		<link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/>
 		<![endif]-->
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
+		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
+		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
 		
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 		
 		<!-- http://lctn -->
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 		
 		<script type="text/javascript" src="js/gears_init.js"></script>
-
 		<script type="text/javascript" src="js/jxs.js"> </script>
+
 
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
-		<script type="text/javascript" src="js/browser_detect.js"></script>		
-		<script type="text/javascript" src="js/popup.js"></script>		
 
 		<script type="text/javascript">
 
 			// Current containers supported
 			var containers = ["general_container", "wiki_container", "tweet_container", "streetview_container"];
-		
+			var activeContainer = "general_container";
+			
 			// reference to the main map
 			var map;
 			// reference to the streetview
@@ -77,18 +79,23 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
+				activeContainer = <?php if (isset($_GET["container"])) { echo $_GET["container"]; } else { echo "\"general_container\""; }?>;
 
 				if (latitude == 999 || longitude == 999) {
-					locateMe();
+					findMe();
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 					showMap();
 				}
 
-				document.getElementById("general_container").style.display="inline";
-				 
+				
+				document.getElementById(activeContainer).style.display="inline";
+
+				$("[title]").tooltip({ effect: 'slide'});
+				
 			}
 
+			// Try to find the users location
 			function locateMe() {
 				// Try W3C Geolocation (Preferred)
 				if (navigator.geolocation) {
@@ -112,6 +119,7 @@
 				} 
 			}
 
+			//
 			function findMe() {
 				// Try W3C Geolocation (Preferred)
 				if (navigator.geolocation) {
@@ -276,7 +284,7 @@
 			// Determine the shortened URL based on the current location, saves to DB
 			function shortenUrl() {
 				root = "http://" + top.location.host + "/";
-				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
+				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + activeContainer ;
 				shorturl = "";
 				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root+data);} );
 				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
@@ -289,19 +297,19 @@
 
 				output += "<a href=\"http://twitter.com/home/?status=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
 
 				output += "<a href=\"http://www.facebook.com/sharer.php?u=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.jpg\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
 
 				output += "<a href=\"http://del.icio.us/post?url=";
 				output += link + "\"";
-				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"\Add the link to Del.icio.us.\" alt=\"Del.icio.us\"></img></a>";
 
 				output += "<a href=\"mailto:?subject=";
 				output += link + "\"";
-				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
+				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
 
 				document.getElementById("url-window").innerHTML=output;
 				
@@ -409,30 +417,6 @@
 				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 			}
 
-			function showhelp(element) {
-				if (element == "wiki-range") {
-					text = "Enter a range to search for articles, maximum of 5km.";
-				}
-				if (element == "tweet-filter") {
-					text = "Enter a search term to filter area specific tweets, or blank for all.";
-				}
-				if (element == "tweet-range") {
-					text = "Enter a range to search for tweets.";
-				}
-				if (element == "address") {
-					text = "Enter an address or place name to search for.";
-				}
-				if (element == "url") {
-					text = "Click Go to generate a url of this location and share it.";
-					element.style.width="400px";
-				}
-				if (element == "findme") {
-					text = "Find me!";
-				}
-				
-				popup(text);	
-			}
-
 			function beta(){
 				var thediv=document.getElementById('displaybox');
 				if(thediv.style.display == "none"){
@@ -460,6 +444,7 @@
 				
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
+				activeContainer = containers[position];
 			}
 
 			function prevContainer(container) {
@@ -477,6 +462,7 @@
 				
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
+				activeContainer = containers[position];
 			}
 			
 		</script>
@@ -503,11 +489,11 @@
 			
 			<div class="span-12">
 				<div class="header">
-					Start by searching for an address, or place name
+					Find
 				</div>
 				<div class="detail">
 					<center>
-						<input onmouseover="showhelp('address')" onmouseout="kill()" title="" type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
+						<input title="Enter an address or place name to search for (eg. Eiffel Tower or 10 Downing Street, London) then click Find or press Enter" type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
 						<input class="large button" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
 					</center>
 				</div>
@@ -516,12 +502,12 @@
 
 			<div class="span-12 last">
 				<div class="header">
-				Create short url for this location
+				Share
 				</div>
-				<div class="detail">
+				<div class="detail"  title="Share this location with friends, generate the link and click on one of the social icons." >
 					<center>
 						<input class="large button" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
-						<input onmouseover="showhelp('url')" onmouseout="kill()" title="" type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
+						<input title="Click Go to generate a short url. The link will point back to this location and open the page as you see it." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
 						<div class="inline" id="url-window"></div>
 					</center>
 				</div>
@@ -532,7 +518,7 @@
 
 			<div id="map_container" class="span-12">
 				<div class="header">
-				Click anywhere to select a location&nbsp;<img width="14px" height="14px" onmouseover="showhelp('findme')" onmouseout="kill()" title="" src="images/find.png" onclick="findMe();" alt="Find me!"/>
+				Map&nbsp;<img width="14px" height="14px" title="Try to find your current location. Best guess, not 100% accurate." src="images/find.png" onclick="findMe();" alt="Find me!"/>
 				</div>
 
 				<div class="detail">
@@ -543,14 +529,14 @@
 					<div id="map" style="width: 468px; height: 465px;"></div>
 					</center>
 				</div>
-				<div class="footer-straight"></div>
+				<div class="footer-text fixed-height-footer"></div>
 			</div>
 
 			<div id="view-container" class="span-12 last">
 
 				<div id="streetview_container" class="child">
 	
-					<div class="header">
+					<div class="header" title="Shows the streetview at the current location, streetview is only available in certain locations.">
 						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('streetview_container')"/>
 						<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('streetview_container')"/>&nbsp;
 						Streetview
@@ -558,24 +544,23 @@
 					<div class="detail">
 						<div id="streetview" style="width: 468px; height: 465px"></div>
 					</div>
-					<div class="footer-straight"></div>
-	
+					<div class="footer-text fixed-height-footer"></div>
 				</div>
 	
 				<div id="tweet_container" class="child">
 	
-					<div class="header">
+					<div class="header" title="Shows tweets in the surrounding area. Does not show all tweets, only those where people have chosen to share the location.">
 						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('tweet_container')"/>
 		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('tweet_container')"/>&nbsp;Tweets
 					</div>
 	 				<div class="detail-padded">
 						<center>
-							Search for <input onmouseover="showhelp('tweet-filter')" onmouseout="kill()" title="" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-							in <input onmouseover="showhelp('tweet-range')" onmouseout="kill()" title="" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+							Search for <input title="Enter a search term to filter tweets, comma seperate for multiple terms (eg. party, cool)" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
+							in <input title="How big an area would you like to search for tweets in?" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
 							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
 						</center>
 					</div>
-					<div class="detail-padded fixed-height-block">
+					<div class="detail-padded fixed-height-block-with-title">
 						<div id="tweet_stream">No tweets found, try a bigger search area or search for something different</div>
 					</div>
 					<div class="footer-text fixed-height-footer">
@@ -585,17 +570,17 @@
 				</div>
 
 				<div id="wiki_container" class="child">
-					<div class="header">
+					<div class="header" title="Shows all wikipedia articles relevant to the area.">
 						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('wiki_container')"/>
 		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('wiki_container')"/>&nbsp;Wiki Articles
 					</div>
 	 				<div class="detail-padded">
 						<center>
-							Find me articles within <input onmouseover="showhelp('wiki-range')" onmouseout="kill()" title="" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
+							Find me articles within <input title="How big an area would you like to see wikipedia articles for (maximum of 5km)?" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
 							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 						</center>
 					</div>
-					<div class="detail-padded fixed-height-block">
+					<div class="detail-padded fixed-height-block-with-title">
 						<center>
 							<div id="wiki_stream">No entries found, try a bigger search area</div>
 						</center>
@@ -606,14 +591,14 @@
 				</div>
 
 				<div id="general_container" class="child">
-					<div class="header">
+					<div class="header" title="Shows general information about the location.">
 						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('general_container')"/>
 		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('general_container')"/>&nbsp;General location information
 				    </div>
 					<div class="detail-padded fixed-height-block">
 						<div id="general_stream"></div>
 					</div>
-					<div class="footer-clear"></div>
+					<div class="footer-text fixed-height-footer"></div>
 				</div>
 			</div>
 		</div>
