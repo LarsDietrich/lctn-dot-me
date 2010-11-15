@@ -141,7 +141,7 @@
 				if (navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition(function(position) {	
 							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-							showMap();
+							repositionMap();
 						}, function(error) {
 							selectedLocation = new google.maps.LatLng(0, 0);
 							repositionMap();
@@ -530,7 +530,7 @@
 				</div>
 				<div class="detail" >
 					<center>
-						<input class="large button" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
+						<input class="large button" type="button" name="generate" value="Shorten" onclick="shortenUrl();"/>
 						<input title="Click Go to generate a short url. The link will point back to this location and open the page as you see it." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
 						<div class="inline" id="url-window"></div>
 					</center>
@@ -543,7 +543,7 @@
 			<div id="view-container-left" class="span-12">
 				<div id="map_container">
 					<div class="header">
-					Map&nbsp;<img class="header-icon" title="Try to find your current location. Best guess, not 100% accurate." src="images/find.png" onclick="findMe();" alt="Find me!"/>
+					Map&nbsp;<img class="header-icon" title="Try to find your current location. Best guess, not 100% accurate or guaranteed to work, based on browser capabilities" src="images/find.png" onclick="findMe();" alt="Find me!"/>
 					</div>
 	
 					<div class="detail">
@@ -563,12 +563,12 @@
 
 				<div id="streetview_container" class="child">
 	
-					<div class="header" title="Shows the streetview at the current location, streetview is only available in certain locations.">
+					<div class="header">
 
 						<div class="header-left">
-							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')"/>
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')" title="Show previous view"/>
 						</div>
-						<div class="header-center">
+						<div class="header-center" title="Shows the streetview at the current location, streetview is only available in certain locations.">
 							Streetview
 						</div>
 						<div class="header-right">
@@ -584,11 +584,11 @@
 	
 				<div id="tweet_container" class="child">
 	
-					<div class="header" title="Shows tweets in the surrounding area. Does not show all tweets, only those where people have chosen to share the location.">
+					<div class="header">
 						<div class="header-left">
 							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('tweet_container')"/>
 						</div>
-						<div class="header-center">
+						<div class="header-center"  title="Shows tweets in the surrounding area. Will only show tweets where people have chosen to share the location.">
 							Twitter
 						</div>
 						<div class="header-right">
@@ -612,11 +612,11 @@
 				</div>
 
 				<div id="wiki_container" class="child">
-					<div class="header" title="Shows all wikipedia articles relevant to the area.">
+					<div class="header">
 						<div class="header-left">
 							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('wiki_container')"/>
 						</div>
-						<div class="header-center">
+						<div class="header-center" title="Shows all wikipedia articles in the area.">
 							Wikipedia
 						</div>
 						<div class="header-right">
@@ -640,11 +640,11 @@
 				</div>
 
 				<div id="general_container" class="child">
-					<div class="header" title="Shows general information about the location.">
+					<div class="header">
 						<div class="header-left">
 							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('general_container')"/>
 						</div>
-						<div class="header-center">
+						<div class="header-center" title="Shows general information about the location. Currently only supports weather, but more to come.">
 							General
 						</div>
 						<div class="header-right">
