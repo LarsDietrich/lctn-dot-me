@@ -183,6 +183,8 @@
 			  });
 
 			  var panoOptions = {
+				  linksControl: true,
+				  addressControl:true,
 				  visible: true,
 				  navigationControl: true,
 				  navigationControlOptions: {
@@ -237,7 +239,7 @@
 				updateGeneralLocationInformation();
 				scroll(0,0);
 				document.getElementById("url").value="";
-				setMessage("Location updated", "success");
+				setMessage("", "success");
 			}
 
 			// Try find street view data and load appropriate panorama panel and set selectedLocation
@@ -262,7 +264,11 @@
 			}
 
 			function setMessage(message, type) {
-				jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
+				if (message == "") {
+					document.getElementById("message").innerHTML="";
+				} else {
+					jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
+				}
 			}
 
 			// Sets the selectedLocation based on address in address box
@@ -307,7 +313,6 @@
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + active_container ;
 				shorturl = "";
 				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root + data);} );
-				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
 			}
 
 			
@@ -379,6 +384,7 @@
 					output += listOfTweets[i];	
 				}				
 				document.getElementById("tweet_stream").innerHTML = output;
+				$("[title]").tooltip({ effect: "slide"});
 				updateTwitterPaging(page);
  		  	}
 
