@@ -577,7 +577,7 @@
 
 					</div>
 					<div class="detail">
-						<div id="streetview" style="width: 468px; height: 465px"></div>
+						<div id="streetview" style="width: 465px; height: 465px"></div>
 					</div>
 					<div class="footer-text fixed-height-footer"></div>
 				</div>
