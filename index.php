@@ -32,7 +32,7 @@
 
 			// Current containers supported
 			var containers = ["general_container", "wiki_container", "tweet_container", "streetview_container"];
-			var active_container = "general_container";
+			var active_container = "streetview_container";
 			
 			// reference to the main map
 			var map;
@@ -79,7 +79,7 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"general_container\""; }?>;
+				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"streetview_container\""; }?>;
 
 				if (latitude == 999 || longitude == 999) {
 					findMe();
@@ -353,7 +353,10 @@
 				for (i = 0; i < listOfWeather.length; i++) {
 					output += listOfWeather[i];
 				}				
-				output += "</tr></table>";
+				output += "</tr><tr><td class='weather-text'>";
+				output += "Powered by <a href=\"http://www.worldweatheronline.com/\" title=\"Free local weather content provider\" target=\"_blank\">World Weather Online</a>";
+				output += "</td></tr></table>";
+
 				document.getElementById("general_stream").innerHTML = output;
 				$("[title]").tooltip({ effect: 'slide'});
  		  	}
