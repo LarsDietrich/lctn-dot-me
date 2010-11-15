@@ -167,6 +167,7 @@
 
 			// show the map
 			function showMap() { 
+				
 			  var myOptions = {
 				  zoom: zoom,
 				  center: selectedLocation,
@@ -175,16 +176,19 @@
 			  }
 
 			  map = new google.maps.Map(document.getElementById("map"), myOptions);
+
 			  positionMarker = new google.maps.Marker({
 			      position: selectedLocation, 
 			      map: map
 			  });
 
 			  var panoOptions = {
-			      navigationControl: true,
+				  visible: true,
+				  navigationControl: true,
 				  navigationControlOptions: {
 				    style: google.maps.NavigationControlStyle.DEFAULT
 				  }
+			  	  
 			  };
 
   			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
@@ -300,9 +304,9 @@
 			// Determine the shortened URL based on the current location, saves to DB
 			function shortenUrl() {
 				root = "http://" + top.location.host + "/";
-				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + activeContainer ;
+				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + active_container ;
 				shorturl = "";
-				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root+data);} );
+				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root + data);} );
 				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
 			}
 
