@@ -78,8 +78,8 @@ function processResults(jsonData) {
 		}
 	}
 
-	if (listOfWeather.length == 0) {
-		listOfWeather[0] = "No weather data found";
+	if (listOfWeather[0] == "") {
+		listOfWeather[0] = "There was a problem loading weather data, the service may be down.";
 	}
 	updateGeneralDisplay();
 }
