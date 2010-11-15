@@ -11,12 +11,16 @@ body {
 	border-right: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
+	font-size: x-large;
+	color: #2C5700;
+	text-align: center;
 }
 
 .detail {
 	background: #FFFFFF;
 	border-left: 1px solid #AFD775;
 	border-right: 1px solid #AFD775;
+	overflow-y: auto;
 }
 
 .detail-padded {
@@ -24,6 +28,7 @@ body {
 	border-left: 1px solid #AFD775;
 	border-right: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
+	overflow-y: auto;
 }
 
 .footer-text {
@@ -59,8 +64,8 @@ body {
 }
 
 .weather-icon {
-	height: 55px;
-	width: 55x;
+	height: 50px;
+	width: 50x;
 }
 
 .wind-direction-icon {
@@ -80,8 +85,9 @@ body {
 
 .weather-text {
 	font-weight: bold;
-	font-size: small;
+	font-size: x-small;
 	padding-bottom: 2px;
+	width: 10px;
 }
 
 .weather-text-min-temp {
@@ -99,6 +105,12 @@ body {
 }
 
 a:link {
+	font-weight: bold;
+	color: #2C5700;
+	text-decoration: none;
+}
+
+a:visited {
 	font-weight: bold;
 	color: #2C5700;
 	text-decoration: none;
@@ -167,8 +179,8 @@ input {
 }
 
 .header-icon {
-	height: 14px;
-	width: 14px;
+	height: 20px;
+	width: 20px;
 	cursor: pointer;
 }
 
@@ -178,4 +190,26 @@ input {
 	cursor: pointer;
 }
 
+.container-navigation-icon {
+	height: 26px;
+	width: 36px;
+	cursor: pointer;
+}
 
+.header-left {
+	width: 150px;	
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.header-center {
+	width: 150px;	
+	display: table-cell;
+	overflow: hidden;
+}
+
+.header-right {
+	width: 150px;	
+	display: table-cell;
+	vertical-align: middle;
+}

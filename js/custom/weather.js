@@ -48,14 +48,13 @@ function processResults(jsonData) {
 	if (current) {
 		description = current[0].weatherDesc[0].value;
 		icon = "images/weather/" + description + ".png";
-		output =  "<td width='10px' class='weather-text'>Current<br/>";
+		output =  "<td class='weather-text'>" + current[0].observation_time + "<br/>";
 		output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
 		output += "</td>";
 		output += "<td class='weather-text'>";
-		output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-max-temp'>" + current[0].temp_C + "C</span><br/>";
+		output += "<span class='weather-text-max-temp'>" + current[0].temp_C + "C</span><br/>";
 		output += "<img title='Wind direction' src='images/weather/wind-direction/" + current[0].winddir16Point + ".gif' class='wind-direction-icon'/> " + current[0].windspeedKmph + "km/h<br/>";
 		output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + current[0].precipMM + "mm<br/>";
-		output += "Time: " + current[0].observation_time + "<br/>";
 		output += "</td>";
 	}
 
@@ -70,7 +69,7 @@ function processResults(jsonData) {
 				output += "<img class='weather-icon' alt='" + description + "' title='" + description + "' src='" + icon + "'/>";
 				output += "</td>";
 				output += "<td class='weather-text'>";
-				output += "<img title='Temperature' src='images/weather/thermometer.jpg' class='thermometer-icon'/><span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
+				output += "<span class='weather-text-min-temp'>" + weather[i].tempMinC + "C</span>" + " / " + "<span class='weather-text-max-temp'>" + weather[i].tempMaxC + "C</span><br/>";
 				output += "<img title='Wind direction' src='images/weather/wind-direction/" + weather[i].winddirection + ".gif' class='wind-direction-icon'/> " + weather[i].windspeedKmph + "km/h<br/>";
 				output += "<img title='Precipitation' src='images/weather/precipitation.jpg' class='precipitation-icon'/>&nbsp;&nbsp;" + weather[i].precipMM + "mm<br/>";
 				output += "</td>";

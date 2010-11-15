@@ -32,7 +32,7 @@
 
 			// Current containers supported
 			var containers = ["general_container", "wiki_container", "tweet_container", "streetview_container"];
-			var activeContainer = "general_container";
+			var active_container = "general_container";
 			
 			// reference to the main map
 			var map;
@@ -79,7 +79,7 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-				activeContainer = <?php if (isset($_GET["container"])) { echo "\"" . $_GET["container"] . "\""; } else { echo "\"general_container\""; }?>;
+				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"general_container\""; }?>;
 
 				if (latitude == 999 || longitude == 999) {
 					findMe();
@@ -88,11 +88,27 @@
 					showMap();
 				}
 
-				
-				document.getElementById(activeContainer).style.display="inline";
+				document.getElementById(active_container).style.display="inline";
 
-				$("[title]").tooltip({ effect: 'slide'});
-				
+				$("[title]").tooltip({ effect: "slide"});
+
+				$(function() {
+
+					// if the function argument is given to overlay, it is assumed to be the onBeforeLoad event listener.
+
+					$("a[rel]").overlay({
+						mask: '#2C5700',
+						effect: 'apple',
+
+						onBeforeLoad: function() {
+							// grap wrapper element inside content
+							var wrap = this.getOverlay().find(".contentWrap");
+							// load the page specified in the trigger
+							wrap.load(this.getTrigger().attr("href"));
+
+						}
+					});
+				});
 			}
 
 			// Try to find the users location
@@ -330,6 +346,7 @@
 				}				
 				output += "</tr></table>";
 				document.getElementById("general_stream").innerHTML = output;
+				$("[title]").tooltip({ effect: 'slide'});
  		  	}
 			
  		  	function updateTwitterLocationInformation() {
@@ -444,7 +461,7 @@
 				
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
-				activeContainer = containers[position];
+				active_container = containers[position];
 			}
 
 			function prevContainer(container) {
@@ -462,13 +479,20 @@
 				
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
-				activeContainer = containers[position];
+				active_container = containers[position];
 			}
 			
 		</script>
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
+
+		<!-- overlayed element -->
+		<div class="apple_overlay" id="overlay">
+			<!-- the external content is loaded inside this tag -->
+			<div class="contentWrap"></div>
+		
+		</div>
 
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
@@ -516,30 +540,41 @@
 
 			<div class="span-24">&nbsp;</div>
 
-			<div id="map_container" class="span-12">
-				<div class="header">
-				Map&nbsp;<img width="14px" height="14px" title="Try to find your current location. Best guess, not 100% accurate." src="images/find.png" onclick="findMe();" alt="Find me!"/>
+			<div id="view-container-left" class="span-12">
+				<div id="map_container">
+					<div class="header">
+					Map&nbsp;<img class="header-icon" title="Try to find your current location. Best guess, not 100% accurate." src="images/find.png" onclick="findMe();" alt="Find me!"/>
+					</div>
+	
+					<div class="detail">
+						<center>
+	<!-- 						
+						<div id="map" style="width: 40px; height: 40px;"></div>
+	-->
+						<div id="map" style="width: 468px; height: 465px;"></div>
+						</center>
+					</div>
+					<div class="footer-text fixed-height-footer"></div>
 				</div>
-
-				<div class="detail">
-					<center>
-<!-- 						
-					<div id="map" style="width: 40px; height: 40px;"></div>
--->
-					<div id="map" style="width: 468px; height: 465px;"></div>
-					</center>
-				</div>
-				<div class="footer-text fixed-height-footer"></div>
 			</div>
 
-			<div id="view-container" class="span-12 last">
+
+			<div id="view-container-right" class="span-12 last">
 
 				<div id="streetview_container" class="child">
 	
 					<div class="header" title="Shows the streetview at the current location, streetview is only available in certain locations.">
-						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('streetview_container')"/>
-						<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('streetview_container')"/>&nbsp;
-						Streetview
+
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')"/>
+						</div>
+						<div class="header-center">
+							Streetview
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('streetview_container')"/>
+						</div>
+
 					</div>
 					<div class="detail">
 						<div id="streetview" style="width: 468px; height: 465px"></div>
@@ -550,8 +585,15 @@
 				<div id="tweet_container" class="child">
 	
 					<div class="header" title="Shows tweets in the surrounding area. Does not show all tweets, only those where people have chosen to share the location.">
-						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('tweet_container')"/>
-		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('tweet_container')"/>&nbsp;Tweets
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('tweet_container')"/>
+						</div>
+						<div class="header-center">
+							Twitter
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('tweet_container')"/>
+						</div>
 					</div>
 	 				<div class="detail-padded">
 						<center>
@@ -571,8 +613,15 @@
 
 				<div id="wiki_container" class="child">
 					<div class="header" title="Shows all wikipedia articles relevant to the area.">
-						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('wiki_container')"/>
-		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('wiki_container')"/>&nbsp;Wiki Articles
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('wiki_container')"/>
+						</div>
+						<div class="header-center">
+							Wikipedia
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('wiki_container')"/>
+						</div>
 					</div>
 	 				<div class="detail-padded">
 						<center>
@@ -592,8 +641,15 @@
 
 				<div id="general_container" class="child">
 					<div class="header" title="Shows general information about the location.">
-						<img class="header-icon" src="images/arrow_left.png" onclick="prevContainer('general_container')"/>
-		              	<img class="header-icon" src="images/arrow_right.png" onclick="nextContainer('general_container')"/>&nbsp;General location information
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('general_container')"/>
+						</div>
+						<div class="header-center">
+							General
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('general_container')"/>
+						</div>
 				    </div>
 					<div class="detail-padded fixed-height-block">
 						<div id="general_stream"></div>
@@ -601,6 +657,16 @@
 					<div class="footer-text fixed-height-footer"></div>
 				</div>
 			</div>
+			<div class="span-24">&nbsp;</div>
+			<div class="span-24"><hr/></div>
+			
+			<div class="span-1"><a href="about.htm" rel="#overlay">About</a></div>
+			<div class="span-1"><a href="contact.htm" rel="#overlay">Contact</a></div>
+			<div class="span-21">&nbsp;</div>
+			<div class="span-1 last">0.0.1</div>
+			<div class="span-24">&nbsp;</div>
+			
+
 		</div>
 
 	</body>
