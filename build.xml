@@ -23,7 +23,7 @@
 				<include name="**/*.png"/>
 				<include name="**/*.jpg"/>
 				<include name="**/*.gif"/>
-				<include name="**/*.html"/>
+				<include name="**/*.htm"/>
 			</fileset>
 		</copy>
 	</target>
