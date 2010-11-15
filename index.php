@@ -229,8 +229,8 @@
 				map.setCenter(selectedLocation);
 				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
-				updateGeneralLocationInformation();
 				reverseCodeLatLng();
+				updateGeneralLocationInformation();
 				scroll(0,0);
 				document.getElementById("url").value="";
 				setMessage("Location updated", "success");
