@@ -62,8 +62,8 @@
 				<ol class="forms">
 					<li><label for="emailFrom">Email</label><input onclick="$('#emailFrom').css('background-color', 'white');" class="title" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></li>
 					<li><label for="message">Message</label><textarea onclick="$('#message').css('background-color', 'white');" class="title" name="message" id="message"><?= $_POST['message']; ?></textarea></li>
-					<li class="buttons"><button type="submit" id="submit">Send Email</button><input type="hidden" name="submitted" id="submitted" value="true" /></li>
 				</ol>
+				<div width="100%" align="right"><button class="buttons" type="submit" id="submit">Send Email</button></div><input type="hidden" name="submitted" id="submitted" value="true"/>
 			</form>
 			<div class="clearing"></div>
 		</div>

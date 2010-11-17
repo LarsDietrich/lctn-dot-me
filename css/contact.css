@@ -40,10 +40,9 @@ ol.forms label {
 }
 
 ol.forms input {
-	background: transparent;
 	background: white;
 	border: 1px solid #2C5700;
-	width: 80%;
+	width: 78%;
 	font-size: 1.0em;
 }
 
@@ -51,10 +50,15 @@ ol.forms textarea {
 	height: 15em;
 	background: white;
 	border: 1px solid #2C5700;
-	width: 80%;
+	width: 78%;
 	font-size: 1.0em;
 }
 
 .contact-error {
 	color: #FF3333;
+}
+
+.buttons {
+	font-size: medium;
+	color: #2C5700;
 }
