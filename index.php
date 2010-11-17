@@ -487,13 +487,13 @@
 
 		<div class="container">
 			<div class="span-21">&nbsp;</div>
-			<div class="span-2"><h1><i>BETA</i></h1></div>
+			<div class="span-2"><h1><i><span class="title-text">BETA</span></i></h1></div>
 			<div class="span-24"><center><hr/></center></div>
 			<div class="span-3">
-				<h1>lctn.me</h1>
+				<h1><span class="title-text">lctn.me</span></h1>
 			</div>
 			<div class="span-9">
-				<h4><i>Find it, share it</i></h4>
+				<h4><i><span class="title-text">Find it, share it</span></i></h4>
 			</div>
 			<div class="span-12 last">
 				<div id="message"></div>

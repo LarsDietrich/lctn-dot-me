@@ -1,5 +1,7 @@
+
 /* Form Styles */
 div#container {
+	color: #2C5700;
 	background: transparent;
 	font-size: 1.2em;
 	margin: 0 auto;
@@ -33,10 +35,11 @@ ol.forms label {
 	cursor: pointer;
 	display: block;
 	float: left;
-	line-height: 1.5em;
-	padding-right: 1%;
-	text-align: right;
-	width: 15%;
+	line-height: 2.5em;
+	padding-right: 4%;
+	text-align: left;
+	width: 10%;
+	font-size: medium;
 }
 
 ol.forms input {
