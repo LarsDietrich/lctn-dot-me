@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 	<head>
-	    <title>lctn.me</title>
+	    <title>lctn.me | A Location Portal - Find it, Share it</title>
 	
 		<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
@@ -27,6 +27,7 @@
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
+
 
 		<script type="text/javascript">
 
@@ -108,7 +109,7 @@
 					// if the function argument is given to overlay, it is assumed to be the onBeforeLoad event listener.
 
 					$("a[rel]").overlay({
-						mask: '#2C5700',
+						mask: '#C7D9D4',
 						effect: 'apple',
 
 						onBeforeLoad: function() {
@@ -546,7 +547,7 @@
 				<div class="detail" >
 					<center>
 						<input class="large button" type="button" name="generate" value="Shorten" onclick="shortenUrl();"/>
-						<input title="Click Go to generate a short url. The link will point back to this location and open the page as you see it." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
+						<input title="Click Shorten to generate a short url. The link will point back to this location and open the page as you see it (with live data updated)." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
 						<div class="inline" id="url-window"></div>
 					</center>
 				</div>
@@ -613,7 +614,7 @@
 	 				<div class="detail-padded">
 						<center>
 							Search for <input title="Enter a search term to filter tweets, comma seperate for multiple terms (eg. party, cool)" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-							in <input title="How big an area would you like to search for tweets in?" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+							in <input title="How big an area would you like to search for tweets in?" class="short-text" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
 							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
 						</center>
 					</div>
@@ -640,7 +641,7 @@
 					</div>
 	 				<div class="detail-padded">
 						<center>
-							Find me articles within <input title="How big an area would you like to see wikipedia articles for (maximum of 5km)?" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
+							Find me articles within <input title="How big an area would you like to see wikipedia articles for (maximum of 5km)?" class="short-text" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
 							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 						</center>
 					</div>
@@ -683,6 +684,31 @@
 			
 
 		</div>
+
+		<script type="text/javascript">
+			var uservoiceOptions = {
+			  /* required */
+			  key: 'lctn',
+			  host: 'lctn.uservoice.com', 
+			  forum: '86707',
+			  showTab: true,  
+			  /* optional */
+			  alignment: 'left',
+			  background_color:'#73654C', 
+			  text_color: 'white',
+			  hover_color: '#4E84A6',
+			  lang: 'en'
+			};
+			
+			function _loadUserVoice() {
+			  var s = document.createElement('script');
+			  s.setAttribute('type', 'text/javascript');
+			  s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
+			  document.getElementsByTagName('head')[0].appendChild(s);
+			}
+			_loadSuper = window.onload;
+			window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+		</script>
 
 	</body>
 

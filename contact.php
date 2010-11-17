@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<title>jQuery Ajax Forms | Trevor Davis</title>
+		<title>lctn.me | Contact Us</title>
 		<link href="css/contact.css" type="text/css" rel="stylesheet" media="screen,projection" />
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -12,21 +12,22 @@
 					var subject = "An email from lctn.me's contact form";
 					var hasError = false;
 					var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-					var errorColor = "#FF0000";
+					var errorColor = "1px solid red";
+					var normalColor = "1px solid white";
 					var emailFromVal = $("#emailFrom").val();
-					$('#emailFrom').css("background-color", "white");
+					$('#emailFrom').css("border", normalColor);
 					if(emailFromVal == '') {
-						$('#emailFrom').css("background-color", errorColor);
+						$('#emailFrom').css("border", errorColor);
 						hasError = true;
 					} else if(!emailReg.test(emailFromVal)) {	
-						$('#emailFrom').css("background-color", errorColor);
+						$('#emailFrom').css("border", errorColor);
 						hasError = true;
 					}
 					
 					var messageVal = $("#message").val();
-					$('#message').css("background-color", "white");
+					$('#message').css("border", normalColor);
 					if(messageVal == '') {
-						$('#message').css("background-color", errorColor);
+						$('#message').css("border", errorColor);
 						hasError = true;
 					}
 					
@@ -39,7 +40,7 @@
 			   				{ emailTo: emailTo, emailFrom: emailFromVal, subject: subject, message: messageVal },
 			   					function(data){
 									$("#sendEmail").slideUp("normal", function() {				   
-										$("#sendEmail").before('<h1>Success</h1><p>Your email was sent. Press ESC or click the close button to continue.</p>');											
+										$("#sendEmail").before('<p>Thank you for your feedback!<br><br><i> Close this window by either pressing ESC or clicking on the close button to continue.</i></p>');											
 									});
 			   					}
 							 );
@@ -54,10 +55,10 @@
 		<div id="container">
 			<?php include('verify.php'); ?>
 			<form action="/" method="post" id="sendEmail">
-				<p>If you find something that doesn't work, or think you have a cool idea, please let me know!</p>
+				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<ol class="forms">
-					<li><label for="emailFrom">Email</label><input onclick="$('#emailFrom').css('background-color', 'white');" class="title" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></li>
-					<li><label for="message">Message</label><textarea onclick="$('#message').css('background-color', 'white');" class="title" name="message" id="message"><?= $_POST['message']; ?></textarea></li>
+					<li><label for="emailFrom">Email</label><input onclick="$('#emailFrom').css('border', '1px solid white');" class="title" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></li>
+					<li><label for="message">Message</label><textarea onclick="$('#message').css('border', '1px solid white');" class="title" name="message" id="message"><?= $_POST['message']; ?></textarea></li>
 				</ol>
 				<div width="100%" align="right"><button class="buttons" type="submit" id="submit">Send Email</button></div><input type="hidden" name="submitted" id="submitted" value="true"/>
 			</form>

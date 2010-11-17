@@ -1,44 +1,44 @@
 /* Overridden styles of Blueprint to customize layout */
 body {
-	background-color: #FFFFFF;
+	background-color: #C7D9D4;
 }
 
 .header {
-	background: #AFD775;
+	background: #84A651;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
-	border-top: 1px solid #AFD775;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	border-top: 1px solid #84A651;
+	border-left: 1px solid #84A651;
+	border-right: 1px solid #84A651;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
 	font-size: x-large;
-	color: #2C5700;
+	color: #000000;
 	text-align: center;
 }
 
 .detail {
 	background: #FFFFFF;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	border-left: 1px solid #84A651;
+	border-right: 1px solid #84A651;
 	overflow: auto;
 }
 
 .detail-padded {
 	background: #FFFFFF;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	border-left: 1px solid #84A651;
+	border-right: 1px solid #84A651;
 	padding: 4px 10px 4px 5px;
 	overflow: auto;
 }
 
 .footer-text {
-	background: #AFD775;
+	background: #84A651;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
-	border-bottom: 1px solid #AFD775;
+	border-left: 1px solid #84A651;
+	border-right: 1px solid #84A651;
+	border-bottom: 1px solid #84A651;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -46,9 +46,9 @@ body {
 	background: #FFFFFF;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
-	border-bottom: 1px solid #AFD775;
+	border-left: 1px solid #84A651;
+	border-right: 1px solid #84A651;
+	border-bottom: 1px solid #84A651;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -101,19 +101,19 @@ body {
 
 .hashtag {
 	font-weight: bold;
-	color: #024769;
+	color: #68A61E;
 	cursor: pointer;
 }
 
 a:link {
 	font-weight: bold;
-	color: #2C5700;
+	color: #4E84A6;
 	text-decoration: none;
 }
 
 a:visited {
 	font-weight: bold;
-	color: #2C5700;
+	color: #4E84A6;
 	text-decoration: none;
 }
 
@@ -129,7 +129,7 @@ input {
 	margin-top: 5px;
 	width: 200px;
 	border: 1px solid black;
-	background-color: #AFD775;
+	background-color: #84A651;
 	filter: alpha(opacity =   80);
 	opacity: .8;
 	color: black;
@@ -216,5 +216,9 @@ input {
 }
 
 .title-text {
-	color: #2C5700;
+	color: #000000;
+}
+
+.short-text {
+	width: 30px;
 }
