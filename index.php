@@ -22,6 +22,7 @@
 		
  		<script type="text/javascript" src="js/gears_init.js"></script> 
 		<script type="text/javascript" src="js/jxs.js"> </script>
+		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
 
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
@@ -72,6 +73,7 @@
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
+				
 				beta();
 				updateUrlWindow("");
 				
@@ -80,8 +82,16 @@
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"streetview_container\""; }?>;
+				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"\""; }?>;
 
+				if ($.cookie("active_container") == null) {
+					$.cookie("active_container", "streetview_container"); 
+				}
+				
+				if (active_container == "") {
+					active_container = $.cookie("active_container");
+				}
+				
 				if (latitude == 999 || longitude == 999) {
 					findMe();
 				} else {
@@ -460,6 +470,8 @@
 				if (active_container == "streetview_container") {
 					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				}
+
+				$.cookie("active_container", active_container);
 			}
 
 			function prevContainer(container) {
@@ -481,6 +493,8 @@
 				if (active_container == "streetview_container") {
 					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				}
+
+				$.cookie("active_container", active_container);
 			}
 			
 		</script>
