@@ -1,5 +1,4 @@
-
-/* Form Styles */
+/* Styles for Contact Us form */
 div#container {
 	color: #2C5700;
 	background: transparent;
@@ -45,7 +44,7 @@ ol.forms label {
 ol.forms input {
 	background: white;
 	border: 1px solid #2C5700;
-	width: 78%;
+	width: 80%;
 	font-size: 1.0em;
 }
 
@@ -53,7 +52,7 @@ ol.forms textarea {
 	height: 15em;
 	background: white;
 	border: 1px solid #2C5700;
-	width: 78%;
+	width: 80%;
 	font-size: 1.0em;
 }
 

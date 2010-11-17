@@ -12,17 +12,16 @@
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
-		
+
+		<!-- http://lctn -->
+		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
+
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 		
-		<!-- http://lctn -->
-		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
-		
-		<script type="text/javascript" src="js/gears_init.js"></script>
+ 		<script type="text/javascript" src="js/gears_init.js"></script> 
 		<script type="text/javascript" src="js/jxs.js"> </script>
-
 
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
@@ -31,7 +30,7 @@
 		<script type="text/javascript">
 
 			// Current containers supported
-			var containers = ["general_container", "wiki_container", "tweet_container", "streetview_container"];
+			var containers = ["general_container", "wiki_container", "twitter_container", "streetview_container"];
 			var active_container = "streetview_container";
 			
 			// reference to the main map
@@ -68,6 +67,8 @@
 
 			// weather array
 			var listOfWeather = [];
+
+			var hasMoved = false;
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
@@ -123,16 +124,17 @@
 							repositionMap();
 						});
 					// Try Google Gears Geolocation
-				} else if (google.gears) {
-					var geo = google.gears.factory.create('beta.geolocation');
-					geo.getCurrentPosition(function(position) {	
-						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-						repositionMap();
-					}, function(error) {
-						selectedLocation = new google.maps.LatLng(0, 0);
-						repositionMap();
-					});
 				} 
+//				else if (google.gears) {
+//					var geo = google.gears.factory.create('beta.geolocation');
+//					geo.getCurrentPosition(function(position) {	
+//						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+//						repositionMap();
+//					}, function(error) {
+//						selectedLocation = new google.maps.LatLng(0, 0);
+//						repositionMap();
+//					});
+//				} 
 			}
 			
 			
@@ -207,15 +209,19 @@
 				positionMarker.setMap(null);
 				positionMarker.setPosition(selectedLocation);
 				positionMarker.setMap(map);
+
 				streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
-				map.setCenter(selectedLocation);
-				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
-				reverseCodeLatLng();
+				updateTwitterLocationInformation();
 				updateGeneralLocationInformation();
-				scroll(0,0);
+
+				reverseCodeLatLng();
+				
+				map.setCenter(selectedLocation);
 				document.getElementById("url").value="";
 				setMessage("", "success");
+				scroll(0,0);
+				hasMoved = false;
 			}
 
 			// Try find street view data and load appropriate panorama panel and set selectedLocation
@@ -451,6 +457,9 @@
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
 				active_container = containers[position];
+				if (active_container == "streetview_container") {
+					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+				}
 			}
 
 			function prevContainer(container) {
@@ -469,6 +478,9 @@
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
 				active_container = containers[position];
+				if (active_container == "streetview_container") {
+					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+				}
 			}
 			
 		</script>
@@ -571,17 +583,17 @@
 					<div class="footer-text fixed-height-footer"></div>
 				</div>
 	
-				<div id="tweet_container" class="child">
+				<div id="twitter_container" class="child">
 	
 					<div class="header">
 						<div class="header-left">
-							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('tweet_container')"/>
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('twitter_container')"/>
 						</div>
 						<div class="header-center"  title="Shows tweets in the surrounding area. Will only show tweets where people have chosen to share the location.">
 							Twitter
 						</div>
 						<div class="header-right">
-							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('tweet_container')"/>
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('twitter_container')"/>
 						</div>
 					</div>
 	 				<div class="detail-padded">
