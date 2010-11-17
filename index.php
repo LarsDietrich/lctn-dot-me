@@ -111,31 +111,7 @@
 				});
 			}
 
-			// Try to find the users location
-			function locateMe() {
-				// Try W3C Geolocation (Preferred)
-				if (navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {	
-							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-							showMap();
-						}, function(error) {
-							selectedLocation = new google.maps.LatLng(0, 0);
-							showMap();
-						});
-					// Try Google Gears Geolocation
-				} else if (google.gears) {
-					var geo = google.gears.factory.create('beta.geolocation');
-					geo.getCurrentPosition(function(position) {	
-						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-						showMap();
-					}, function(error) {
-						selectedLocation = new google.maps.LatLng(0, 0);
-						showMap();
-					});
-				} 
-			}
-
-			//
+			// Try to find the user's location
 			function findMe() {
 				// Try W3C Geolocation (Preferred)
 				if (navigator.geolocation) {
@@ -353,7 +329,7 @@
 				for (i = 0; i < listOfWeather.length; i++) {
 					output += listOfWeather[i];
 				}				
-				output += "</tr><tr><td class='weather-text'>";
+				output += "</tr><tr><td colspan='6' class='weather-text'>";
 				output += "Powered by <a href=\"http://www.worldweatheronline.com/\" title=\"Free local weather content provider\" target=\"_blank\">World Weather Online</a>";
 				output += "</td></tr></table>";
 
@@ -556,7 +532,7 @@
 			<div id="view-container-left" class="span-12">
 				<div id="map_container">
 					<div class="header">
-					Map&nbsp;<img class="header-icon" title="Try to find your current location. Best guess, not 100% accurate or guaranteed to work, based on browser capabilities" src="images/find.png" onclick="findMe();" alt="Find me!"/>
+					Map
 					</div>
 	
 					<div class="detail">
@@ -673,8 +649,8 @@
 			<div class="span-24">&nbsp;</div>
 			<div class="span-24"><hr/></div>
 			
-			<div class="span-1"><a href="about.htm" rel="#overlay">About</a></div>
-			<div class="span-1"><a href="contact.htm" rel="#overlay">Contact</a></div>
+			<div class="span-1"><a href="about.php" rel="#overlay">About</a></div>
+			<div class="span-1"><a href="contact.php" rel="#overlay">Contact</a></div>
 			<div class="span-21">&nbsp;</div>
 			<div class="span-1 last">0.0.1</div>
 			<div class="span-24">&nbsp;</div>

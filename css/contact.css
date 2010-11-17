@@ -1,0 +1,60 @@
+/* Form Styles */
+div#container {
+	background: transparent;
+	font-size: 1.2em;
+	margin: 0 auto;
+	padding-bottom: 0px;
+	padding-top: 50px;
+	padding-left: 50px;
+	padding-right: 50px;
+	width: 480px;
+	vertical-align: middle;
+}
+
+.clearing {
+	clear: both;
+}
+
+ol.forms {
+	float: left;
+	list-style: none;
+	width: 100%;
+}
+
+ol.forms li {
+	clear: left;
+	float: left;
+	line-height: 1.5em;
+	margin-bottom: 0.5em;
+	width: 100%;
+}
+
+ol.forms label {
+	cursor: pointer;
+	display: block;
+	float: left;
+	line-height: 1.5em;
+	padding-right: 1%;
+	text-align: right;
+	width: 15%;
+}
+
+ol.forms input {
+	background: transparent;
+	background: white;
+	border: 1px solid #2C5700;
+	width: 80%;
+	font-size: 1.0em;
+}
+
+ol.forms textarea {
+	height: 15em;
+	background: white;
+	border: 1px solid #2C5700;
+	width: 80%;
+	font-size: 1.0em;
+}
+
+.contact-error {
+	color: #FF3333;
+}
