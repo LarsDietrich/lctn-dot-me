@@ -3,6 +3,6 @@
 		$server = 'localhost';
 		$username = 'someone';
 		$password = 'someone123';
-		$database = 'lctn';
+		$database = 'lctn_test';
 
 ?>

@@ -1,4 +1,4 @@
-USE 'lctn';
+USE 'lctn_test';
 --
 -- Table structure for table `url`
 --
