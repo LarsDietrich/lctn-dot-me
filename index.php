@@ -27,6 +27,7 @@
 		<script type="text/javascript" src="js/custom/tweets.js"> </script>
 		<script type="text/javascript" src="js/custom/weather.js"> </script>
 		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
+		<script type="text/javascript" src="js/custom/timezone.js"> </script>
 
 
 		<script type="text/javascript">
@@ -58,19 +59,6 @@
 			var heading = 0;
 			var pitch = 0;
 			var zoom = 12;
-
-			// tweet array to hold all tweets in area
-			var listOfTweets = [];
-			var tweetsPerPage = 8;
-			
-			// wiki array to hold all wikis in area
-			var listOfWikis = [];
-			var wikisPerPage = 10;
-
-			// weather array
-			var listOfWeather = [];
-
-			var hasMoved = false;
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
@@ -123,38 +111,38 @@
 				});
 			}
 
-			// Try to find the user's location
+			// 
+			// Tries to get the users current location using build in geolocation functionality.
+			//
 			function findMe() {
-				// Try W3C Geolocation (Preferred)
 				if (navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition(function(position) {	
 							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-							repositionMap();
+							setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+							repositionMarker();
 						}, function(error) {
+							setMessage("Tried to get your location, but there was a problem, sorry", "error");
 							selectedLocation = new google.maps.LatLng(0, 0);
-							repositionMap();
+							repositionMarker();
 						});
-					// Try Google Gears Geolocation
 				} 
-//				else if (google.gears) {
-//					var geo = google.gears.factory.create('beta.geolocation');
-//					geo.getCurrentPosition(function(position) {	
-//						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
-//						repositionMap();
-//					}, function(error) {
-//						selectedLocation = new google.maps.LatLng(0, 0);
-//						repositionMap();
-//					});
-//				} 
+				else if (google.gears) {
+					var geo = google.gears.factory.create('beta.geolocation');
+					geo.getCurrentPosition(function(position) {	
+						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+						setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+						repositionMarker();
+					}, function(error) {
+						selectedLocation = new google.maps.LatLng(0, 0);
+						setMessage("Tried to get your location, but there was a problem, sorry", "error");
+						repositionMarker();
+					});
+				} 
 			}
 			
-			
-			function clearElements() {
-				document.getElementById("address").value="";
-				document.getElementById("url").value="";
-			}
-
-			// show the map
+			//
+			// Loads the Google Map 
+			//
 			function showMap() { 
 				
 			  var myOptions = {
@@ -189,7 +177,9 @@
 		      repositionMarker();
 			}
 
-		   // Various listeners to catch changes on the map(s)
+		   //
+		   // Various listeners to listen for changes on the map(s):
+		   // 
 		   function setupListeners() {
 			 google.maps.event.addListener(map, 'click', function(event) {
   			    selectedLocation = event.latLng;
@@ -210,9 +200,11 @@
   			      pitch = panorama.getPov().pitch;
   			  });
 			}
-			
+
+		    //
 			// Moves the marker to a new location specified by selectedLocation. Refreshes screen for anything
 			// that uses the location (like tweets and streetview)
+			//
 			function repositionMarker() {
 				if (!map) {
 					showMap();
@@ -224,18 +216,21 @@
 				streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				updateWikiLocationInformation();
 				updateTwitterLocationInformation();
-				updateGeneralLocationInformation();
-
+				updateWeatherLocationInformation();
 				reverseCodeLatLng();
 				
 				map.setCenter(selectedLocation);
 				document.getElementById("url").value="";
-				setMessage("", "success");
+				setMessage("", "");
 				scroll(0,0);
-				hasMoved = false;
 			}
 
-			// Try find street view data and load appropriate panorama panel and set selectedLocation
+			//
+			// Try find street view data, load appropriate panorama panel and set selectedLocation.
+			// If the selectedLocation does not have a streetview associated with it, will
+			// attempt to find a streetview within a specified distance and reposition the map 
+			// to that point.
+			//
 			function processSVData(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
 			      var markerPanoID = data.location.pano;
@@ -251,11 +246,14 @@
 				  positionMarker.setMap(map);
 				  panorama.setVisible(true);
 			  	} else {
-				  setMessage("Streetview not available at this location, try clicking on a nearby road", "notice");
+				  setMessage("Streetview not available at this location.", "notice");
 				  panorama.setVisible(false);
 				}
 			}
 
+			// 
+			// Sets a message in the upper right message display area
+			// 
 			function setMessage(message, type) {
 				if (message == "") {
 					document.getElementById("message").innerHTML="";
@@ -264,43 +262,56 @@
 				}
 			}
 
+			//
 			// Sets the selectedLocation based on address in address box
+			//
 			function locationFromAddr() {
 				var address = document.getElementById("address").value;
+				setMessage("", "");
 				geocoder.geocode( { 'address': address}, function(results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 				      selectedLocation = results[0].geometry.location;
 				      repositionMarker();
 				    } else {
-					  setMessage("Unable to determine location from address: " + status, "error");
+					  setMessage("Is that a real place? I could not find it", "info");
 				    }
 				});
 				}
-			
+
+			//
 			// Reverse geocodes the address, moves the marker to the new location
+			//
 			function locationFromAddress(address) {
 				document.getElementById("address").value = address;
 				locationFromAddr();
 			}
-
-			 // Sets the address box based on selectedLocation
+			
+			//
+			// Sets the address box based on current selectedLocation coordinates
+			//
 			function reverseCodeLatLng() {
 				geocoder.geocode({'latLng': selectedLocation}, function(results, status) {
+					document.getElementById("timezone_stream").innerHTML="";
 					output = "";
+					var address = "";
 					if (status == google.maps.GeocoderStatus.OK) {
 						if (results.length > 0) {
 							address = results[0].formatted_address;
 							document.getElementById("address").value = address;
+							updateTimezoneLocationInformation();
 						} else {
-							setMessage("No Addresses Found");
+							setMessage("No addresses were found at this location.", "info");
 						}
 					} else {
-						setMessage("Unable to determined address: " + status, "error");
+						setMessage("Unable to determine address from current location", "error");
 					}
+					updateGeneralLocationInformation(address);
 				});
 			}
-			  
+
+			//
 			// Determine the shortened URL based on the current location, saves to DB
+			//
 			function shortenUrl() {
 				root = "http://" + top.location.host + "/";
 				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + active_container ;
@@ -308,8 +319,9 @@
 				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root + data);} );
 			}
 
-			
-			  // Update the social bar with new shortened link
+			//
+			// Updates the icons on the social bar with the current shortened link
+			//
 			function updateUrlWindow(link) {
 				var output = "";
 
@@ -333,113 +345,19 @@
 				
 			}
 
-			function updateGeneralLocationInformation() {
-				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("general_stream").innerHTML="Searching..";
-					getWeather(selectedLocation, 2);
+
+			function updateGeneralLocationInformation(address) {
+				var output = "You are positioned at Longitude: <b>" + selectedLocation.lng() + "</b> and Latitude: <b>" + selectedLocation.lat() + "</b>";
+				if (!(address == "")) {
+					output += ", which is also known as <b>" + address + "</b>";
 				}
+				output += ".";
+				document.getElementById("location_stream").innerHTML=output;
 			}
 
- 		  	// Load the weather display based on whats in tweets array
-			function updateGeneralDisplay() {
-				var output = "<table><tr>";
-				for (i = 0; i < listOfWeather.length; i++) {
-					output += listOfWeather[i];
-				}				
-				output += "</tr><tr><td colspan='6' class='weather-text'>";
-				output += "Powered by <a href=\"http://www.worldweatheronline.com/\" title=\"Free local weather content provider\" target=\"_blank\">World Weather Online</a>";
-				output += "</td></tr></table>";
-
-				document.getElementById("general_stream").innerHTML = output;
-				$("[title]").tooltip({ effect: 'slide'});
- 		  	}
-			
- 		  	function updateTwitterLocationInformation() {
-				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("tweet_stream").innerHTML="Searching..";
-					getTweets(selectedLocation, document.getElementById("filter").value, document.getElementById("tweet_range").value);
-				}
-			}
-
- 		  	function updateTwitterLocationInformationFromHashTag(value) {
- 		  		document.getElementById("filter").value = value;
-				updateTwitterLocationInformation();
- 		  	}
- 		  	
- 		  	// Load the twitter display based on whats in tweets array
-			function updateTwitterDisplay(page) {
-				var startItem = (page - 1) * tweetsPerPage;
-				var endItem = page * tweetsPerPage;
-				var output = "";
-
-				if (endItem > listOfTweets.length) {
-					endItem = listOfTweets.length;
-				}
-				
-				for (i = startItem; i < endItem; i++) {
-					output += listOfTweets[i];	
-				}				
-				document.getElementById("tweet_stream").innerHTML = output;
-				$("[title]").tooltip({ effect: "slide"});
-				updateTwitterPaging(page);
- 		  	}
-
-			function updateTwitterPaging(page) {
-				var totalPages = Math.round(listOfTweets.length / tweetsPerPage);
-				if (totalPages < (listOfTweets.length / tweetsPerPage)) {
-					totalPages++;
-				}
-				var next = "&nbsp;";
-				var previous = "&nbsp;";
-				
-				if ((page + 1) <= totalPages) {				
-					next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
-				}
-				if ((page - 1) >= 1) { 
-					previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
-				}				
-				document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
-			}
- 		  	
- 		  	function updateWikiLocationInformation() {
-				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("wiki_stream").innerHTML="Searching..";
-					articles(selectedLocation, document.getElementById("wiki_range").value);
-				}
-			}
-
- 		  	// Load the twitter display based on whats in tweets array
-			function updateWikiDisplay(page) {
-				var startItem = (page - 1) * wikisPerPage;
-				var endItem = page * wikisPerPage;
-				var output = "";
-				if (endItem > listOfWikis.length) {
-					endItem = listOfWikis.length;
-				}
-				for (i = startItem; i < endItem; i++) {
-					output += listOfWikis[i];	
-				}				
-				document.getElementById("wiki_stream").innerHTML = output;
-				updateWikiPaging(page);
- 		  	}
-
-			function updateWikiPaging(page) {
-				var totalPages = Math.round(listOfWikis.length / wikisPerPage);
-				if (totalPages < (listOfWikis.length / wikisPerPage)) {
-					totalPages++;
-				}
-				var next = "&nbsp;";
-				var previous = "&nbsp;";
-				if ((page + 1) <= totalPages) {				
-					next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
-				}
-				if ((page - 1) >= 1) { 
-					previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
-				}				
-
-				document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
-			}
-
+ 		  	//
+ 		  	// Display the beta page.
+ 		  	//
 			function beta(){
 				var thediv=document.getElementById('displaybox');
 				if(thediv.style.display == "none"){
@@ -452,6 +370,10 @@
 				return false;
 			}
 
+ 		  	//
+ 		  	// Loads the next container in the sequence based on the containers array.
+ 		  	// Containers that are dependant on focus for refresh are refreshed (Streetview)
+ 		  	//
 			function nextContainer(container) {
 				position = 0;
 				for (i = 0; i < containers.length; i++) {
@@ -475,6 +397,10 @@
 				$.cookie("active_container", active_container);
 			}
 
+ 		  	//
+ 		  	// Loads the previous container in the sequence based on the containers array.
+ 		  	// Containers that are dependant on focus for refresh are refreshed (Streetview)
+ 		  	//
 			function prevContainer(container) {
 				position = 0;
 				for (i = 0; i < containers.length; i++) {
@@ -487,14 +413,12 @@
 				} else {
 					position--;
 				}
-				
 				document.getElementById(container).style.display="none";
 				document.getElementById(containers[position]).style.display="inline";
 				active_container = containers[position];
 				if (active_container == "streetview_container") {
 					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				}
-
 				$.cookie("active_container", active_container);
 			}
 			
@@ -559,7 +483,7 @@
 			<div id="view-container-left" class="span-12">
 				<div id="map_container">
 					<div class="header">
-					Map
+					<div title="Shows a map of the immediate area around the location, use the controls on the map to manipulate it.">Map</div>
 					</div>
 	
 					<div class="detail">
@@ -582,7 +506,7 @@
 					<div class="header">
 
 						<div class="header-left">
-							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')" title="Show previous view"/>
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')"/>
 						</div>
 						<div class="header-center" title="Shows the streetview at the current location, streetview is only available in certain locations.">
 							Streetview
@@ -668,7 +592,14 @@
 						</div>
 				    </div>
 					<div class="detail-padded fixed-height-block">
-						<div id="general_stream"></div>
+						<div class="general-subtitle">Location</div>
+						<hr/>
+						<div class="general-text inline" id="location_stream"></div>
+						<div class="general-text inline" id="timezone_stream"></div>
+						<br/><br/>
+						<div class="general-subtitle">Weather</div>
+						<hr/>
+						<div id="weather_stream"></div>
 					</div>
 					<div class="footer-text fixed-height-footer"></div>
 				</div>

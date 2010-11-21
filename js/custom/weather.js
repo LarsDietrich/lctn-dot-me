@@ -1,3 +1,5 @@
+var listOfWeather = [];
+
 /**
  * Generate weather entries based on location
  * 
@@ -36,6 +38,11 @@ function getWeather(selectedLocation) {
 	});
 }
 
+/**
+ * Process the weather data returned, convert to array.
+ * 
+ * @param jsonData - weather data returned
+ */
 function processResults(jsonData) {
 	var shtml = '';
 	var description = "";
@@ -81,11 +88,45 @@ function processResults(jsonData) {
 	if (listOfWeather[0] == "") {
 		listOfWeather[0] = "There was a problem loading weather data, the service may be down.";
 	}
-	updateGeneralDisplay();
+	updateWeatherDisplay();
 }
 
+/**
+ * Returns the name of the day of the week based on the date supplied.
+ * 
+ * @param date - the data to get the day of week for
+ * 
+ * @return 3 letter version of day of week
+ */
 function getDayOfWeek(date) {
 	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 	var myDate=new Date(eval('"' + date + '"'));
 	return days[myDate.getDay()];
+}
+
+/**
+ * Updates the "Weather" information
+ */
+function updateWeatherLocationInformation() {
+	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+		document.getElementById("weather_stream").innerHTML="<img class='spinner' src='images/spinner.gif' alt='...'/>";
+		getWeather(selectedLocation, 2);
+	}
+}
+
+/**
+ * Load the weather display based on whats in weather array.
+ */
+function updateWeatherDisplay() {
+	var output = "<table><tr>";
+	for (i = 0; i < listOfWeather.length; i++) {
+		output += listOfWeather[i];
+	}				
+	output += "</tr><tr><td colspan='6' class='weather-text'>";
+	output += "Powered by <a href=\"http://www.worldweatheronline.com/\" title=\"Free local weather content provider\" target=\"_blank\">World Weather Online</a>";
+	output += "</td></tr></table>";
+
+	document.getElementById("weather_stream").innerHTML = output;
+	$("[title]").tooltip({ effect: 'slide'});
+
 }

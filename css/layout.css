@@ -1,6 +1,7 @@
 /* Overridden styles of Blueprint to customize layout */
 body {
 	background-color: #C7D9D4;
+	font-family: sans-serif;
 }
 
 .header {
@@ -223,3 +224,17 @@ input {
 	width: 30px;
 }
 
+.general-subtitle {
+	font-size: small;
+	font-weight: bold;
+}
+
+.general-text {
+	font-size: small;
+	font-family: sans-serif;
+}
+	
+.spinner {
+	width: 30px;
+	height: 30px;
+}

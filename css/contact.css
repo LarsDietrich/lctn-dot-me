@@ -16,39 +16,14 @@ div#container {
 	clear: both;
 }
 
-ol.forms {
-	float: left;
-	list-style: none;
-	width: 100%;
-}
-
-ol.forms li {
-	clear: left;
-	float: left;
-	line-height: 1.5em;
-	margin-bottom: 0.5em;
-	width: 100%;
-}
-
-ol.forms label {
-	cursor: pointer;
-	display: block;
-	float: left;
-	line-height: 2.5em;
-	padding-right: 6%;
-	text-align: left;
-	width: 10%;
-	font-size: medium;
-}
-
-ol.forms input {
+input {
 	background: white;
 	border: 1px solid #C7D9D4;
 	width: 80%;
 	font-size: 1.0em;
 }
 
-ol.forms textarea {
+textarea {
 	height: 13em;
 	background: white;
 	border: 1px solid #C7D9D4;
@@ -63,4 +38,8 @@ ol.forms textarea {
 .buttons {
 	font-size: medium;
 	color: #4E84A6;
+}
+
+.contact-text {
+	font-size: x-large;
 }

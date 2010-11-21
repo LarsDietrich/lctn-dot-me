@@ -12,10 +12,10 @@ This site is an idea I've been toying with for a while: to have a single portal 
 After much deliberation (with myself mostly) I decided to go with what I considered to be "interesting" information about a location and settled on the following:
 </p>
 <ul>
-<li>Twitter - Shows all the tweets, where people have opted to add location, in the area.</li>
+<li>Twitter - Shows all the tweets in the area, where people have opted to add location.</li>
 <li>Streetview (Google) - Not available everywhere but awesome where it is, shows you what the place looked like when Google last took a picture of it.</li>
 <li>Wikipedia - Shows you any wikipedia articles in the area. </li>
-<li>Weather - Current and future weather predictions.</li>
+<li>General - Some general information about the area, like weather, you current coordinates and local time.</li>
 </ul>
 
 <p>
@@ -39,14 +39,14 @@ Where would I like to take this? These are some of the ideas I'm toying with / w
 <li>Adding user identity to allow users to store and recall locations they've selected.</li>
 <li>Adding more generic information about the location, like local time, current population, country information.</li>
 <li>Allow users to link to their social networks to pull in the networks location based information (like Facebook Places).</li>
-<li>Adding in points of interest for the location so you can, as an example, find a cool coffee shop in the area.</li>
+<li>Adding in points of interest for the location so you can, for example, find a cool coffee shop in the area.</li>
 <li>Adding in simple navigation, allowing you to generate a simple route between two points.</li>
 </ul>
 
 <p>
 There's a nice feedback button on the site that I recommend you use should you have any ideas of your own, I'd like to grow this into a useful location information portal and I think I can do this with your help. Your feedback will help design the site so go ahead and let me know what you want (or don't want!)
 </p>
-
+<p>Thanks</p>
 <b>Rick</b>
 </body>
 </html>
