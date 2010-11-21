@@ -1,28 +1,41 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-   "DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 	<head>
-	    <title>lctn.me</title>
+	    <title>lctn.me | A Location Portal - Find it, Share it</title>
 	
 		<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
 		<!--[if lt IE 8]>
 		<link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/>
 		<![endif]-->
-		<link rel="stylesheet" href="css/main.css" type="text/css"/>
-		
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-		<script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-		<script type="text/javascript" src="js/jxs.js"> </script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
+		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
+		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
 
-		<script type="text/javascript" src="js/custom/locate.js"> </script>
-		<script type="text/javascript" src="js/custom/tweets.js"> </script>
-		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
+		<!-- http://lctn -->
+		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
+
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 		
+ 		<script type="text/javascript" src="js/gears_init.js"></script> 
+		<script type="text/javascript" src="js/jxs.js"> </script>
+		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
+
+		<script type="text/javascript" src="js/custom/tweets.js"> </script>
+		<script type="text/javascript" src="js/custom/weather.js"> </script>
+		<script type="text/javascript" src="js/custom/wikipedia.js"> </script>
+		<script type="text/javascript" src="js/custom/timezone.js"> </script>
+
+
 		<script type="text/javascript">
 
+			// Current containers supported
+			var containers = ["general_container", "wiki_container", "twitter_container", "streetview_container"];
+			var active_container = "streetview_container";
+			
 			// reference to the main map
 			var map;
 			// reference to the streetview
@@ -46,36 +59,92 @@
 			var heading = 0;
 			var pitch = 0;
 			var zoom = 12;
-
+			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
-				updateSocialBar("");
+				
+				beta();
+				updateUrlWindow("");
+				
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
+				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"\""; }?>;
 
+				if ($.cookie("active_container") == null) {
+					$.cookie("active_container", "streetview_container"); 
+				}
+				
+				if (active_container == "") {
+					active_container = $.cookie("active_container");
+				}
+				
 				if (latitude == 999 || longitude == 999) {
-					locateMe();
-					if (!locateResponse.success)  {
-						setMessage("Geolocation not supported", "error");
-					}
-					selectedLocation = locateResponse.location;
+					findMe();
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
+					showMap();
+				}
+
+				document.getElementById(active_container).style.display="inline";
+
+				$("[title]").tooltip({ effect: "slide"});
+
+				$(function() {
+
+					// if the function argument is given to overlay, it is assumed to be the onBeforeLoad event listener.
+
+					$("a[rel]").overlay({
+						mask: '#C7D9D4',
+						effect: 'apple',
+
+						onBeforeLoad: function() {
+							// grap wrapper element inside content
+							var wrap = this.getOverlay().find(".contentWrap");
+							// load the page specified in the trigger
+							wrap.load(this.getTrigger().attr("href"));
+
+						}
+					});
+				});
+			}
+
+			// 
+			// Tries to get the users current location using build in geolocation functionality.
+			//
+			function findMe() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {	
+							selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+							setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+							repositionMarker();
+						}, function(error) {
+							setMessage("Tried to get your location, but there was a problem, sorry", "error");
+							selectedLocation = new google.maps.LatLng(0, 0);
+							repositionMarker();
+						});
 				} 
-				showMap();
+				else if (google.gears) {
+					var geo = google.gears.factory.create('beta.geolocation');
+					geo.getCurrentPosition(function(position) {	
+						selectedLocation = new google.maps.LatLng(position.coords.latitude,	position.coords.longitude);
+						setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+						repositionMarker();
+					}, function(error) {
+						selectedLocation = new google.maps.LatLng(0, 0);
+						setMessage("Tried to get your location, but there was a problem, sorry", "error");
+						repositionMarker();
+					});
+				} 
 			}
-
-			function clearElements() {
-				document.getElementById("address").value="";
-				document.getElementById("url").value="";
-			}
-
-			// show the map
+			
+			//
+			// Loads the Google Map 
+			//
 			function showMap() { 
-
+				
 			  var myOptions = {
 				  zoom: zoom,
 				  center: selectedLocation,
@@ -84,27 +153,33 @@
 			  }
 
 			  map = new google.maps.Map(document.getElementById("map"), myOptions);
+
 			  positionMarker = new google.maps.Marker({
 			      position: selectedLocation, 
 			      map: map
 			  });
 
 			  var panoOptions = {
-			      navigationControl: true,
+				  linksControl: true,
+				  addressControl:true,
+				  visible: true,
+				  navigationControl: true,
 				  navigationControlOptions: {
 				    style: google.maps.NavigationControlStyle.DEFAULT
 				  }
+			  	  
 			  };
 
   			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
 
 		      setupListeners();
-  			  
-  			  repositionMarker();
-	  			  
+
+		      repositionMarker();
 			}
 
-		   // Various listeners to catch changes on the map(s)
+		   //
+		   // Various listeners to listen for changes on the map(s):
+		   // 
 		   function setupListeners() {
 			 google.maps.event.addListener(map, 'click', function(event) {
   			    selectedLocation = event.latLng;
@@ -125,24 +200,37 @@
   			      pitch = panorama.getPov().pitch;
   			  });
 			}
-			
+
+		    //
 			// Moves the marker to a new location specified by selectedLocation. Refreshes screen for anything
 			// that uses the location (like tweets and streetview)
+			//
 			function repositionMarker() {
+				if (!map) {
+					showMap();
+				}
 				positionMarker.setMap(null);
 				positionMarker.setPosition(selectedLocation);
 				positionMarker.setMap(map);
+
 				streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
-				map.setCenter(selectedLocation);
-				updateTwitterLocationInformation();
 				updateWikiLocationInformation();
+				updateTwitterLocationInformation();
+				updateWeatherLocationInformation();
 				reverseCodeLatLng();
-				scroll(0,0);
+				
+				map.setCenter(selectedLocation);
 				document.getElementById("url").value="";
-				setMessage("Location updated. See bottom of page for area specific tweets / wiki's", "success");
+				setMessage("", "");
+				scroll(0,0);
 			}
 
-			// Try find street view data and load appropriate panorama panel and set selectedLocation
+			//
+			// Try find street view data, load appropriate panorama panel and set selectedLocation.
+			// If the selectedLocation does not have a streetview associated with it, will
+			// attempt to find a streetview within a specified distance and reposition the map 
+			// to that point.
+			//
 			function processSVData(data, status) {
 				if (status == google.maps.StreetViewStatus.OK) {
 			      var markerPanoID = data.location.pano;
@@ -158,314 +246,400 @@
 				  positionMarker.setMap(map);
 				  panorama.setVisible(true);
 			  	} else {
-				  setMessage("Streetview not available at this location, try clicking on a nearby road", "notice");
+				  setMessage("Streetview not available at this location.", "notice");
 				  panorama.setVisible(false);
 				}
 			}
 
-//			// Determines if supplied shortened url is available and sets it as the url to use
-//			function customUrl() {
-//				var url = document.getElementById("shorturl").value;
-//				jx.load("custom_url.php?url=" + url, function(data) {document.getElementById('custom_url_message').innerHTML=data; });
-//			}
-
+			// 
+			// Sets a message in the upper right message display area
+			// 
 			function setMessage(message, type) {
-				jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
+				if (message == "") {
+					document.getElementById("message").innerHTML="";
+				} else {
+					jx.load("message.php?message=" + message + "&type=" + type, function(data) { document.getElementById('message').innerHTML=data; });
+				}
 			}
 
+			//
 			// Sets the selectedLocation based on address in address box
+			//
 			function locationFromAddr() {
 				var address = document.getElementById("address").value;
+				setMessage("", "");
 				geocoder.geocode( { 'address': address}, function(results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 				      selectedLocation = results[0].geometry.location;
 				      repositionMarker();
 				    } else {
-					  setMessage("Unable to determine location from address: " + status, "error");
+					  setMessage("Is that a real place? I could not find it", "info");
 				    }
 				});
-			}
-			
+				}
+
+			//
 			// Reverse geocodes the address, moves the marker to the new location
+			//
 			function locationFromAddress(address) {
 				document.getElementById("address").value = address;
 				locationFromAddr();
 			}
-
-			 // Sets the address box based on selectedLocation
+			
+			//
+			// Sets the address box based on current selectedLocation coordinates
+			//
 			function reverseCodeLatLng() {
 				geocoder.geocode({'latLng': selectedLocation}, function(results, status) {
+					document.getElementById("timezone_stream").innerHTML="";
 					output = "";
+					var address = "";
 					if (status == google.maps.GeocoderStatus.OK) {
 						if (results.length > 0) {
 							address = results[0].formatted_address;
 							document.getElementById("address").value = address;
+							updateTimezoneLocationInformation();
 						} else {
-							setMessage("No Addresses Found");
+							setMessage("No addresses were found at this location.", "info");
 						}
 					} else {
-						setMessage("Unable to determined address: " + status, "error");
+						setMessage("Unable to determine address from current location", "error");
 					}
+					updateGeneralLocationInformation(address);
 				});
 			}
-			  
+
+			//
 			// Determine the shortened URL based on the current location, saves to DB
+			//
 			function shortenUrl() {
 				root = "http://" + top.location.host + "/";
-				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom ;
+				longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom + "&container=" + active_container ;
 				shorturl = "";
-				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { updateUrl(root + data); updateSocialBar(root + data); });
-				setMessage("Short url created, send this to your friends and it will reload the maps as is.", "success");
+				jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) { document.getElementById("url").value=root + data; updateUrlWindow(root + data);} );
 			}
 
-			// Update the url block with the supplied link, should be a shortened link
-			function updateUrl(link) {
-				document.getElementById("url").value=link;
-			}
+			//
+			// Updates the icons on the social bar with the current shortened link
+			//
+			function updateUrlWindow(link) {
+				var output = "";
 
-			  // Update the social bar with new shortened link
-			function updateSocialBar(link) {
-				size="70px";
-				data = "<a href=\"http://twitter.com/home/?status=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/twitter.jpg\" title=\"Tweet it\" alt=\"Twitter\"></img></a>";
-				document.getElementById("twitter").innerHTML=data;
+				output += "<a href=\"http://twitter.com/home/?status=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
 
-				data = "<a href=\"http://www.facebook.com/sharer.php?u=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/facebook.jpg\" title=\"Add to Facebook\" alt=\"Facebook\"></img></a>";
-				document.getElementById("facebook").innerHTML=data;
+				output += "<a href=\"http://www.facebook.com/sharer.php?u=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.jpg\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
 
-				data = "<a href=\"http://del.icio.us/post?url=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/delicious.jpg\" title=\"Add to Del.icio.us\" alt=\"Del.icio.us\"></img></a>";
-				document.getElementById("delicious").innerHTML=data;
+				output += "<a href=\"http://del.icio.us/post?url=";
+				output += link + "\"";
+				output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
 
-				data = "<a href=\"http://www.google.com/bookmarks/mark?op=edit&output=popup&bkmk=";
-				data = data + link + "\"";
-				data = data + " target=\"_blank\"><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/google.jpg\" title=\"Add to Google Bookmarks\" alt=\"Google Bookmarks\"></img></a>";
-				document.getElementById("google").innerHTML=data;
+				output += "<a href=\"mailto:?subject=";
+				output += link + "\"";
+				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
 
-				data = "<a href=\"mailto:?subject=" + link + "\"";
-				data = data + "><img height=\"" + size + "\" width=\"" + size + "\" border=\"0\" src=\"images/email.jpg\" title=\"Send by email\" alt=\"Email\"></img></a>";
-				document.getElementById("email").innerHTML=data;
+				document.getElementById("url-window").innerHTML=output;
 				
 			}
 
- 		  	function updateTwitterLocationInformation() {
-				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("tweet_stream").innerHTML="Loading..";
-					tweets(selectedLocation, document.getElementById("filter").value, document.getElementById("tweet_range").value);
+
+			function updateGeneralLocationInformation(address) {
+				var output = "You are positioned at Longitude: <b>" + selectedLocation.lng() + "</b> and Latitude: <b>" + selectedLocation.lat() + "</b>";
+				if (!(address == "")) {
+					output += ", which is also known as <b>" + address + "</b>";
 				}
+				output += ".";
+				document.getElementById("location_stream").innerHTML=output;
 			}
 
- 		  	function updateWikiLocationInformation() {
-				if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-					document.getElementById("wiki_stream").innerHTML="Loading..";
-					articles(selectedLocation, document.getElementById("wiki_range").value);
+ 		  	//
+ 		  	// Display the beta page.
+ 		  	//
+			function beta(){
+				var thediv=document.getElementById('displaybox');
+				if(thediv.style.display == "none"){
+					thediv.style.display = "";
+					thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>This site is still under development, feel free to use it but expect some issues. I cannot take responsibility for the stability and accuracy of data being displayed.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
+				}else{
+					thediv.style.display = "none";
+					thediv.innerHTML = '';
 				}
+				return false;
 			}
 
+ 		  	//
+ 		  	// Loads the next container in the sequence based on the containers array.
+ 		  	// Containers that are dependant on focus for refresh are refreshed (Streetview)
+ 		  	//
+			function nextContainer(container) {
+				position = 0;
+				for (i = 0; i < containers.length; i++) {
+					if (containers[i] == container) {
+						position = i;
+					}
+				}
+				if (position == containers.length-1) {
+					position = 0;
+				} else {
+					position++;
+				}
+				
+				document.getElementById(container).style.display="none";
+				document.getElementById(containers[position]).style.display="inline";
+				active_container = containers[position];
+				if (active_container == "streetview_container") {
+					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+				}
+
+				$.cookie("active_container", active_container);
+			}
+
+ 		  	//
+ 		  	// Loads the previous container in the sequence based on the containers array.
+ 		  	// Containers that are dependant on focus for refresh are refreshed (Streetview)
+ 		  	//
+			function prevContainer(container) {
+				position = 0;
+				for (i = 0; i < containers.length; i++) {
+					if (containers[i] == container) {
+						position = i;
+					}
+				}
+				if (position == 0) {
+					position = containers.length-1;
+				} else {
+					position--;
+				}
+				document.getElementById(container).style.display="none";
+				document.getElementById(containers[position]).style.display="inline";
+				active_container = containers[position];
+				if (active_container == "streetview_container") {
+					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+				}
+				$.cookie("active_container", active_container);
+			}
+			
 		</script>
 	</head>
 
 	<body onload="load()" onunload="GUnload()">
+
+		<!-- overlayed element -->
+		<div class="apple_overlay" id="overlay">
+			<!-- the external content is loaded inside this tag -->
+			<div class="contentWrap"></div>
+		
+		</div>
+
+		<div id="displaybox" onclick="beta();" style="display: none;"></div>
+
 		<div class="container">
-			<div class="span-24"><center><h1>ALPHA RELEASE</h1></center></div>
+			<div class="span-21">&nbsp;</div>
+			<div class="span-2"><h1><i><span class="title-text">BETA</span></i></h1></div>
+			<div class="span-24"><center><hr/></center></div>
 			<div class="span-3">
-				<h1>lctn.me</h1>
+				<h1><span class="title-text">lctn.me</span></h1>
 			</div>
 			<div class="span-9">
-				<h4><i>Your one stop location shortening and link service</i></h4>
+				<h4><i><span class="title-text">Find it, share it</span></i></h4>
 			</div>
 			<div class="span-12 last">
 				<div id="message"></div>
 			</div>
 			<div class="span-24"><hr/></div>
-			<div class="span-12">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Start by searching for an address, or place name</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									<input type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
-									<input style="height: 33px;" class="large" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
-			</div>
-			<div class="span-12 last">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Create short url for this location</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-							<center>
-								<input style="height: 33px;"  class="large" type="button" name="generate" value="Go" onclick="shortenUrl();"/>
-								<input type="text" class="title" name="url" id="url" value="" readonly="readonly"/>
-							</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
-			</div>
 			
-<!-- 
-			<div class="span-3">
-				<h3>Custom URL</h3>
-			</div>
-			<div class="span-8">
-				<input type="text" class="title" name="shorturl" id="shorturl" value="" onkeyup="customUrl()"/>
-			</div>
-			<div class="span-3 last">
-				<div id="custom_url_message"><div id="custom_url_available"></div></div>
-			</div>
- -->
 			<div class="span-12">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Click anywhere to select a location</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-								<div id="map" style="width: 460px; height: 460px;"></div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header">
+					Find
+				</div>
+				<div class="detail">
+					<center>
+						<input title="Enter an address or place name to search for (eg. Eiffel Tower or 10 Downing Street, London) then click Find or press Enter" type="text" class="title" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locationFromAddr();}"/>
+						<input class="large button" type="button" name="find" value="Find" onclick="locationFromAddr();"/>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
+
 			<div class="span-12 last">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12"><div id="streetview_title">This shows you the streetview, if it's available</div></th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-								<div id="streetview" style="width: 460px; height: 460px"></div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+				<div class="header" title="Share this location with friends, generate the link and click on one of the social icons.">
+				Share
+				</div>
+				<div class="detail" >
+					<center>
+						<input class="large button" type="button" name="generate" value="Shorten" onclick="shortenUrl();"/>
+						<input title="Click Shorten to generate a short url. The link will point back to this location and open the page as you see it (with live data updated)." type="text" class="url-text" name="url" id="url" value="" readonly="readonly"/>
+						<div class="inline" id="url-window"></div>
+					</center>
+				</div>
+				<div class="footer-clear"></div>
 			</div>
-			<div class="span-24">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-20">Share the link with your friends</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									<div class="span-2" id="email">
-									</div>
-									<div class="span-2" id="twitter">
-									</div>
-									<div class="span-2" id="facebook">
-									</div>
-									<div class="span-2" id="delicious">
-									</div>
-									<div class="span-2" id="google">
-									</div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-				</table>
+
+			<div class="span-24">&nbsp;</div>
+
+			<div id="view-container-left" class="span-12">
+				<div id="map_container">
+					<div class="header">
+					<div title="Shows a map of the immediate area around the location, use the controls on the map to manipulate it.">Map</div>
+					</div>
+	
+					<div class="detail">
+						<center>
+	<!-- 						
+						<div id="map" style="width: 40px; height: 40px;"></div>
+	-->
+						<div id="map" style="width: 468px; height: 465px;"></div>
+						</center>
+					</div>
+					<div class="footer-text fixed-height-footer"></div>
+				</div>
 			</div>
-			<div class="span-12 ">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">What people are tweeting in the area</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									Search for <input type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
-									in <input type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
-									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
-								</center>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div id="tweet_stream">Tweets close to your selected location</div>
-							</td>
-						</tr>
-          		   </tbody>
-					<tfoot>
-			            <tr>
-			              	<th class="span-12"><div id="wiki_paging"></div></th>
-			            </tr>
-		           </tfoot>
-				</table>
-			</div>
-			<div class="span-12 last ">
-				<table>
-					<thead>
-			            <tr>
-			              	<th class="span-12">Wikipedia articles in the area</th>
-			            </tr>
-		           </thead>
- 		           <tbody>
-						<tr>
-							<td>
-								<center>
-									Find me articles in a <input type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km radius
-									<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
-								</center>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<center>
-									<div id="wiki_stream">Wikipedia entries close to your location</div>
-								</center>
-							</td>
-						</tr>
-          		   </tbody>
-					<tfoot>
-			            <tr>
-			              	<th class="span-12"><div id="wiki_paging"></div></th>
-			            </tr>
-		           </tfoot>
-				</table>
+
+
+			<div id="view-container-right" class="span-12 last">
+
+				<div id="streetview_container" class="child">
+	
+					<div class="header">
+
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('streetview_container')"/>
+						</div>
+						<div class="header-center" title="Shows the streetview at the current location, streetview is only available in certain locations.">
+							Streetview
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('streetview_container')"/>
+						</div>
+
+					</div>
+					<div class="detail">
+						<div id="streetview" style="width: 465px; height: 465px"></div>
+					</div>
+					<div class="footer-text fixed-height-footer"></div>
+				</div>
+	
+				<div id="twitter_container" class="child">
+	
+					<div class="header">
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('twitter_container')"/>
+						</div>
+						<div class="header-center"  title="Shows tweets in the surrounding area. Will only show tweets where people have chosen to share the location.">
+							Twitter
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('twitter_container')"/>
+						</div>
+					</div>
+	 				<div class="detail-padded">
+						<center>
+							Search for <input title="Enter a search term to filter tweets, comma seperate for multiple terms (eg. party, cool)" type="text" name="filter" id="filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
+							in <input title="How big an area would you like to search for tweets in?" class="short-text" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
+							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
+						</center>
+					</div>
+					<div class="detail-padded fixed-height-block-with-title">
+						<div id="tweet_stream">No tweets found, try a bigger search area or search for something different</div>
+					</div>
+					<div class="footer-text fixed-height-footer">
+		              	<div id="twitter_footer"></div>
+					</div>
+				
+				</div>
+
+				<div id="wiki_container" class="child">
+					<div class="header">
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('wiki_container')"/>
+						</div>
+						<div class="header-center" title="Shows all wikipedia articles in the area.">
+							Wikipedia
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('wiki_container')"/>
+						</div>
+					</div>
+	 				<div class="detail-padded">
+						<center>
+							Find me articles within <input title="How big an area would you like to see wikipedia articles for (maximum of 5km)?" class="short-text" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
+							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
+						</center>
+					</div>
+					<div class="detail-padded fixed-height-block-with-title">
+						<center>
+							<div id="wiki_stream">No entries found, try a bigger search area</div>
+						</center>
+					</div>
+					<div class="footer-text fixed-height-footer">
+		              	<div id="wiki_footer"></div>
+					</div>
+				</div>
+
+				<div id="general_container" class="child">
+					<div class="header">
+						<div class="header-left">
+							<img class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('general_container')"/>
+						</div>
+						<div class="header-center" title="Shows general information about the location. Currently only supports weather, but more to come.">
+							General
+						</div>
+						<div class="header-right">
+							<img class="container-navigation-icon" src="images/arrow-right.png" onclick="nextContainer('general_container')"/>
+						</div>
+				    </div>
+					<div class="detail-padded fixed-height-block">
+						<div class="general-subtitle">Location</div>
+						<hr/>
+						<div class="general-text inline" id="location_stream"></div>
+						<div class="general-text inline" id="timezone_stream"></div>
+						<br/><br/>
+						<div class="general-subtitle">Weather</div>
+						<hr/>
+						<div id="weather_stream"></div>
+					</div>
+					<div class="footer-text fixed-height-footer"></div>
+				</div>
 			</div>
 			<div class="span-24">&nbsp;</div>
 			<div class="span-24"><hr/></div>
-			<div class="span-1"><a href="about.html">About</a></div>
-			<div class="span-1"><a href="contact.html">Contact</a></div>
-			<div class="span-21"></div>
-			<div class="span-1 last">v0.0.1</div>
+			
+			<div class="span-1"><a href="about.php" rel="#overlay">About</a></div>
+			<div class="span-1"><a href="contact.php" rel="#overlay">Contact</a></div>
+			<div class="span-21">&nbsp;</div>
+			<div class="span-1 last">0.0.1</div>
 			<div class="span-24">&nbsp;</div>
+			
+
 		</div>
 
-
+		<script type="text/javascript">
+			var uservoiceOptions = {
+			  /* required */
+			  key: 'lctn',
+			  host: 'lctn.uservoice.com', 
+			  forum: '86707',
+			  showTab: true,  
+			  /* optional */
+			  alignment: 'left',
+			  background_color:'#73654C', 
+			  text_color: 'white',
+			  hover_color: '#4E84A6',
+			  lang: 'en'
+			};
+			
+			function _loadUserVoice() {
+			  var s = document.createElement('script');
+			  s.setAttribute('type', 'text/javascript');
+			  s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
+			  document.getElementsByTagName('head')[0].appendChild(s);
+			}
+			_loadSuper = window.onload;
+			window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+		</script>
 
 	</body>
 

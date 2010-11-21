@@ -2,8 +2,6 @@
 <!-- Phing build script -->
 <project name="Lctn.Me" default="release">
 
-	<property name="release.dir" value="/home/rick/html/test.lctn.me" />
-
 	<target name="clean">
 		<delete>
 			<fileset dir="${release.dir}">
@@ -22,7 +20,9 @@
 				<include name="**/*.css"/>
 				<include name="**/*.png"/>
 				<include name="**/*.jpg"/>
-				<include name="**/*.html"/>
+				<include name="**/*.jpeg"/>
+				<include name="**/*.gif"/>
+				<include name="**/*.htm"/>
 			</fileset>
 		</copy>
 	</target>
