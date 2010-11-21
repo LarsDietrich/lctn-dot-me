@@ -2,8 +2,6 @@
 <!-- Phing build script -->
 <project name="Lctn.Me" default="release">
 
-	<property name="release.dir" value="/home/rick/html/test.lctn.me" />
-
 	<target name="clean">
 		<delete>
 			<fileset dir="${release.dir}">
