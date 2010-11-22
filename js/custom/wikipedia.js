@@ -70,10 +70,14 @@ function getWikiLocation(_article) {
  * selectedLocation.
  */
 function updateWikiLocationInformation() {
-	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
-		getArticles(selectedLocation,
-				document.getElementById("wiki_range").value);
+	if (isEnabled("wiki")) {
+		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			getArticles(selectedLocation,
+					document.getElementById("wiki_range").value);
+		}
+	} else {
+		document.getElementById("wiki_stream").innerHTML="";
 	}
 }
 

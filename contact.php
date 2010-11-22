@@ -57,8 +57,8 @@
 			<form action="/" method="post" id="sendEmail">
 				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<div class="contact-text">Your email address</div>
-				<div><input onclick="$('#emailFrom').css('border', '1px solid white');" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></div>
-				<div class="contact-text">What you would like to say</div>
+				<div><input onclick="$('#emailFrom').css('border', '1px solid white');" style="width:84%" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></div>
+				<div class="contact-text">Your message</div>
 				<div><textarea onclick="$('#message').css('border', '1px solid white');" name="message" id="message"><?= $_POST['message']; ?></textarea></div>
 				<div><button class="buttons" type="submit" id="submit">Send Email</button><input type="hidden" name="submitted" id="submitted" value="true"/></div>
 			</form>
