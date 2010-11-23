@@ -144,7 +144,7 @@ function isNumeric(text) {
 function updateTwitterLocationInformation() {
 	if (isEnabled("twitter")) {
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>";
 			getTweets(selectedLocation,
 					document.getElementById("filter").value, document
 							.getElementById("tweet_range").value);
@@ -183,9 +183,9 @@ function updateTwitterDisplay(page) {
 		output += listOfTweets[i];
 	}
 	document.getElementById("tweet_stream").innerHTML = output;
-	$("[title]").tooltip( {
-		effect : "slide"
-	});
+	if (isEnabled("popup")) {
+		$("[title]").tooltip( {effect : "slide"});
+	}
 	updateTwitterPaging(page);
 }
 

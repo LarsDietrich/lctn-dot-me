@@ -72,7 +72,7 @@ function getWikiLocation(_article) {
 function updateWikiLocationInformation() {
 	if (isEnabled("wiki")) {
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for wikipedia articles'/>";
 			getArticles(selectedLocation,
 					document.getElementById("wiki_range").value);
 		}
