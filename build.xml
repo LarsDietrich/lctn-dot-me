@@ -25,17 +25,17 @@
 				<include name="**/*.htm"/>
 			</fileset>
 		</copy>
-	</target>
+	</target>	
 
 	
 	<target name="release-test" depends="release">
 		<echo message="Copying test configuration." />
-		<copy file="includes/configure.php.test" todir="${release.dir}/includes" tofile="configure.php"/>
+		<copy file="includes/configure.php.test" tofile="${release.dir}/includes/configure.php"/>
 	</target>
 
 	<target name="release-live" depends="release">
 		<echo message="Copying live configuration." />
-		<copy file="includes/configure.php.live" todir="${release.dir}/includes" tofile="configure.php"/>
+		<copy file="includes/configure.php.live" tofile="${release.dir}/includes/configure.php"/>
 	</target>
 
 </project>
