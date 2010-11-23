@@ -1,34 +1,18 @@
 /* Styles for Contact Us form */
 div#container {
-	color: #73654C;
 	background: transparent;
 	font-size: 1.2em;
 	margin: 0 auto;
 	padding-bottom: 0px;
-	padding-top: 50px;
-	padding-left: 50px;
-	padding-right: 50px;
+	padding-top: 30px;
+	padding-left: 30px;
+	padding-right: 30px;
 	width: 480px;
 	vertical-align: middle;
 }
 
 .clearing {
 	clear: both;
-}
-
-input {
-	background: white;
-	border: 1px solid #C7D9D4;
-	width: 80%;
-	font-size: 1.0em;
-}
-
-textarea {
-	height: 13em;
-	background: white;
-	border: 1px solid #C7D9D4;
-	width: 80%;
-	font-size: 1.0em;
 }
 
 .contact-error {
@@ -41,5 +25,5 @@ textarea {
 }
 
 .contact-text {
-	font-size: x-large;
+	font-size: medium;
 }

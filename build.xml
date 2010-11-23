@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Phing build script -->
-<project name="Lctn.Me" default="release">
+<project name="Lctn.Me" default="release-test">
 
 	<target name="clean">
 		<delete>
 			<fileset dir="${release.dir}">
-				<include name="**/*.php" />
+				<include name="**/*" />
 			</fileset>
 		</delete>
 	</target>
@@ -14,8 +14,8 @@
 		<echo message="Copying files for release" />
 		<copy todir="${release.dir}">
 			<fileset dir=".">
-				<include name="**/*.php" />
-				<include name=".htaccess" />
+				<include name="**/*.php"/>
+				<include name=".htaccess"/>
 				<include name="**/*.js"/>
 				<include name="**/*.css"/>
 				<include name="**/*.png"/>
@@ -25,6 +25,17 @@
 				<include name="**/*.htm"/>
 			</fileset>
 		</copy>
+	</target>	
+
+	
+	<target name="release-test" depends="release">
+		<echo message="Copying test configuration." />
+		<copy file="includes/configure.php.test" tofile="${release.dir}/includes/configure.php"/>
+	</target>
+
+	<target name="release-live" depends="release">
+		<echo message="Copying live configuration." />
+		<copy file="includes/configure.php.live" tofile="${release.dir}/includes/configure.php"/>
 	</target>
 
 </project>

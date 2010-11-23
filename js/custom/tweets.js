@@ -142,10 +142,15 @@ function isNumeric(text) {
  * Triggers the retrieval of new tweets based on selectedLocation
  */
 function updateTwitterLocationInformation() {
-	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
-		getTweets(selectedLocation, document.getElementById("filter").value,
-				document.getElementById("tweet_range").value);
+	if (isEnabled("twitter")) {
+		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			getTweets(selectedLocation,
+					document.getElementById("filter").value, document
+							.getElementById("tweet_range").value);
+		}
+	} else {
+		document.getElementById("tweet_stream").innerHTML="";
 	}
 }
 

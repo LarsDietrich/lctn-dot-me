@@ -108,9 +108,13 @@ function getDayOfWeek(date) {
  * Updates the "Weather" information
  */
 function updateWeatherLocationInformation() {
-	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("weather_stream").innerHTML="<img class='spinner' src='images/spinner.gif' alt='...'/>";
-		getWeather(selectedLocation, 2);
+	if (isEnabled("weather")) {
+		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+			document.getElementById("weather_stream").innerHTML="<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			getWeather(selectedLocation, 2);
+		}
+	} else {
+		document.getElementById("weather_stream").innerHTML="";
 	}
 }
 
@@ -118,7 +122,8 @@ function updateWeatherLocationInformation() {
  * Load the weather display based on whats in weather array.
  */
 function updateWeatherDisplay() {
-	var output = "<table><tr>";
+	var output = "<div class='general-subtitle'>The weather forecast for the area is:</div>";
+	output += "<table><tr>";
 	for (i = 0; i < listOfWeather.length; i++) {
 		output += listOfWeather[i];
 	}				

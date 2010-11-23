@@ -16,7 +16,7 @@
 		<!-- http://lctn -->
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 		
@@ -38,8 +38,6 @@
 			
 			// reference to the main map
 			var map;
-			// reference to the streetview
-			var streetview;
 			// reference to the panorama of the streetview			
 			var panorama;
 
@@ -62,8 +60,11 @@
 			
 			// load the necessary data, parse command line for location information and show map
 			function load() {
-				
-				beta();
+
+				if (isEnabled("beta")) {
+					beta();
+				}
+
 				updateUrlWindow("");
 				
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
@@ -74,12 +75,14 @@
 				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"\""; }?>;
 
 				if ($.cookie("active_container") == null) {
-					$.cookie("active_container", "streetview_container"); 
+					$.cookie("active_container", "general_container"); 
 				}
 				
 				if (active_container == "") {
 					active_container = $.cookie("active_container");
 				}
+				
+				$.cookie("option_" + active_container.split("_")[0], "true");
 				
 				if (latitude == 999 || longitude == 999) {
 					findMe();
@@ -90,7 +93,9 @@
 
 				document.getElementById(active_container).style.display="inline";
 
-				$("[title]").tooltip({ effect: "slide"});
+				if (isEnabled("popup")) {
+					$("[title]").tooltip({ effect: "slide"});
+				}
 
 				$(function() {
 
@@ -160,18 +165,23 @@
 			  });
 
 			  var panoOptions = {
-				  linksControl: true,
-				  addressControl:true,
-				  visible: true,
-				  navigationControl: true,
+				  addressControlOptions: {
+					    position: google.maps.ControlPosition.BOTTOM,
+					    style: {
+					      "fontWeight" : "bold",
+					      "backgroundColor" : "#191970",
+					      "color" :"#A9203E"
+					    }
+				  },
 				  navigationControlOptions: {
-				    style: google.maps.NavigationControlStyle.DEFAULT
-				  }
-			  	  
+				    style: google.maps.NavigationControlStyle.SMALL
+				  },
+				  enableCloseButton: false,
+				  linksControl: true
 			  };
 
-  			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
-
+			  panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
+		
 		      setupListeners();
 
 		      repositionMarker();
@@ -212,13 +222,11 @@
 				positionMarker.setMap(null);
 				positionMarker.setPosition(selectedLocation);
 				positionMarker.setMap(map);
-
 				streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
 				updateWikiLocationInformation();
 				updateTwitterLocationInformation();
 				updateWeatherLocationInformation();
-				reverseCodeLatLng();
-				
+				reverseCodeLatLng();				
 				map.setCenter(selectedLocation);
 				document.getElementById("url").value="";
 				setMessage("", "");
@@ -240,7 +248,7 @@
 			        pitch: pitch,
 			        zoom: 1
 			      });
-				  positionMarker.setMap(null);
+			      positionMarker.setMap(null);
 				  selectedLocation = data.location.latLng;
 				  positionMarker.setPosition(selectedLocation);
 				  positionMarker.setMap(map);
@@ -388,13 +396,17 @@
 				}
 				
 				document.getElementById(container).style.display="none";
-				document.getElementById(containers[position]).style.display="inline";
-				active_container = containers[position];
-				if (active_container == "streetview_container") {
-					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+				if (isEnabled(containers[position].split("_")[0])) {
+					document.getElementById(containers[position]).style.display="inline";
+					active_container = containers[position];
+					if (active_container == "streetview_container") {
+						streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+					}
+					$.cookie("active_container", active_container);
+				} else {
+					nextContainer(containers[position]);
 				}
 
-				$.cookie("active_container", active_container);
 			}
 
  		  	//
@@ -414,18 +426,41 @@
 					position--;
 				}
 				document.getElementById(container).style.display="none";
-				document.getElementById(containers[position]).style.display="inline";
-				active_container = containers[position];
-				if (active_container == "streetview_container") {
-					streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+
+				if (isEnabled(containers[position].split("_")[0])) {
+					document.getElementById(containers[position]).style.display="inline";
+					active_container = containers[position];
+					if (active_container == "streetview_container") {
+						streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+					}
+					$.cookie("active_container", active_container);
+				} else {
+					prevContainer(containers[position]);
 				}
-				$.cookie("active_container", active_container);
+			}
+
+ 		  	//
+ 		  	// Queries cookies for option to see if it's set to true. If null, assumes as never set
+ 		  	// and sets to true.
+ 		  	//
+			function isEnabled(option) {
+				var result = false;
+				var cookie = $.cookie("option_" + option);
+
+				if ( cookie == null ) {
+					$.cookie("option_" + option, "true");
+				}
+				
+				if ($.cookie("option_" + option) == "true") {
+					result = true;
+				}
+				return result;
 			}
 			
 		</script>
 	</head>
 
-	<body onload="load()" onunload="GUnload()">
+	<body onload="load()">
 
 		<!-- overlayed element -->
 		<div class="apple_overlay" id="overlay">
@@ -592,13 +627,9 @@
 						</div>
 				    </div>
 					<div class="detail-padded fixed-height-block">
-						<div class="general-subtitle">Location</div>
-						<hr/>
 						<div class="general-text inline" id="location_stream"></div>
 						<div class="general-text inline" id="timezone_stream"></div>
 						<br/><br/>
-						<div class="general-subtitle">Weather</div>
-						<hr/>
 						<div id="weather_stream"></div>
 					</div>
 					<div class="footer-text fixed-height-footer"></div>
@@ -607,9 +638,10 @@
 			<div class="span-24">&nbsp;</div>
 			<div class="span-24"><hr/></div>
 			
-			<div class="span-1"><a href="about.php" rel="#overlay">About</a></div>
-			<div class="span-1"><a href="contact.php" rel="#overlay">Contact</a></div>
-			<div class="span-21">&nbsp;</div>
+			<div class="span-2"><a href="config.php" rel="#overlay">Options</a></div>
+			<div class="span-2"><a href="contact.php" rel="#overlay">Contact</a></div>
+			<div class="span-2"><a href="about.php" rel="#overlay">About</a></div>
+			<div class="span-17">&nbsp;</div>
 			<div class="span-1 last">0.0.1</div>
 			<div class="span-24">&nbsp;</div>
 			
