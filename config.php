@@ -9,7 +9,7 @@
 	    <script type="text/javascript">
 	    	$("input[class=config]").each(function () {
 				var value = $.cookie("option_" + $(this).attr("id"));
-				if (value == "true") {
+				if (value == "true" || value == null) {
 					$(this).attr("checked",true);
 				} else {
 					$(this).attr("checked",false);
