@@ -20,7 +20,7 @@
  * }
  */
 function getTimezone(selectedLocation) {
-	var query = "timezone.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng();
+	var query = "feed/timezone.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng();
 	jx.load(query, function(jsonData) {processTimezoneData(jsonData);}, "json");
 }
 
