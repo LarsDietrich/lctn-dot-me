@@ -1,5 +1,5 @@
 var listOfTweets = [];
-var tweetsPerPage = 8;
+var tweetsPerPage = 6;
 
 /**
  * Entry method for generating tweets, calls the twitter service using selected
@@ -39,12 +39,13 @@ function processTheseTweets(jsonData) {
 	var tweet = "";
 	if (results) {
 		$.each(results, function(index, value) {
-			tweet = "<p class='title'><span>"
+			tweet = "<tr><td><img src='" +  value.profile_image_url + "'/></td>";
+			tweet += "<td><p class='title'><span>"
 					+ "<a target= '_blank' href='http://twitter.com/"
 					+ value.from_user.substring(0, value.from_user.length)
 					+ "'>" + value.from_user + "</a>" + "</span>: "
 					+ formatTwitterText(value.text) + "&nbsp;"
-					+ getTweetLocation(value.location) + "</p>";
+					+ getTweetLocation(value.location) + "</p></td><tr>";
 			listOfTweets[i] = tweet;
 			i++;
 		});
@@ -179,9 +180,14 @@ function updateTwitterDisplay(page) {
 		endItem = listOfTweets.length;
 	}
 
+	output += "<table>";
+
 	for (i = startItem; i < endItem; i++) {
 		output += listOfTweets[i];
 	}
+	
+	output += "</table>";
+	
 	document.getElementById("tweet_stream").innerHTML = output;
 	if (isEnabled("popup")) {
 		$("[title]").tooltip( {effect : "slide"});
