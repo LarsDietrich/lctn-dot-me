@@ -70,14 +70,14 @@
 				}
 
 				updateUrlWindow("");
-				
+
 				latitude = <?php if (isset($_GET["lat"])) { echo $_GET["lat"]; } else { echo "999"; }?>;
 				longitude = <?php if (isset($_GET["lng"])) { echo $_GET["lng"]; } else { echo "999"; }?>;
 				heading = <?php if (isset($_GET["heading"])) { echo $_GET["heading"]; } else { echo "0"; }?>;
 				pitch = <?php if (isset($_GET["pitch"])) { echo $_GET["pitch"]; } else { echo "0"; }?>;
 				zoom = <?php if (isset($_GET["zoom"])) { echo $_GET["zoom"]; } else { echo "12"; }?>;
-				maptype = <?php if (isset($_GET["maptype"])) { echo $_GET["maptype"]; } else { echo "\"roadmap\""; }?>;
-				active_container = <?php if (isset($_GET["right_container"])) { echo "\"" . $_GET["right_container"] . "\""; } else { echo "\"\""; }?>;
+				maptype = <?php if (isset($_GET["maptype"])) { echo "\"" . $_GET["maptype"] . "\""; } else { echo "\"roadmap\""; }?>;
+				active_container = <?php if (isset($_GET["container"])) { echo "\"" . $_GET["container"] . "\""; } else { echo "\"\""; }?>;
 
 				if ($.cookie("active_container") == null) {
 					$.cookie("active_container", "general_container"); 
