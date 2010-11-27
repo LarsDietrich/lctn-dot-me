@@ -667,7 +667,7 @@
 			<div class="span-2"><a href="contact/contact.php" rel="#overlay">Contact</a></div>
 			<div class="span-2"><a href="about.php" rel="#overlay">About</a></div>
 			<div class="span-17">&nbsp;</div>
-			<div class="span-1 last">0.0.1</div>
+			<div class="span-1 last">0.0.4</div>
 			<div class="span-24">&nbsp;</div>
 			
 
