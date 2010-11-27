@@ -60,7 +60,7 @@ function processTheseTweets(jsonData) {
 
 		if (listOfTweets.length == 0) {
 			if (warning) {
-				listOfTweets[0] = "There was an error retrieving tweets, service reported";
+				listOfTweets[0] = "There was an error retrieving tweets. The Twitter search service returned an error.";
 			} else {
 				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different";
 			}
@@ -210,6 +210,7 @@ function updateTwitterDisplay(page) {
 	}
 	
 	output += "</table>";
+	output += "<img src=\"images/powered-by-twitter-sig.gif\"/>";
 	
 	document.getElementById("tweet_stream").innerHTML = output;
 	if (isEnabled("popup")) {
