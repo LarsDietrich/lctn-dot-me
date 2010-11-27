@@ -500,19 +500,17 @@
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
 		<div class="container">
-			<div class="span-21">&nbsp;</div>
-			<div class="span-2"><h1><i><span class="title-text">BETA</span></i></h1></div>
-			<div class="span-24"><center><hr/></center></div>
+			<div class="span-24"><hr/></div>
 			<div class="span-3">
-				<h1><span class="title-text">lctn.me</span></h1>
+				<h1><span style="color: #4E84A6" class="title-text">lctn.me</span></h1>
 			</div>
 			<div class="span-9">
-				<h4><i><span class="title-text">Find it, share it</span></i></h4>
+				<h4><i><span  style="color: #4E84A6" class="title-text">Find it, share it</span></i></h4>
 			</div>
 			<div class="span-12 last">
 				<div id="message"></div>
 			</div>
-			<div class="span-24"><hr/></div>
+			<div class="span-24">&nbsp;</div>
 			
 			<div class="span-12">
 				<div class="header">
@@ -661,13 +659,12 @@
 				</div>
 			</div>
 			<div class="span-24">&nbsp;</div>
-			<div class="span-24"><hr/></div>
 			
 			<div class="span-2"><a href="config.php" rel="#overlay">Options</a></div>
 			<div class="span-2"><a href="contact/contact.php" rel="#overlay">Contact</a></div>
 			<div class="span-2"><a href="about.php" rel="#overlay">About</a></div>
 			<div class="span-17">&nbsp;</div>
-			<div class="span-1 last">0.0.4</div>
+			<div class="span-1 last" style="font-weight: bold; color: #4E84A6">0.0.4</div>
 			<div class="span-24">&nbsp;</div>
 			
 
