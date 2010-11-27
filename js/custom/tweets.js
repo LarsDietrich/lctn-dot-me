@@ -1,5 +1,5 @@
 var listOfTweets = [];
-var tweetsPerPage = 8;
+var tweetsPerPage = 6;
 
 /**
  * Entry method for generating tweets, calls the twitter service using selected
@@ -35,25 +35,49 @@ function getTweets(selectedLocation, filter, range) {
 function processTheseTweets(jsonData) {
 	var shtml = '';
 	var results = jsonData.results;
+	var warning = jsonData.warning;
 	var i = 0;
 	var tweet = "";
+	
+	if (warning) {
+	
+	}
+	
 	if (results) {
 		$.each(results, function(index, value) {
-			tweet = "<p class='title'><span>"
+			tweet += "<tr><td><img src='" +  value.profile_image_url 
+					+ "'/><br/>" + getTimeCreated(value.created_at) 
+					+ " seconds ago </td>";
+					+ "<td><p class='title'><span>"
 					+ "<a target= '_blank' href='http://twitter.com/"
 					+ value.from_user.substring(0, value.from_user.length)
 					+ "'>" + value.from_user + "</a>" + "</span>: "
 					+ formatTwitterText(value.text) + "&nbsp;"
-					+ getTweetLocation(value.location) + "</p>";
+					+ getTweetLocation(value.location) + "</p></td><tr>";
 			listOfTweets[i] = tweet;
 			i++;
 		});
+
 		if (listOfTweets.length == 0) {
-			listOfTweets[0] = "No tweets found, try a bigger search area or search for something different";
+			if (warning) {
+				listOfTweets[0] = "There was an error retrieving tweets, service reported";
+			} else {
+				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different";
+			}
 		}
 		updateTwitterDisplay(1);
 	}
 }
+
+function getTimeCreated(time) {
+//Fri, 26 Nov 2010 13:32:59 +0000
+	var tweetDate =new Date(eval('"' + time + '"'));
+	var currentDate = new Date();
+	var difference = Math.ceil((currentDate.getTime()-tweetDate.getTime())/1000);
+	return difference;
+}
+
+
 
 /**
  * Formats the twitter text, adding hyperlinks to hashtags, web links and @ tags.
@@ -144,7 +168,7 @@ function isNumeric(text) {
 function updateTwitterLocationInformation() {
 	if (isEnabled("twitter")) {
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>";
 			getTweets(selectedLocation,
 					document.getElementById("filter").value, document
 							.getElementById("tweet_range").value);
@@ -179,13 +203,18 @@ function updateTwitterDisplay(page) {
 		endItem = listOfTweets.length;
 	}
 
+	output += "<table>";
+
 	for (i = startItem; i < endItem; i++) {
 		output += listOfTweets[i];
 	}
+	
+	output += "</table>";
+	
 	document.getElementById("tweet_stream").innerHTML = output;
-	$("[title]").tooltip( {
-		effect : "slide"
-	});
+	if (isEnabled("popup")) {
+		$("[title]").tooltip( {effect : "slide"});
+	}
 	updateTwitterPaging(page);
 }
 

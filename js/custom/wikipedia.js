@@ -12,7 +12,7 @@ var wikisPerPage = 10;
  */
 function getArticles(selectedLocation, range) {
 	listOfWikis = [];
-	query = "wikipedia.php?lat=" + selectedLocation.lat() + "&lng="
+	query = "feed/wikipedia.php?lat=" + selectedLocation.lat() + "&lng="
 			+ selectedLocation.lng() + "&radius=" + range * 1000;
 	jx.load(query, function(data) {
 		processWikiData(data);
@@ -31,9 +31,12 @@ function processWikiData(data) {
 	var limit = 15;
 	var wiki = "";
 	var j = 0;
+	var point;
+	
 	if (_articles.length < 15) {
 		limit = _articles.length;
 	}
+	
 	if (_articles) {
 		for (i = 0; i < limit; i++) {
 			wiki = "<a target= '_blank' href='" + _articles[i].url + "'>"
@@ -72,7 +75,7 @@ function getWikiLocation(_article) {
 function updateWikiLocationInformation() {
 	if (isEnabled("wiki")) {
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for wikipedia articles'/>";
 			getArticles(selectedLocation,
 					document.getElementById("wiki_range").value);
 		}
@@ -91,6 +94,7 @@ function updateWikiDisplay(page) {
 	var startItem = (page - 1) * wikisPerPage;
 	var endItem = page * wikisPerPage;
 	var output = "";
+	
 	if (endItem > listOfWikis.length) {
 		endItem = listOfWikis.length;
 	}

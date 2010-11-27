@@ -110,7 +110,7 @@ function getDayOfWeek(date) {
 function updateWeatherLocationInformation() {
 	if (isEnabled("weather")) {
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("weather_stream").innerHTML="<img class='spinner' src='images/spinner.gif' alt='...'/>";
+			document.getElementById("weather_stream").innerHTML="<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest weather forecast'/>";
 			getWeather(selectedLocation, 2);
 		}
 	} else {
@@ -132,6 +132,7 @@ function updateWeatherDisplay() {
 	output += "</td></tr></table>";
 
 	document.getElementById("weather_stream").innerHTML = output;
-	$("[title]").tooltip({ effect: 'slide'});
-
+	if (isEnabled("popup")) {
+		$("[title]").tooltip({ effect: 'slide'});
+	}
 }

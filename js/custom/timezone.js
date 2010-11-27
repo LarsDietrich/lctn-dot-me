@@ -20,7 +20,7 @@
  * }
  */
 function getTimezone(selectedLocation) {
-	var query = "timezone.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng();
+	var query = "feed/timezone.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng();
 	jx.load(query, function(jsonData) {processTimezoneData(jsonData);}, "json");
 }
 
@@ -38,7 +38,7 @@ function processTimezoneData(jsonData) {
  */
 function updateTimezoneLocationInformation() {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("timezone_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...'/>";
+		document.getElementById("timezone_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Loading timezone information'/>";
 		getTimezone(selectedLocation);
 	}
 }
