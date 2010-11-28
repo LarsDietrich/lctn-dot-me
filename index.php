@@ -94,8 +94,9 @@
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 					showMap();
+					repositionMarker();
 				}
-
+				
 				document.getElementById(active_container).style.display="inline";
 
 				if (isEnabled("popup")) {
@@ -190,7 +191,6 @@
 		
 		      setupListeners();
 
-		      repositionMarker();
 			}
 
 		   //
@@ -242,8 +242,14 @@
 				document.getElementById("url").value="";
 				setMessage("", "");
 				scroll(0,0);
+				updateStats();
 			}
 
+			function updateStats() {
+				var stat = "{ \"stat\": [{\"longitude\": \"" + selectedLocation.lng() + "\", \"latitude\": \"" + selectedLocation.lat() + "\"}]}";
+				jx.load("stats.php?stat=" + stat, function(data) {});
+			}
+		    
 			//
 			// Try find street view data, load appropriate panorama panel and set selectedLocation.
 			// If the selectedLocation does not have a streetview associated with it, will

@@ -17,7 +17,7 @@ function getTweets(selectedLocation, filter, range) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://search.twitter.com/search.json?lang=en&rpp=100&q="
+		script.src = "http://search.twitter.com/search.json?rpp=100&q="
 				+ filter + "&geocode=" + selectedLocation.lat() + ","
 				+ selectedLocation.lng() + "," + range
 				+ "km&callback=processTheseTweets&_=" + new Date().getTime();
@@ -60,9 +60,9 @@ function processTheseTweets(jsonData) {
 
 		if (listOfTweets.length == 0) {
 			if (warning) {
-				listOfTweets[0] = "There was an error retrieving tweets, service reported";
+				listOfTweets[0] = "There was an error retrieving tweets. The Twitter search service seems to be down.";
 			} else {
-				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different";
+				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different.";
 			}
 		}
 		updateTwitterDisplay(1);
@@ -210,6 +210,7 @@ function updateTwitterDisplay(page) {
 	}
 	
 	output += "</table>";
+	output += "<div style='text-align=right'><img src=\"images/powered-by-twitter-sig.gif\"/></>";
 	
 	document.getElementById("tweet_stream").innerHTML = output;
 	if (isEnabled("popup")) {
