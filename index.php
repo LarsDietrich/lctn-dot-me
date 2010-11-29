@@ -37,6 +37,8 @@
 			// Current containers supported
 			var containers = ["general_container", "wiki_container", "twitter_container", "streetview_container"];
 			var active_container = "streetview_container";
+
+			var relatives = [];
 			
 			// reference to the main map
 			var map;
@@ -242,12 +244,34 @@
 				document.getElementById("url").value="";
 				setMessage("", "");
 				scroll(0,0);
+//				showRelatives();
 				updateStats();
 			}
 
+			function showRelatives() {
+				for (i=0;i < relatives.length;i++) {
+					var marker = relatives[i];
+					marker.setMap(null);					
+				}
+
+				relatives.length = 0;
+
+				jx.load("stats.php?do=close&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
+					for (i=0;i < data.result.length;i++) {
+						var location = new google.maps.LatLng(data.result[i].latitude, data.result[i].longitude);
+
+						var myMarker = new google.maps.Marker({
+						    position: location
+						});
+						myMarker.setIcon("http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png");
+						myMarker.setMap(map);
+						relatives.push(myMarker);
+					}
+				}, "json");
+			}				
+		    
 			function updateStats() {
-				var stat = "{ \"stat\": [{\"longitude\": \"" + selectedLocation.lng() + "\", \"latitude\": \"" + selectedLocation.lat() + "\"}]}";
-				jx.load("stats.php?stat=" + stat, function(data) {});
+				jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {});
 			}
 		    
 			//

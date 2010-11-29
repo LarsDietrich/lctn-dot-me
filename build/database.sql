@@ -23,8 +23,10 @@ DROP TABLE IF EXISTS `stats`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` varchar(200) NOT NULL,
-  `stat` varchar(9999) NOT NULL,
+  `microtime` int(11) NOT NULL,
+  `date` varchar(50) NOT NULL,
+  `latitude` float(10,6) NOT NULL,
+  `longitude` float(10,6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
