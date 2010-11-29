@@ -22,7 +22,8 @@ if (isset($_GET["do"])) {
 function add() {
 	$_lng = $_GET["lng"];
 	$_lat = $_GET["lat"];
-	$_query = "INSERT stats (microtime, date, longitude, latitude) VALUES ('" . microtime(true) . "', '" . mktime() . "', '" . $_lng . "', '" . $_lat . "')";
+	$_now = date("Y-m-d H:i:s");
+	$_query = "INSERT stats (created, longitude, latitude) VALUES ('" . $_now . "', '" . $_lng . "', '" . $_lat . "')";
 	$_sql = new Sql();
 	$_sql->execute($_query);
 	echo("ok");
@@ -59,7 +60,7 @@ function close() {
 		$min_lng = -1 * ($min_lng - 90);
 	}
 	
-	$_query = "SELECT microtime, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY microtime DESC limit 5";
+	$_query = "SELECT microtime, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
 	$_sql = new Sql();
 	$_results = $_sql->execute($_query);
 

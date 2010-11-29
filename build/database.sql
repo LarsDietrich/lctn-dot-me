@@ -11,9 +11,9 @@ CREATE TABLE `url` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `longurl` varchar(200) NOT NULL,
   `shorturl` varchar(30) NOT NULL,
-  `created` int(11) NOT NULL,
+  `created` datetime NOT NULL  default '0000-00-00 00:00:00' ,
   `openid` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `stats`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `microtime` int(11) NOT NULL,
+  `created` datetime NOT NULL  default '0000-00-00 00:00:00' ,
   `date` varchar(50) NOT NULL,
   `latitude` float(10,6) NOT NULL,
   `longitude` float(10,6) NOT NULL,

@@ -31,8 +31,8 @@ function getShortUrl($longUrl, $shortUrl) {
 		$shortUrl = base_convert($id,20,36);
 	}
 
-	$_now = microtime(true) * 1000;
-	$_query = "insert into url (longurl, shorturl, openid, created) values ('" . $_longUrl . "','" . $shortUrl . "', 'TEST', $_now)";
+	$_now = date("Y-m-d H:i:s");
+	$_query = "insert into url (longurl, shorturl, openid, created) values ('" . $_longUrl . "','" . $shortUrl . "', 'TEST', '" . $_now . "')";
 	$_sql->execute($_query);
 	return $shortUrl;
 }
