@@ -322,7 +322,7 @@
 					      selectedLocation = results[0].geometry.location;
 					      repositionMarker();
 					    } else {
-						  setMessage("Is that a real place? I could not find it", "info");
+						  setMessage("Not able to locate that place, please try something else.", "info");
 					    }
 					});
 				}
