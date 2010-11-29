@@ -318,13 +318,13 @@
 				var address = document.getElementById("address").value;
 				setMessage("", "");
 				geocoder.geocode( { 'address': address}, function(results, status) {
-					if (status == google.maps.GeocoderStatus.OK) {
-				      selectedLocation = results[0].geometry.location;
-				      repositionMarker();
-				    } else {
-					  setMessage("Is that a real place? I could not find it", "info");
-				    }
-				});
+						if (status == google.maps.GeocoderStatus.OK) {
+					      selectedLocation = results[0].geometry.location;
+					      repositionMarker();
+					    } else {
+						  setMessage("Is that a real place? I could not find it", "info");
+					    }
+					});
 				}
 
 			//
@@ -395,7 +395,7 @@
 			}
 
 			function updateGeneralLocationInformation(address) {
-				var output = "You are positioned at Longitude: <b>" + selectedLocation.lng() + "</b> and Latitude: <b>" + selectedLocation.lat() + "</b>";
+				var output = "You are positioned at <b>" + Math.round(selectedLocation.lng() * 10000) / 10000 + "</b> longitude and <b>" + Math.round(selectedLocation.lat() * 10000) / 10000 + "</b> latitude";
 				if (!(address == "")) {
 					output += ", which is also known as <b>" + address + "</b>";
 				}
