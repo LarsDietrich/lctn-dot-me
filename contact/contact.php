@@ -36,7 +36,7 @@
 						$(this).hide();
 						$("#sendEmail li.buttons").append('<img src="/images/loading.gif" alt="Loading" id="loading" />');
 						
-						$.post("contact/email.php",
+						$.post("email.php",
 			   				{ emailTo: emailTo, emailFrom: emailFromVal, subject: subject, message: messageVal },
 			   					function(data){
 									$("#sendEmail").slideUp("normal", function() {				   
@@ -53,9 +53,9 @@
 	</head>
 	<body>
 		<div id="container">
-			<?php include('contact/verify.php'); ?>
+			<?php include('verify.php'); ?>
 			<form action="/" method="post" id="sendEmail">
-				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. Your email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
+				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<div class="contact-text">Your email address</div>
 				<div><input onclick="$('#emailFrom').css('border', '1px solid white');" style="width:84%" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></div>
 				<div class="contact-text">Your message</div>
