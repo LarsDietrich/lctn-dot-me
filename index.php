@@ -37,6 +37,8 @@
 			// Current containers supported
 			var containers = ["general_container", "wiki_container", "twitter_container", "streetview_container"];
 			var active_container = "streetview_container";
+
+			var relatives = [];
 			
 			// reference to the main map
 			var map;
@@ -94,8 +96,9 @@
 				} else {
   				    selectedLocation = new google.maps.LatLng(latitude, longitude);
 					showMap();
+					repositionMarker();
 				}
-
+				
 				document.getElementById(active_container).style.display="inline";
 
 				if (isEnabled("popup")) {
@@ -190,7 +193,6 @@
 		
 		      setupListeners();
 
-		      repositionMarker();
 			}
 
 		   //
@@ -242,8 +244,36 @@
 				document.getElementById("url").value="";
 				setMessage("", "");
 				scroll(0,0);
+//				showRelatives();
+				updateStats();
 			}
 
+			function showRelatives() {
+				for (i=0;i < relatives.length;i++) {
+					var marker = relatives[i];
+					marker.setMap(null);					
+				}
+
+				relatives.length = 0;
+
+				jx.load("stats.php?do=close&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
+					for (i=0;i < data.result.length;i++) {
+						var location = new google.maps.LatLng(data.result[i].latitude, data.result[i].longitude);
+
+						var myMarker = new google.maps.Marker({
+						    position: location
+						});
+						myMarker.setIcon("http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png");
+						myMarker.setMap(map);
+						relatives.push(myMarker);
+					}
+				}, "json");
+			}				
+		    
+			function updateStats() {
+				jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {});
+			}
+		    
 			//
 			// Try find street view data, load appropriate panorama panel and set selectedLocation.
 			// If the selectedLocation does not have a streetview associated with it, will
@@ -664,7 +694,7 @@
 			<div class="span-2"><a href="contact/contact.php" rel="#overlay">Contact</a></div>
 			<div class="span-2"><a href="about.php" rel="#overlay">About</a></div>
 			<div class="span-17">&nbsp;</div>
-			<div class="span-1 last" style="font-weight: bold; color: #4E84A6">0.0.4</div>
+			<div class="span-1 last" style="font-weight: bold; color: #4E84A6">0.0.5</div>
 			<div class="span-24">&nbsp;</div>
 			
 
