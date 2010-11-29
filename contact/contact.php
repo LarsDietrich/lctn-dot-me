@@ -55,7 +55,7 @@
 		<div id="container">
 			<?php include('verify.php'); ?>
 			<form action="/" method="post" id="sendEmail">
-				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. Your email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
+				<p>I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<div class="contact-text">Your email address</div>
 				<div><input onclick="$('#emailFrom').css('border', '1px solid white');" style="width:84%" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" /></div>
 				<div class="contact-text">Your message</div>
