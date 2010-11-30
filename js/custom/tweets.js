@@ -53,11 +53,7 @@ function processTheseTweets(jsonData) {
 		});
 
 		if (listOfTweets.length == 0) {
-			if (warning) {
-				listOfTweets[0] = "There was an error retrieving tweets. The Twitter search service seems to be down.";
-			} else {
-				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different.";
-			}
+				listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
 		}
 		updateTwitterDisplay(1);
 	}
