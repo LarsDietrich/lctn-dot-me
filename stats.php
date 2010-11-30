@@ -9,8 +9,8 @@ if (isset($_GET["do"])) {
 		show();
 	} else if ($do == "stat" && isset($_GET["lat"]) && isset($_GET["lng"])) {
 		add();
-	} else if ($do == "close" && isset($_GET["lat"]) && isset($_GET["lng"])) {
-		close();
+	} else if ($do == "related" && isset($_GET["lat"]) && isset($_GET["lng"])) {
+		related();
 	} else {
 		die("Invalid parameters.");
 	}
@@ -30,20 +30,29 @@ function add() {
 }
 
 function show() {
-	$_query = "SELECT latitude, longitude FROM stats";
+	$_query = "SELECT created, latitude, longitude FROM stats";
 	$_sql = new Sql();
 	$_results = $_sql->execute($_query);
+
+	$result = array();
+
+	$i = 0;
+
 	while ($row = mysql_fetch_array($_results, MYSQL_NUM)) {
-		echo ($row[0] . "</br>");
+		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'microtime' => $row[0]);
+		$result[$i] = $arr;
+		$i++;
 	}
+
+	echo "{\"result\":" . json_encode($result) . "}";
 }
 
-function close() {
+function related() {
 	$min_lng = $_GET["lng"] - 1;
 	$max_lng = $_GET["lng"] + 1;
 	$min_lat = $_GET["lat"] - 1;
 	$max_lat = $_GET["lat"] + 1;
-	
+
 	if ($min_lng < -180) {
 		$min_lng = -1 * ($min_lng + 180);
 	}
@@ -59,21 +68,21 @@ function close() {
 	if ($min_lat > 90) {
 		$min_lng = -1 * ($min_lng - 90);
 	}
-	
-	$_query = "SELECT microtime, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
+
+	$_query = "SELECT created, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
 	$_sql = new Sql();
 	$_results = $_sql->execute($_query);
 
 	$result = array();
-	
+
 	$i = 0;
-	
+
 	while ($row = mysql_fetch_array($_results, MYSQL_NUM)) {
 		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'microtime' => $row[0]);
 		$result[$i] = $arr;
 		$i++;
 	}
-	
+
 	echo "{ \"result\": " . json_encode($result) . "}";
 
 }
