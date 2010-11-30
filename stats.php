@@ -39,7 +39,7 @@ function show() {
 	$i = 0;
 
 	while ($row = mysql_fetch_array($_results, MYSQL_NUM)) {
-		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'microtime' => $row[0]);
+		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'created' => $row[0]);
 		$result[$i] = $arr;
 		$i++;
 	}
