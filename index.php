@@ -84,7 +84,7 @@
 	<!-- 						
 						<div id="map" style="width: 40px; height: 40px;"></div>
 	-->
-						<div id="map" style="width: 468px; height: 465px;"></div>
+						<div id="map_canvas" style="width: 468px; height: 465px;"></div>
 						</center>
 					</div>
 					<div class="footer-text fixed-height-footer"></div>
@@ -378,7 +378,7 @@
   				  streetViewControl: false
   			   }
 
-			  map = new google.maps.Map(document.getElementById("map"), myOptions);
+			  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 			  positionMarker = new google.maps.Marker({
 			      position: selectedLocation, 
@@ -443,6 +443,8 @@
 			// that uses the location (like tweets and streetview)
 			//
 			function repositionMarker() {
+
+				alert(map);
 				if (!map) {
 					showMap();
 				}
