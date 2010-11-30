@@ -268,3 +268,7 @@ input {
 .shorten {
 	vertical-align: middle;
 }
+
+.tweet-age {
+	color: gray;
+}

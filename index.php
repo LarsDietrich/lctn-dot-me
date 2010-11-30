@@ -119,7 +119,7 @@
 						<div class="header-left">
 							<img title="Click to see previous view" class="container-navigation-icon" src="images/arrow-left.png" onclick="prevContainer('twitter_container')"/>
 						</div>
-						<div class="header-center"  title="Shows tweets in the surrounding area. Will only show tweets where people have chosen to share the location.">
+						<div class="header-center"  title="Shows tweets in the surrounding area for people that have chosen to share their location.">
 							Twitter
 						</div>
 						<div class="header-right">
@@ -199,7 +199,7 @@
 -->
 			<div class="span-2"><a href="about.php" rel="#overlay">About</a></div>
 			<div class="span-17">&nbsp;</div>
-			<div class="span-1 last" style="font-weight: bold; color: #4E84A6">0.0.5</div>
+			<div class="span-1 last" style="font-weight: bold; color: #4E84A6">0.0.6</div>
 			<div class="span-24">&nbsp;</div>
 
 		</div>
@@ -376,16 +376,9 @@
 				  center: selectedLocation,
 				  mapTypeId: maptype,
   				  streetViewControl: false
-  			   },
-		      gbarOptions = {
-				     // we're going with the defaults
-			  };
+  			   }
 
 			  map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-			  var gbar=new window.jeremy.jGoogleBar(map,gbarOptions)
-
-			  map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(gbar.container);
 
 			  positionMarker = new google.maps.Marker({
 			      position: selectedLocation, 
@@ -590,7 +583,11 @@
 				output += "><img class='social-button' src=\"images/email.jpg\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
 
 				document.getElementById("url-window").innerHTML=output;
-				
+
+				if (isEnabled("popup")) {
+					$("[title]").tooltip( {effect : "slide"});
+				}
+							
 			}
 
 			function updateGeneralLocationInformation(address) {
