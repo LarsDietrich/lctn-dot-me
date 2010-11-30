@@ -1,5 +1,5 @@
 var listOfTweets = [];
-var tweetsPerPage = 6;
+var tweetsPerPage = 7;
 
 /**
  * Entry method for generating tweets, calls the twitter service using selected
@@ -17,7 +17,7 @@ function getTweets(selectedLocation, filter, range) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://search.twitter.com/search.json?rpp=100&q="
+		script.src = "http://search.twitter.com/search.json?rpp=200&q="
 				+ filter + "&geocode=" + selectedLocation.lat() + ","
 				+ selectedLocation.lng() + "," + range
 				+ "km&callback=processTheseTweets&_=" + new Date().getTime();
@@ -38,32 +38,22 @@ function processTheseTweets(jsonData) {
 	var warning = jsonData.warning;
 	var i = 0;
 	var tweet = "";
-	
-	if (warning) {
-	
-	}
-	
+
 	if (results) {
 		$.each(results, function(index, value) {
-			tweet += "<tr><td><img src='" +  value.profile_image_url 
-					+ "'/><br/>" + getTimeCreated(value.created_at) 
-					+ " seconds ago </td>";
-					+ "<td><p class='title'><span>"
+			tweet = "<tr><td><img src='" +  value.profile_image_url + "'/></td>"; 
+			tweet += "<td><span>"
 					+ "<a target= '_blank' href='http://twitter.com/"
 					+ value.from_user.substring(0, value.from_user.length)
-					+ "'>" + value.from_user + "</a>" + "</span>: "
-					+ formatTwitterText(value.text) + "&nbsp;"
-					+ getTweetLocation(value.location) + "</p></td><tr>";
+					+ "'>" + value.from_user + "</a>" + ": "
+					+ formatTwitterText(value.text) + "</span><br/>"
+					+ getTimeCreated(value.created_at) + "&nbsp;|&nbsp;" + getTweetLocation(value.location) + "</td><tr>";
 			listOfTweets[i] = tweet;
 			i++;
 		});
 
 		if (listOfTweets.length == 0) {
-			if (warning) {
-				listOfTweets[0] = "There was an error retrieving tweets. The Twitter search service seems to be down.";
-			} else {
-				listOfTweets[0] = "No tweets found, try a bigger search area or search for something different.";
-			}
+				listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
 		}
 		updateTwitterDisplay(1);
 	}
@@ -73,8 +63,20 @@ function getTimeCreated(time) {
 //Fri, 26 Nov 2010 13:32:59 +0000
 	var tweetDate =new Date(eval('"' + time + '"'));
 	var currentDate = new Date();
-	var difference = Math.ceil((currentDate.getTime()-tweetDate.getTime())/1000);
-	return difference;
+	var seconds = Math.ceil((currentDate.getTime()-tweetDate.getTime())/1000);
+	
+	var response = "";
+	
+	if (seconds < 60) {
+		response = seconds + " second(s) ago";
+	} else if (seconds >= 60 && seconds < 3600) {
+		response = Math.round(seconds / 60) + " minute(s) ago";
+	} else if (seconds >= 3600 && seconds < 86400) {
+		response = Math.round(seconds / 3600) + " hour(s) ago";
+	} else {
+		response = Math.round(seconds / 86400) + " day(s) ago";
+	}
+	return "<div class='tweet-age inline'>" + response + "</div>";
 }
 
 
@@ -123,20 +125,11 @@ function getTweetLocation(text) {
 	var result = text.replace("\u00dcT: ", "");
 	var output = "";
 	result = result.replace("iPhone: ", "");
-	var image = "find.png";
 
-	splitResult = result.split(",");
-	if (splitResult.length == 2) {
-		if (isNumeric(splitResult[0].replace(" ", ""))
-				&& isNumeric(splitResult[1].replace(" ", ""))) {
-			image = "find-hilite.png";
-		}
-	}
 	title = "Reposition map to " + result;
-	output = "<img class=\"reposition-image\" title=\"" + title
-			+ "\" src=\"images/" + image + "\" onclick=\"locationFromAddress('"
-			+ result + "')\"/>";
-
+	
+	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('" + result + "')\">Show Me!</div>";
+	
 	return output;
 }
 

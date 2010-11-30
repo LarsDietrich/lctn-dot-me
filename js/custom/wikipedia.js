@@ -101,7 +101,13 @@ function updateWikiDisplay(page) {
 	for (i = startItem; i < endItem; i++) {
 		output += listOfWikis[i];
 	}
+
 	document.getElementById("wiki_stream").innerHTML = output;
+
+	if (isEnabled("popup")) {
+		$("[title]").tooltip( {effect : "slide"});
+	}
+	
 	updateWikiPaging(page);
 }
 
