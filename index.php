@@ -444,7 +444,6 @@
 			//
 			function repositionMarker() {
 
-				alert(map);
 				if (!map) {
 					showMap();
 				}
