@@ -1,6 +1,5 @@
 var listOfTweets = [];
 var tweetsPerPage = 7;
-
 /**
  * Entry method for generating tweets, calls the twitter service using selected
  * parameters. Once complete, calls a method to process the results.
@@ -144,11 +143,11 @@ function getTweetLocation(text) {
 function isNumeric(text) {
 	var validChars = "-0123456789.";
 	var isNumber = true;
-	var char;
+	var character;
 
 	for (i = 0; i < text.length && isNumber == true; i++) {
-		char = text.charAt(i);
-		if (validChars.indexOf(char) == -1) {
+		character = text.charAt(i);
+		if (validChars.indexOf(character) == -1) {
 			isNumber = false;
 		}
 	}
