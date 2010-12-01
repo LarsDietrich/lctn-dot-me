@@ -106,6 +106,7 @@
 				<include name="**/*.php" />
 				<include name=".htaccess" />
 				<include name="**/*.htm" />
+				<include name="**/configure*" />
 			</fileset>
 		</copy>
 	</target>
