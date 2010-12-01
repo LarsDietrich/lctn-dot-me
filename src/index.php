@@ -3,6 +3,7 @@
 
 	<head>
 	    <title>lctn.me | A Location Portal - Find it, Share it</title>
+
 		<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print"/> 
 		<!--[if lt IE 8]>
@@ -197,16 +198,16 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 
- 		<script type="text/javascript" src="js/min/gears_init.js"></script> 
-		<script type="text/javascript" src="js/min/jxs.js"> </script>
-		<script type="text/javascript" src="js/min/jquery-cookie.js"> </script>
+ 		<script type="text/javascript" src="js/gears_init-min.js"></script> 
+		<script type="text/javascript" src="js/jxs-min.js"> </script>
+		<script type="text/javascript" src="js/jquery-cookie-min.js"> </script>
 
-		<script type="text/javascript" src="js/min/tweets.js"> </script>
-		<script type="text/javascript" src="js/min/weather.js"> </script>
-		<script type="text/javascript" src="js/min/wikipedia.js"> </script>
-		<script type="text/javascript" src="js/min/timezone.js"> </script>
-		<script type="text/javascript" src="js/min/uservoice.js"></script>
-		<script type="text/javascript" src="js/min/main.js"></script>
+		<script type="text/javascript" src="js/tweets-min.js"> </script>
+		<script type="text/javascript" src="js/weather-min.js"> </script>
+		<script type="text/javascript" src="js/wikipedia-min.js"> </script>
+		<script type="text/javascript" src="js/timezone-min.js"> </script>
+		<script type="text/javascript" src="js/uservoice-min.js"></script>
+		<script type="text/javascript" src="js/main-min.js"></script>
 
 	</body>
 

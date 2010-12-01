@@ -1,41 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Phing build script -->
-<project name="Lctn.Me" default="release-test">
+<project name="lctn.me" default="dev">
 
+	<property name="build.dir" value="build" />
+	<property name="src.dir" value="src" />
+	
+	<target name="dev" depends="setup, clean, load.properties.dev, js.minify, css.minify, build.content, build.images" description="Development Build" />
+	<target name="qa" depends="setup, clean, load.properties.dev, js.minify, css.minify, build.content, build.images, release-test" description="QA Release Build" />
+	<target name="prod" depends="setup, clean, load.properties.prod, js.minify, css.minify, build.content, build.images, release-live" description="Production Build" />
+
+	<target name="setup">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${release.dir}"/>
+	</target>
+	
 	<target name="clean">
 		<delete>
 			<fileset dir="${release.dir}">
 				<include name="**/*" />
 			</fileset>
 		</delete>
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
 	</target>
 
-	<target name="release" depends="clean">
+	<target name="release">
 		<echo message="Copying files for release" />
 		<copy todir="${release.dir}">
-			<fileset dir=".">
-				<include name="**/*.php"/>
-				<include name=".htaccess"/>
-				<include name="**/*.js"/>
-				<include name="**/*.css"/>
-				<include name="**/*.png"/>
-				<include name="**/*.jpg"/>
-				<include name="**/*.jpeg"/>
-				<include name="**/*.gif"/>
-				<include name="**/*.htm"/>
+			<fileset dir="${build.dir}">
+				<include name="**/*.php" />
+				<include name=".htaccess" />
+				<include name="**/*.js" />
+				<include name="**/*.css" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.gif" />
+				<include name="**/*.htm" />
 			</fileset>
 		</copy>
-	</target>	
+	</target>
 
-	
 	<target name="release-test" depends="release">
 		<echo message="Copying test configuration." />
-		<copy file="includes/configure.php.test" tofile="${release.dir}/includes/configure.php"/>
+		<copy file="${build.dir}/includes/configure.php.test" tofile="${release.dir}/includes/configure.php" />
 	</target>
 
 	<target name="release-live" depends="release">
 		<echo message="Copying live configuration." />
-		<copy file="includes/configure.php.live" tofile="${release.dir}/includes/configure.php"/>
+		<copy file="${build.dir}/includes/configure.php.live" tofile="${release.dir}/includes/configure.php" />
+	</target>
+
+	<target name="load.properties.dev">
+		<property name="js.compressor.switches" value="--nomunge --line-break" />
+	</target>
+
+	<target name="load.properties.prod">
+		<property name="js.compressor.switches" value="" />
+	</target>
+
+	<!--
+	<target name="js.concatenate">
+		<concat destfile="${build.dir}/js/script.js">
+			<fileset dir="${src.dir}/js" includes="*.js" excludes="browser_detect.js, jxs.js gears_init.js jquery-cookie.js" />
+		</concat>
+	</target>
+	
+	<target name="css.concatenate">
+		<concat destfile="${src.dir}/css/blueprint-style.css">
+			<fileset dir="${src.dir}/css/blueprint" includes="*.css"/>
+		</concat>
+		<concat destfile="${build.dir}/css/style.css">
+			<fileset dir="${src.dir}/css" includes="*.css"/>
+		</concat>
+	</target>
+-->
+
+	<target name="js.minify">
+	    <apply executable="java" parallel="false">
+	        <fileset dir="${src.dir}/js" includes="*.js"/>
+	        <arg line="-jar"/>
+	        <arg path="yuicompressor.jar"/>
+	        <srcfile/>
+	        <arg line="-o"/>
+	        <mapper type="glob" from="*.js" to="*-min.js"/>
+	        <targetfile/>
+	    </apply>
+		<move todir="${build.dir}/js">
+	        <fileset dir="." includes="*-min.js"/>
+		</move>
+	</target>
+	
+	<target name="css.minify">
+		<copy todir="${build.dir}/css">
+	        <fileset dir="${src.dir}/css" includes="**/*.css"/>
+		</copy>
+	</target>
+
+	<target name="build.content">
+		<copy todir="${build.dir}">
+			<fileset dir="src">
+				<include name="**/*.php" />
+				<include name=".htaccess" />
+				<include name="**/*.htm" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build.images">
+		<copy todir="${build.dir}">
+			<fileset dir="src">
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.jpeg" />
+				<include name="**/*.gif" />
+			</fileset>
+		</copy>
 	</target>
 
 </project>
