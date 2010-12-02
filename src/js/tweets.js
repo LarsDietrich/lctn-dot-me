@@ -40,7 +40,11 @@ function processTheseTweets(jsonData) {
 
 	if (results) {
 		$.each(results, function(index, value) {
-			tweet = "<tr><td><img src='" +  value.profile_image_url + "'/></td>"; 
+			var location = "999,999";
+			if (isNumeric(value.location)) {
+				location = value.location;
+			}
+			tweet = "<tr onmouseover='highlightRow(this," + location + ")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" +  value.profile_image_url + "'/></td>"; 
 			tweet += "<td><span>"
 					+ "<a target= '_blank' href='http://twitter.com/"
 					+ value.from_user.substring(0, value.from_user.length)
@@ -121,17 +125,19 @@ function formatTwitterText(text) {
  * @return hyperlinked location text
  */
 function getTweetLocation(text) {
-	var result = text.replace("\u00dcT: ", "");
 	var output = "";
-	result = result.replace("iPhone: ", "");
-
+	result = cleanTweetLocation(text);
 	title = "Reposition map to " + result;
-	
 	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('" + result + "')\">Show Me!</div>";
-	
+
 	return output;
 }
 
+function cleanTweetLocation(text) {
+	var result = text.replace("\u00dcT: ", "");
+	result = result.replace("iPhone: ", "");
+	return result;
+}
 /**
  * Determine if text supplied is numeric.
  * 
@@ -141,7 +147,7 @@ function getTweetLocation(text) {
  * @return true if number, false if not
  */
 function isNumeric(text) {
-	var validChars = "-0123456789.";
+	var validChars = "-0123456789., ";
 	var isNumber = true;
 	var character;
 

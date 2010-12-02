@@ -99,7 +99,7 @@
 					</div>
 					<div class="detail-map">
 						<div id="streetview" style="width: 465px; height: 465px"></div>
-					</div>
+ 					</div>
 					<div class="footer-text fixed-height-footer"></div>
 				</div>
 	
@@ -144,7 +144,7 @@
 					</div>
 	 				<div class="detail-padded">
 						<center>
-							Find me articles within <input title="How big an area would you like to see wikipedia articles for (maximum of 5km)?" class="short-text" type="text" name="wiki_range" id="wiki_range" value="1" onkeyup="if (this.value > 5) this.value = 5; " onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
+							Find me articles within <input title="How big an area would you like to see wikipedia articles for?" class="short-text" type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
 							<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 						</center>
 					</div>
@@ -198,16 +198,16 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 
- 		<script type="text/javascript" src="js/gears_init-min.js"></script> 
-		<script type="text/javascript" src="js/jxs-min.js"> </script>
-		<script type="text/javascript" src="js/jquery-cookie-min.js"> </script>
+ 		<script type="text/javascript" src="js/gears_init.js"></script> 
+		<script type="text/javascript" src="js/jxs.js"> </script>
+		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
 
-		<script type="text/javascript" src="js/tweets-min.js"> </script>
-		<script type="text/javascript" src="js/weather-min.js"> </script>
-		<script type="text/javascript" src="js/wikipedia-min.js"> </script>
-		<script type="text/javascript" src="js/timezone-min.js"> </script>
-		<script type="text/javascript" src="js/uservoice-min.js"></script>
-		<script type="text/javascript" src="js/main-min.js"></script>
+		<script type="text/javascript" src="js/tweets.js"> </script>
+		<script type="text/javascript" src="js/weather.js"> </script>
+		<script type="text/javascript" src="js/wikipedia.js"> </script>
+		<script type="text/javascript" src="js/timezone.js"> </script>
+		<script type="text/javascript" src="js/uservoice.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
 
 	</body>
 

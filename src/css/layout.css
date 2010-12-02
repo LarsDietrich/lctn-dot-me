@@ -54,6 +54,7 @@ body {
 	background: #FFFFFF;
 	border-left: 1px solid #84A651;
 	border-right: 1px solid #84A651;
+	border-bottom: 1px solid #84A651;
 	padding: 4px 10px 4px 5px;
 	overflow: auto;
 }
@@ -272,3 +273,7 @@ input {
 .tweet-age {
 	color: gray;
 }
+
+.twitter-pic {
+	width: 48px;
+	height: 48px;
