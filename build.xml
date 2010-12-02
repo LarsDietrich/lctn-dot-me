@@ -86,11 +86,11 @@
 	        <arg path="lib/yuicompressor.jar"/>
 	        <srcfile/>
 	        <arg line="-o"/>
-	        <mapper type="glob" from="*.js" to="*-min.js"/>
+	        <mapper type="glob" from="*.js" to="*.js"/>
 	        <targetfile/>
 	    </apply>
 		<move todir="${build.dir}/js">
-	        <fileset dir="." includes="*-min.js"/>
+	        <fileset dir="." includes="*.js"/>
 		</move>
 	</target>
 	
