@@ -501,13 +501,13 @@ function toggleMapSize() {
 
 	if ($("#map_container").css("width") == max_width) {
 		$("#map_container").css("width", normal_width);
-		$("#map").css("width", normal_width);
+		$("#map_canvas").css("width", normal_width);
 		$("#" + activeContainer).css("display", "block");
 		google.maps.event.trigger(map, "resize");
 	} else {
 		$("#" + activeContainer).css("display", "none");
 		$("#map_container").css("width", max_width);
-		$("#map").css("width", max_width);
+		$("#map_canvas").css("width", max_width);
 		google.maps.event.trigger(map, "resize");
 	}
 }
