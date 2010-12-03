@@ -1,7 +1,4 @@
 // Current containers supported
-var containers = [ "general_container", "wiki_container", "twitter_container",
-		"streetview_container" ];
-var activeContainer = "streetview_container";
 
 var nextAvailableContainer;
 var prevAvailableContainer;
@@ -60,16 +57,16 @@ function loadUrlParameters() {
 		maptype = "roadmap";
 	}
 
-	activeContainer = $.getUrlVars()['container'];
-	if (!activeContainer) {
-		activeContainer = "";
-	}
-
 }
 
 // load the necessary data, parse command line for location
 // information and show map
 function load() {
+
+	$('#map_container').Draggable( {
+		zIndex : 1000,
+		handle : 'span'
+	});
 
 	loadUrlParameters();
 
@@ -79,16 +76,6 @@ function load() {
 
 	updateUrlWindow("");
 
-	if ($.cookie("activeContainer") == null) {
-		$.cookie("activeContainer", "general_container");
-	}
-
-	if (activeContainer == "") {
-		activeContainer = $.cookie("activeContainer");
-	}
-
-	$.cookie("option_" + activeContainer.split("_")[0], "true");
-
 	if (latitude == 999 || longitude == 999) {
 		findMe();
 	} else {
@@ -96,8 +83,6 @@ function load() {
 		showMap();
 		repositionMarker();
 	}
-
-	document.getElementById(activeContainer).style.display = "inline";
 
 	if (isEnabled("popup")) {
 		$("[title]").tooltip( {
@@ -269,7 +254,6 @@ function repositionMarker() {
 	map.setCenter(selectedLocation);
 	document.getElementById("url").value = "";
 	setMessage("", "");
-	scroll(0, 0);
 	updateStats();
 }
 
@@ -312,14 +296,11 @@ function processSVData(data, status) {
 // 
 // Sets a message in the upper right message display area
 // 
-function setMessage(message, type) {
+function setMessage(message) {
 	if (message == "") {
 		document.getElementById("message").innerHTML = "";
 	} else {
-		jx.load("message.php?message=" + message + "&type=" + type, function(
-				data) {
-			document.getElementById('message').innerHTML = data;
-		});
+		document.getElementById('message').innerHTML = message;
 	}
 }
 
@@ -396,8 +377,7 @@ function shortenUrl() {
 	root = "http://" + top.location.host + "/";
 	longurl = root + "?lat=" + selectedLocation.lat() + "&lng="
 			+ selectedLocation.lng() + "&heading=" + heading + "&pitch="
-			+ pitch + "&zoom=" + zoom + "&container=" + activeContainer
-			+ "&maptype=" + maptype;
+			+ pitch + "&zoom=" + zoom + "&maptype=" + maptype;
 	shorturl = "";
 	jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl),
 			function(data) {
@@ -468,74 +448,6 @@ function beta() {
 }
 
 //
-// Loads the next container in the sequence based on the containers
-// array.
-// Containers that are dependant on focus for refresh are refreshed
-// (Streetview)
-//
-function nextContainer(container) {
-	position = 0;
-	for (i = 0; i < containers.length; i++) {
-		if (containers[i] == container) {
-			position = i;
-		}
-	}
-	if (position == containers.length - 1) {
-		position = 0;
-	} else {
-		position++;
-	}
-
-	document.getElementById(container).style.display = "none";
-
-	if (isEnabled(containers[position].split("_")[0])) {
-		document.getElementById(containers[position]).style.display = "inline";
-		activeContainer = containers[position];
-		if (activeContainer == "streetview_container") {
-			streetViewService.getPanoramaByLocation(selectedLocation, 70,
-					processSVData);
-		}
-		$.cookie("activeContainer", activeContainer);
-	} else {
-		nextContainer(containers[position]);
-	}
-}
-
-//
-// Loads the previous container in the sequence based on the
-// containers array.
-// Containers that are dependant on focus for refresh are refreshed
-// (Streetview)
-//
-function prevContainer(container) {
-	position = 0;
-	for (i = 0; i < containers.length; i++) {
-		if (containers[i] == container) {
-			position = i;
-		}
-	}
-	if (position == 0) {
-		position = containers.length - 1;
-	} else {
-		position--;
-	}
-
-	document.getElementById(container).style.display = "none";
-
-	if (isEnabled(containers[position].split("_")[0])) {
-		document.getElementById(containers[position]).style.display = "inline";
-		activeContainer = containers[position];
-		if (activeContainer == "streetview_container") {
-			streetViewService.getPanoramaByLocation(selectedLocation, 70,
-					processSVData);
-		}
-		$.cookie("activeContainer", activeContainer);
-	} else {
-		prevContainer(containers[position]);
-	}
-}
-
-//
 // Queries cookies for option to see if it's set to true. If null,
 // assumes as never set
 // and sets to true.
@@ -556,19 +468,21 @@ function isEnabled(option) {
 
 function toggleMapSize() {
 	var max_width = "955px";
-	var max_width_map = "955px";
 	var normal_width = "470px";
-	var normal_width_map = "470px";
+	var max_height = "600px";
+	var normal_height = "465px";
 
 	if ($("#map_container").css("width") == max_width) {
 		$("#map_container").css("width", normal_width);
 		$("#map_canvas").css("width", normal_width);
-		$("#" + activeContainer).css("display", "block");
+		$("#map_container").css("height", normal_height);
+		$("#map_canvas").css("height", normal_height);
 		google.maps.event.trigger(map, "resize");
 	} else {
-		$("#" + activeContainer).css("display", "none");
 		$("#map_container").css("width", max_width);
 		$("#map_canvas").css("width", max_width);
+		$("#map_container").css("height", max_height);
+		$("#map_canvas").css("height", max_height);
 		google.maps.event.trigger(map, "resize");
 	}
 
@@ -577,40 +491,39 @@ function toggleMapSize() {
 			effect : "slide"
 		});
 	}
-
 }
 
-function loadContainer(container) {
-	$("#" + container).overlay( {
-
-		// custom top position
-		top : 260,
-
-		// some mask tweaks suitable for facebox-looking dialogs
-		mask : {
-
-			// you might also consider a "transparent" color for the mask
-			color : '#fff',
-
-			// load mask a little faster
-			loadSpeed : 200,
-
-			// very transparent
-			opacity : 0.5
-		},
-		// load it immediately after the construction
-		load : true
-
-	});
-
-}
+//function loadContainer(container) {
+//	$("#" + container).overlay( {
+//
+//		// custom top position
+//		top : 260,
+//
+//		// some mask tweaks suitable for facebox-looking dialogs
+//		mask : {
+//
+//			// you might also consider a "transparent" color for the mask
+//			color : '#fff',
+//
+//			// load mask a little faster
+//			loadSpeed : 200,
+//
+//			// very transparent
+//			opacity : 0.5
+//		},
+//		// load it immediately after the construction
+//		load : true
+//
+//	});
+//
+//}
 
 function highlightRow(row, lat, lng) {
 	$(row).css("background-color", "#AFD775");
 	var location = new google.maps.LatLng(lat, lng);
 	myMarker = new google.maps.Marker( {
 		position : location,
-		title : "You are here"
+		title : ""
 	});
 	myMarker.setMap(map);
 }
@@ -629,4 +542,148 @@ $.extend( {
 				});
 		return vars;
 	}
+});
+
+$(document).ready(function() {
+
+	$("#find_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("find_container_top", $(this).css("top"));
+			$.cookie("find_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#find_container").css("top", $.cookie("find_container_top"));
+	$("#find_container").css("left", $.cookie("find_container_left"));
+	$("#find_container").css("display", "inline");
+	
+	$("#share_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("share_container_top", $(this).css("top"));
+			$.cookie("share_container_left", $(this).css("left"));
+			},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#share_container").css("top", $.cookie("share_container_top"));
+	$("#share_container").css("left", $.cookie("share_container_left"));
+	$("#share_container").css("display", "inline");
+
+	$("#map_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("map_container_top", $(this).css("top"));
+			$.cookie("map_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#map_container").css("top", $.cookie("map_container_top"));
+	$("#map_container").css("left", $.cookie("map_container_left"));
+	$("#map_container").css("display", "inline");
+
+	$("#twitter_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("twitter_container_top", $(this).css("top"));
+			$.cookie("twitter_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#twitter_container").css("top", $.cookie("twitter_container_top"));
+	$("#twitter_container").css("left", $.cookie("twitter_container_left"));
+	$("#twitter_container").css("display", "inline");
+
+	$("#wiki_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("wiki_container_top", $(this).css("top"));
+			$.cookie("wiki_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#wiki_container").css("top", $.cookie("wiki_container_top"));
+	$("#wiki_container").css("left", $.cookie("wiki_container_left"));
+	$("#wiki_container").css("display", "inline");
+
+	$("#general_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("general_container_top", $(this).css("top"));
+			$.cookie("general_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#general_container").css("top", $.cookie("general_container_top"));
+	$("#general_container").css("left", $.cookie("general_container_left"));
+	$("#general_container").css("display", "inline");
+
+	$("#streetview_container").Draggable( {
+		handle : 'span',
+		zIndex : '1000',
+		onChange : function() {
+			$.cookie("streetview_container_top", $(this).css("top"));
+			$.cookie("streetview_container_left", $(this).css("left"));
+		},
+		onStop : function() {
+			$(this).css("z-index", "999");
+		},
+		onStart : function () {
+			$("div.panel").each(function() {
+				$(this).css("z-index", "100");
+			});
+		}
+	})
+	$("#streetview_container").css("top", $.cookie("streetview_container_top"));
+	$("#streetview_container").css("left", $.cookie("streetview_container_left"));
+	$("#streetview_container").css("display", "inline");
+
 });
