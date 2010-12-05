@@ -84,12 +84,6 @@ function load() {
 		repositionMarker();
 	}
 
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {
-			effect : "slide"
-		});
-	}
-
 	$(function() {
 
 		// if the function argument is given to overlay, it is
@@ -245,11 +239,19 @@ function repositionMarker() {
 	positionMarker.setMap(null);
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
-	streetViewService
-			.getPanoramaByLocation(selectedLocation, 70, processSVData);
-	updateWikiLocationInformation();
-	updateTwitterLocationInformation();
-	updateWeatherLocationInformation();
+	if (isEnabled("streetview")) {
+		streetViewService.getPanoramaByLocation(selectedLocation, 70,
+				processSVData);
+	}
+	if (isEnabled("wiki")) {
+		updateWikiLocationInformation();
+	}
+	if (isEnabled("twitter")) {
+		updateTwitterLocationInformation();
+	}
+	if (isEnabled("general")) {
+		updateWeatherLocationInformation();
+	}
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
 	document.getElementById("url").value = "";
@@ -275,6 +277,7 @@ function updateStats() {
 //
 function processSVData(data, status) {
 	if (status == google.maps.StreetViewStatus.OK) {
+		showPanel("streetview_container");
 		var markerPanoID = data.location.pano;
 		panorama.setPano(markerPanoID);
 		panorama.setPov( {
@@ -288,6 +291,7 @@ function processSVData(data, status) {
 		positionMarker.setMap(map);
 		panorama.setVisible(true);
 	} else {
+		hidePanel("streetview_container");
 		setMessage("Streetview not available at this location.", "notice");
 		panorama.setVisible(false);
 	}
@@ -365,7 +369,9 @@ function reverseCodeLatLng() {
 									"Unable to determine address from current location",
 									"error");
 						}
-						updateGeneralLocationInformation(address);
+						if (isEnabled("general")) {
+							updateGeneralLocationInformation(address);
+						}
 					});
 }
 
@@ -410,13 +416,6 @@ function updateUrlWindow(link) {
 	output += "><img class='social-button' src=\"images/email.jpg\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
 
 	document.getElementById("url-window").innerHTML = output;
-
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {
-			effect : "slide"
-		});
-	}
-
 }
 
 function updateGeneralLocationInformation(address) {
@@ -485,38 +484,32 @@ function toggleMapSize() {
 		$("#map_canvas").css("height", max_height);
 		google.maps.event.trigger(map, "resize");
 	}
-
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {
-			effect : "slide"
-		});
-	}
 }
 
-//function loadContainer(container) {
-//	$("#" + container).overlay( {
+// function loadContainer(container) {
+// $("#" + container).overlay( {
 //
-//		// custom top position
-//		top : 260,
+// // custom top position
+// top : 260,
 //
-//		// some mask tweaks suitable for facebox-looking dialogs
-//		mask : {
+// // some mask tweaks suitable for facebox-looking dialogs
+// mask : {
 //
-//			// you might also consider a "transparent" color for the mask
-//			color : '#fff',
+// // you might also consider a "transparent" color for the mask
+// color : '#fff',
 //
-//			// load mask a little faster
-//			loadSpeed : 200,
+// // load mask a little faster
+// loadSpeed : 200,
 //
-//			// very transparent
-//			opacity : 0.5
-//		},
-//		// load it immediately after the construction
-//		load : true
+// // very transparent
+// opacity : 0.5
+// },
+// // load it immediately after the construction
+// load : true
 //
-//	});
+// });
 //
-//}
+// }
 
 function highlightRow(row, lat, lng) {
 	$(row).css("background-color", "#AFD775");
@@ -533,6 +526,14 @@ function normalRow(row) {
 	myMarker.setMap(null);
 }
 
+function hidePanel(name) {
+	$("#" + name).css("display", "none");
+}
+
+function showPanel(name) {
+	$("#" + name).css("display", "block");
+}
+
 $.extend( {
 	getUrlVars : function() {
 		var vars = {};
@@ -544,146 +545,38 @@ $.extend( {
 	}
 });
 
-$(document).ready(function() {
-
-	$("#find_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("find_container_top", $(this).css("top"));
-			$.cookie("find_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#find_container").css("top", $.cookie("find_container_top"));
-	$("#find_container").css("left", $.cookie("find_container_left"));
-	$("#find_container").css("display", "inline");
-	
-	$("#share_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("share_container_top", $(this).css("top"));
-			$.cookie("share_container_left", $(this).css("left"));
-			},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#share_container").css("top", $.cookie("share_container_top"));
-	$("#share_container").css("left", $.cookie("share_container_left"));
-	$("#share_container").css("display", "inline");
-
-	$("#map_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("map_container_top", $(this).css("top"));
-			$.cookie("map_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#map_container").css("top", $.cookie("map_container_top"));
-	$("#map_container").css("left", $.cookie("map_container_left"));
-	$("#map_container").css("display", "inline");
-
-	$("#twitter_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("twitter_container_top", $(this).css("top"));
-			$.cookie("twitter_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#twitter_container").css("top", $.cookie("twitter_container_top"));
-	$("#twitter_container").css("left", $.cookie("twitter_container_left"));
-	$("#twitter_container").css("display", "inline");
-
-	$("#wiki_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("wiki_container_top", $(this).css("top"));
-			$.cookie("wiki_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#wiki_container").css("top", $.cookie("wiki_container_top"));
-	$("#wiki_container").css("left", $.cookie("wiki_container_left"));
-	$("#wiki_container").css("display", "inline");
-
-	$("#general_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("general_container_top", $(this).css("top"));
-			$.cookie("general_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#general_container").css("top", $.cookie("general_container_top"));
-	$("#general_container").css("left", $.cookie("general_container_left"));
-	$("#general_container").css("display", "inline");
-
-	$("#streetview_container").Draggable( {
-		handle : 'span',
-		zIndex : '1000',
-		onChange : function() {
-			$.cookie("streetview_container_top", $(this).css("top"));
-			$.cookie("streetview_container_left", $(this).css("left"));
-		},
-		onStop : function() {
-			$(this).css("z-index", "999");
-		},
-		onStart : function () {
-			$("div.panel").each(function() {
-				$(this).css("z-index", "100");
-			});
-		}
-	})
-	$("#streetview_container").css("top", $.cookie("streetview_container_top"));
-	$("#streetview_container").css("left", $.cookie("streetview_container_left"));
-	$("#streetview_container").css("display", "inline");
-
-});
+$(document).ready(
+		function() {
+			$("div.panel").each(
+					function() {
+						var control = $(this);
+						$(control).Draggable(
+								{
+									handle : 'span',
+									zIndex : '1000',
+									onChange : function() {
+										$.cookie(
+												$(control).attr("id") + "_top",
+												$(control).css("top"));
+										$.cookie($(control).attr("id")
+												+ "_left", $(control).css(
+												"left"));
+									},
+									onStop : function() {
+										$(control).css("z-index", "9");
+									},
+									onStart : function() {
+										$("div.panel").each(function() {
+											$(this).css("z-index", "10");
+										});
+									},
+									snapDistance : 10,
+									grid : 20
+								})
+						$(control).css("top",
+								$.cookie($(control).attr("id") + "_top"));
+						$(control).css("left",
+								$.cookie($(control).attr("id") + "_left"));
+						$(control).css("display", "inline");
+					});
+		});

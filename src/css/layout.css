@@ -1,7 +1,6 @@
 /* Overridden styles of Blueprint to customize layout */
 body {
-	background-color: #C7D9D4;
-	background-image: url("/images/day-sky.jpg");
+	background-color: #ADD5F7;
 	font-family: sans-serif;
 }
 
@@ -25,48 +24,49 @@ body {
 }
 
 .header {
-	background: #4e84a6;
+	background: #AFD775;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
-	border-top: 1px solid #4e84a6;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
+	border-top: 1px solid #AFD775;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
 	font-size: x-large;
 	color: #000000;
 	text-align: center;
+	cursor: move;
 }
 
 .detail {
 	background: #FFFFFF;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 	overflow: auto;
 }
 
 .detail-map {
 	background: #FFFFFF;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
 }
 
 .detail-padded {
 	background: #FFFFFF;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
-	border-bottom: 1px solid #4e84a6;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
+	border-bottom: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 	overflow: auto;
 }
 
 .footer-text {
-	background: #4e84a6;
+	background: #AFD775;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
-	border-bottom: 1px solid #4e84a6;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
+	border-bottom: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -74,9 +74,9 @@ body {
 	background: #FFFFFF;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #4e84a6;
-	border-right: 1px solid #4e84a6;
-	border-bottom: 1px solid #4e84a6;
+	border-left: 1px solid #AFD775;
+	border-right: 1px solid #AFD775;
+	border-bottom: 1px solid #AFD775;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -135,13 +135,13 @@ body {
 
 a:link {
 	font-weight: bold;
-	color: #4E84A6;
+	color: #AFD775;
 	text-decoration: none;
 }
 
 a:visited {
 	font-weight: bold;
-	color: #4E84A6;
+	color: #AFD775;
 	text-decoration: none;
 }
 
@@ -157,7 +157,7 @@ input {
 	margin-top: 5px;
 	width: 200px;
 	border: 1px solid black;
-	background-color: #4e84a6;
+	background-color: #AFD775;
 	filter: alpha(opacity =     80);
 	opacity: .8;
 	color: black;
@@ -249,13 +249,7 @@ input {
 	height: 30px;
 }
 
-.config-row-even {
-	background: #fff;
-	font-size: medium;
-	color: black;
-}
-
-.config-row-odd {
+.config-row {
 	background: #fff;
 	font-size: medium;
 	color: black;

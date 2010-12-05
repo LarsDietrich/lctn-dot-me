@@ -3,12 +3,12 @@ ul.topnav {
 	padding: 0 20px;
 	margin: 0;
 	float: left;
-	width: 85%;
+	width: 80%;
 	background: #222;
 	font-size: 1.2em;
 	background: url(/images/topnav_bg.png) repeat-x;
-	filter: alpha(opacity = 70);
-	opacity: .7;
+	filter: alpha(opacity = 90);
+	opacity: .9;
 }
 
 ul.topnav li {
@@ -53,8 +53,8 @@ ul.topnav li ul.subnav {
 
 ul.topnav li ul.subnav li ul.img li{
 	margin: 0; padding: 0;
-	border-top: 1px solid #4e84a6; /*--Create bevel effect--*/
-	border-bottom: 1px solid #4e84a6; /*--Create bevel effect--*/
+	border-top: 1px solid #AFD775; /*--Create bevel effect--*/
+	border-bottom: 1px solid #AFD775; /*--Create bevel effect--*/
 	clear: both;
 	width: 170px;
 }
@@ -62,12 +62,12 @@ ul.topnav li ul.subnav li ul.img li{
 html ul.topnav li ul.subnav li a {
 	float: left;
 	width: 145px;
-	background: #4e84a6;
+	background: #AFD775;
 	padding-left: 20px;
 }
 
 html ul.topnav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
-	background: #4e84a6;
+	background: #AFD775;
 }
 
 .container-image-tick {

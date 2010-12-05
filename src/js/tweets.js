@@ -39,37 +39,49 @@ function processTheseTweets(jsonData) {
 	var tweet = "";
 
 	if (results) {
-		$.each(results, function(index, value) {
-			var location = "999,999";
-			if (isNumeric(value.location)) {
-				location = value.location;
-			}
-			tweet = "<tr onmouseover='highlightRow(this," + location + ")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" +  value.profile_image_url + "'/></td>"; 
-			tweet += "<td><span>"
-					+ "<a target= '_blank' href='http://twitter.com/"
-					+ value.from_user.substring(0, value.from_user.length)
-					+ "'>" + value.from_user + "</a>" + ": "
-					+ formatTwitterText(value.text) + "</span><br/>"
-					+ getTimeCreated(value.created_at) + "&nbsp;|&nbsp;" + getTweetLocation(value.location) + "</td><tr>";
-			listOfTweets[i] = tweet;
-			i++;
-		});
+		$
+				.each(
+						results,
+						function(index, value) {
+							var location = "999,999";
+							if (isNumeric(value.location)) {
+								location = value.location;
+							}
+							tweet = "<tr onmouseover='highlightRow(this,"
+									+ location
+									+ ")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='"
+									+ value.profile_image_url + "'/></td>";
+							tweet += "<td><span>"
+									+ "<a target= '_blank' href='http://twitter.com/"
+									+ value.from_user.substring(0,
+											value.from_user.length) + "'>"
+									+ value.from_user + "</a>" + ": "
+									+ formatTwitterText(value.text)
+									+ "</span><br/>"
+									+ getTimeCreated(value.created_at)
+									+ "&nbsp;|&nbsp;"
+									+ getTweetLocation(value.location)
+									+ "</td><tr>";
+							listOfTweets[i] = tweet;
+							i++;
+						});
 
 		if (listOfTweets.length == 0) {
-				listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
+			listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
 		}
 		updateTwitterDisplay(1);
 	}
 }
 
 function getTimeCreated(time) {
-//Fri, 26 Nov 2010 13:32:59 +0000
-	var tweetDate =new Date(eval('"' + time + '"'));
+	// Fri, 26 Nov 2010 13:32:59 +0000
+	var tweetDate = new Date(eval('"' + time + '"'));
 	var currentDate = new Date();
-	var seconds = Math.ceil((currentDate.getTime()-tweetDate.getTime())/1000);
-	
+	var seconds = Math
+			.ceil((currentDate.getTime() - tweetDate.getTime()) / 1000);
+
 	var response = "";
-	
+
 	if (seconds < 60) {
 		response = seconds + " second(s) ago";
 	} else if (seconds >= 60 && seconds < 3600) {
@@ -81,8 +93,6 @@ function getTimeCreated(time) {
 	}
 	return "<div class='tweet-age inline'>" + response + "</div>";
 }
-
-
 
 /**
  * Formats the twitter text, adding hyperlinks to hashtags, web links and @ tags.
@@ -128,7 +138,10 @@ function getTweetLocation(text) {
 	var output = "";
 	result = cleanTweetLocation(text);
 	title = "Reposition map to " + result;
-	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('" + result + "')\">Show Me!</div>";
+	output = "<div title=\""
+			+ title
+			+ "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('"
+			+ result + "')\">Show Me!</div>";
 
 	return output;
 }
@@ -164,15 +177,10 @@ function isNumeric(text) {
  * Triggers the retrieval of new tweets based on selectedLocation
  */
 function updateTwitterLocationInformation() {
-	if (isEnabled("twitter")) {
-		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>";
-			getTweets(selectedLocation,
-					document.getElementById("filter").value, document
-							.getElementById("tweet_range").value);
-		}
-	} else {
-		document.getElementById("tweet_stream").innerHTML="";
+	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+		document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>";
+		getTweets(selectedLocation, document.getElementById("filter").value,
+				document.getElementById("tweet_range").value);
 	}
 }
 
@@ -206,14 +214,11 @@ function updateTwitterDisplay(page) {
 	for (i = startItem; i < endItem; i++) {
 		output += listOfTweets[i];
 	}
-	
+
 	output += "</table>";
 	output += "<div style='text-align=right'><img src=\"images/powered-by-twitter-sig.gif\"/></>";
-	
+
 	document.getElementById("tweet_stream").innerHTML = output;
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {effect : "slide"});
-	}
 	updateTwitterPaging(page);
 }
 

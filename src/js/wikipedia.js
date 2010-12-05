@@ -19,7 +19,8 @@ var wikisPerPage = 5;
  */
 function getArticles(selectedLocation, range) {
 	listOfWikis = [];
-	query = "feed/wikipedia.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&range=" + range;
+	query = "feed/wikipedia.php?lat=" + selectedLocation.lat() + "&lng="
+			+ selectedLocation.lng() + "&range=" + range;
 	jx.load(query, function(data) {
 		processWikiData(data);
 	}, "json");
@@ -45,12 +46,15 @@ function processWikiData(data) {
 
 	if (_articles) {
 		for (i = 0; i < limit; i++) {
-			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat + "," + _articles[i].lng + ")' onmouseout='normalRow(this)'><td>";
-			wiki += "<a target= '_blank' href='http://" + _articles[i].wikipediaUrl + "'>"
-					+ _articles[i].title + "</a>&nbsp;";
-			wiki += getWikiLocation(_articles[i]);	
-//			wiki += "</td></tr><tr><td style=\"text-align: justify\">";
-			wiki +=  _articles[i].summary;
+			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat
+					+ "," + _articles[i].lng
+					+ ")' onmouseout='normalRow(this)'><td>";
+			wiki += "<a target= '_blank' href='http://"
+					+ _articles[i].wikipediaUrl + "'>" + _articles[i].title
+					+ "</a>&nbsp;";
+			wiki += getWikiLocation(_articles[i]);
+			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
+			wiki += _articles[i].summary;
 			wiki += "</td></tr>";
 
 			listOfWikis[j] = wiki;
@@ -72,8 +76,11 @@ function processWikiData(data) {
  * @return - hyperlinked image
  */
 function getWikiLocation(_article) {
-	var result = Math.round(_article.lat * 10000) / 10000 + "," + Math.round(_article.lng * 10000) / 10000;
-	result = "<img class=\"reposition-image\" title=\"Reposition map to " + result + "\"src=\"images/find-hilite.png\" onclick=\"locationFromAddress('"
+	var result = Math.round(_article.lat * 10000) / 10000 + ","
+			+ Math.round(_article.lng * 10000) / 10000;
+	result = "<img class=\"reposition-image\" title=\"Reposition map to "
+			+ result
+			+ "\"src=\"images/find-hilite.png\" onclick=\"locationFromAddress('"
 			+ result + "')\"/>";
 	return result;
 }
@@ -84,14 +91,10 @@ function getWikiLocation(_article) {
  * selectedLocation.
  */
 function updateWikiLocationInformation() {
-	if (isEnabled("wiki")) {
-		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for wikipedia articles'/>";
-			getArticles(selectedLocation,
-					document.getElementById("wiki_range").value);
-		}
-	} else {
-		document.getElementById("wiki_stream").innerHTML = "";
+	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+		document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for wikipedia articles'/>";
+		getArticles(selectedLocation,
+				document.getElementById("wiki_range").value);
 	}
 }
 
@@ -113,14 +116,8 @@ function updateWikiDisplay(page) {
 		output += listOfWikis[i];
 	}
 	output += "</table>";
-	
-	document.getElementById("wiki_stream").innerHTML = output;
 
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {
-			effect : "slide"
-		});
-	}
+	document.getElementById("wiki_stream").innerHTML = output;
 
 	updateWikiPaging(page);
 }

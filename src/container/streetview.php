@@ -5,7 +5,7 @@
 		</div>
 	</span>
 	<div class="detail-map">
-		<div id="streetview" style="width: 465px; height: 465px"></div>
+		<div id="streetview" style="width: 467px; height: 465px"></div>
  	</div>
 	<span>
 	<div class="footer-text fixed-height-footer"></div>

@@ -4,11 +4,13 @@
 	<head>
 	    <title>lctn.me | A Location Portal - Find it, Share it</title>
 
+		<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css"/>
+
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
-		<link rel="stylesheet" href="css/styled-button.css" type="text/css"/>
 		<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+
 	</head>
 
 	<body onload="load()">
@@ -25,17 +27,34 @@
 		<?php include("menu.php")?>
 		
 		<div style="float: right;">
-			<h1><span style="color: #4E84A6" class="title-text">lctn.me</span></h1>
-			<h4><i><span  style="color: #4E84A6" class="title-text">Find it, share it</span></i></h4>
+			<div style="color: #4E84A6; font-size: xx-large;display:inline" class="title-text">lctn.me</div>
+			<div style="color: #4E84A6; font-size: small; display:inline" class="title-text">Find it, share it</div>
 		</div>
 
-		<?php include("container/find.php")?>
+		<?php include("container/find.php");?>
 		<?php include("container/share.php")?>
 		<?php include("container/map.php")?>
-		<?php include("container/twitter.php")?>
-		<?php include("container/streetview.php")?>
-		<?php include("container/wiki.php")?>
-		<?php include("container/general.php")?>
+		<?php 
+			if ($_COOKIE['option_twitter'] == "true") {
+				include("container/twitter.php");
+			}
+		?>
+		<?php
+			if ($_COOKIE['option_streetview'] == "true") {
+				include("container/streetview.php");
+			}
+		?>
+		<?php
+			if ($_COOKIE['option_wiki'] == "true") {
+				include("container/wiki.php");
+			}
+		?>
+		<?php
+			if ($_COOKIE['option_general'] == "true") {
+				include("container/general.php");
+			}
+		?>
+
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -48,13 +67,13 @@
 		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
 		<script type="text/javascript" src="js/interface.js"></script>
 
-
 		<script type="text/javascript" src="js/tweets.js"> </script>
 		<script type="text/javascript" src="js/weather.js"> </script>
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/uservoice.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/jquery.color.js"></script>
 
 		<script type="text/javascript" src="js/menu.js"></script>
 
