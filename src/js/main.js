@@ -1,4 +1,4 @@
-// Current containers supported
+var user;
 
 var nextAvailableContainer;
 var prevAvailableContainer;
