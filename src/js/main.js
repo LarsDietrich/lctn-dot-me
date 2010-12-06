@@ -557,7 +557,7 @@ $(document).ready(
 									onChange : function() {
 										$.cookie(
 												$(control).attr("id") + "_top",
-												$(control).css("top"));
+												$(control).css("top"), { expires: 365 });
 										$.cookie($(control).attr("id")
 												+ "_left", $(control).css(
 												"left"));
@@ -574,9 +574,9 @@ $(document).ready(
 									grid : 20
 								})
 						$(control).css("top",
-								$.cookie($(control).attr("id") + "_top"));
+								$.cookie($(control).attr("id") + "_top"), { expires: 365 });
 						$(control).css("left",
-								$.cookie($(control).attr("id") + "_left"));
-						$(control).css("display", "inline");
+								$.cookie($(control).attr("id") + "_left"), { expires: 365 });
+						$(control).css("display", "inline", { expires: 365 });
 					});
 		});
