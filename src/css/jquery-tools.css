@@ -12,7 +12,7 @@
 #overlay {
 	background-image:
 		url(/images/transparent.png);
-	color: #ffffff;
+	color: #AFD775;
 	height: 460px;
 }
 
@@ -20,6 +20,7 @@
 div.contentWrap {
 	height: 490px;
 	overflow-y: auto;
+	color: white;
 }
 
 /* the overlayed element */

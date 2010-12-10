@@ -2,7 +2,7 @@
 <head>
 	<title>lctn.me | About</title>
 </head>
-<body>
+<body style="color: white">
 <b>What is it?</b>
 <br/>
 <p>

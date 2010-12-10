@@ -4,9 +4,9 @@ div#container {
 	font-size: 1.2em;
 	margin: 0 auto;
 	padding-bottom: 0px;
-	padding-top: 30px;
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-top: 20px;
+	padding-left: 0px;
+	padding-right: 0px;
 	width: 480px;
 	vertical-align: middle;
 }
@@ -17,13 +17,16 @@ div#container {
 
 .contact-error {
 	color: #FF3333;
+	font-size: medium;
+	width: 70%;
 }
 
 .buttons {
 	font-size: medium;
-	color: #4E84A6;
+	color: #000000;
 }
 
 .contact-text {
 	font-size: medium;
+	color: white;
 }

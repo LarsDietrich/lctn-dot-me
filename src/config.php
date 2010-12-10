@@ -18,7 +18,7 @@
 	    	});
 
 	    	function setOption(control) {
-	    		$.cookie("option_" + control.id, control.checked);
+	    		$.cookie("option_" + control.id, control.checked, { expires : 365 });
 	    	}
 	    </script>
 	    
@@ -27,17 +27,6 @@
 		<div class="config-header">Turn on or off various portal features. Check the box next to the feature to enable it, uncheck to disable. A refresh is required to show the update(s).</div>
 		<br/>
 		<table>
-			<tr class="config-row">
-				<td width=20%">
-					<label for="beta">Beta Warning</label>
-				</td>
-				<td width=10%">
-					<input id="beta" type="checkbox" class="config" onclick="setOption(this);"></input>
-				</td>
-				<td>
-					The beta warning screen on first load
-				</td>
-			</tr>
 			<tr class="config-row">
 				<td width=20%">
 					<label for="streetview">Streetview</label>

@@ -70,9 +70,9 @@ function load() {
 
 	loadUrlParameters();
 
-	if (isEnabled("beta")) {
-		beta();
-	}
+	// if (isEnabled("beta")) {
+	beta();
+	// }
 
 	updateUrlWindow("");
 
@@ -162,10 +162,10 @@ function showMap() {
 		streetViewControl : false
 	}
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	
+
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
-	
+
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map,
@@ -304,7 +304,7 @@ function setMessage(message) {
 //
 function locationFromAddr() {
 	var address = document.getElementById("address").value;
-	setMessage("", "");
+	setMessage("");
 	geocoder
 			.geocode(
 					{
@@ -447,7 +447,7 @@ function isEnabled(option) {
 	var cookie = $.cookie("option_" + option);
 
 	if (cookie == null) {
-		$.cookie("option_" + option, "true");
+		$.cookie("option_" + option, "false");
 	}
 
 	if ($.cookie("option_" + option) == "true") {
@@ -477,31 +477,9 @@ function toggleMapSize() {
 	}
 }
 
-// function loadContainer(container) {
-// $("#" + container).overlay( {
 //
-// // custom top position
-// top : 260,
+// Hilite a row in a pane, also shows point on map, if possible
 //
-// // some mask tweaks suitable for facebox-looking dialogs
-// mask : {
-//
-// // you might also consider a "transparent" color for the mask
-// color : '#fff',
-//
-// // load mask a little faster
-// loadSpeed : 200,
-//
-// // very transparent
-// opacity : 0.5
-// },
-// // load it immediately after the construction
-// load : true
-//
-// });
-//
-// }
-
 function highlightRow(row, lat, lng) {
 	$(row).css("background-color", "#AFD775");
 	var location = new google.maps.LatLng(lat, lng);
@@ -536,38 +514,90 @@ $.extend( {
 	}
 });
 
-$(document).ready(
-		function() {
-			$("div.panel").each(
-					function() {
-						var control = $(this);
-						$(control).Draggable(
-								{
-									handle : 'span',
-									zIndex : '1000',
-									onChange : function() {
-										$.cookie(
-												$(control).attr("id") + "_top",
-												$(control).css("top"), { expires: 365 });
-										$.cookie($(control).attr("id")
-												+ "_left", $(control).css(
-												"left"));
-									},
-									onStop : function() {
-										$(control).css("z-index", "9");
-									},
-									onStart : function() {
-										$("div.panel").each(function() {
-											$(this).css("z-index", "10");
-										});
-									},
-									snapDistance : 10,
-									grid : 20
-								})
-						$(control).css("top",
-								$.cookie($(control).attr("id") + "_top"), { expires: 365 });
-						$(control).css("left",
-								$.cookie($(control).attr("id") + "_left"), { expires: 365 });
-						$(control).css("display", "inline", { expires: 365 });
-					});
-		});
+$(document)
+		.ready(
+				function() {
+					$("div.panel")
+							.each(
+									function() {
+										var control = $(this);
+										$(control)
+												.Draggable(
+														{
+															handle : 'span',
+															zIndex : '1000',
+															onChange : function() {
+																$
+																		.cookie(
+																				$(
+																						control)
+																						.attr(
+																								"id")
+																						+ "_top",
+																				$(
+																						control)
+																						.css(
+																								"top"),
+																				{
+																					expires : 365
+																				});
+																$
+																		.cookie(
+																				$(
+																						control)
+																						.attr(
+																								"id")
+																						+ "_left",
+																				$(
+																						control)
+																						.css(
+																								"left"),
+																				{
+																					expires : 365
+																				});
+															},
+															onStop : function() {
+																$(control)
+																		.css(
+																				"z-index",
+																				"9");
+															},
+															onStart : function() {
+																$("div.panel")
+																		.each(
+																				function() {
+																					$(
+																							this)
+																							.css(
+																									"z-index",
+																									"10");
+																				});
+															},
+															snapDistance : 10,
+															grid : 20
+														})
+
+										$(control).css(
+												"top",
+												($.cookie($(control).attr("id")
+														+ "_top") ? $.cookie($(
+														control).attr("id")
+														+ "_top") : 40));
+										$(control)
+												.css(
+														"left",
+														($.cookie($(control)
+																.attr("id")
+																+ "_left")) ? $
+																.cookie($(
+																		control)
+																		.attr(
+																				"id")
+																		+ "_left")
+																: 20);
+
+										setMessage("Panels can be dragged by clicking on the title and dragging with the mouse");
+
+										$(control).css("display", "inline");
+									});
+				});

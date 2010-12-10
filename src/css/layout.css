@@ -214,8 +214,8 @@ input {
 }
 
 .footer-icon {
-	height: 14px;
-	width: 14px;
+	height: 20px;
+	width: 20px;
 	cursor: pointer;
 }
 
@@ -250,9 +250,9 @@ input {
 }
 
 .config-row {
-	background: #fff;
+	background: transparent;
 	font-size: medium;
-	color: black;
+	color: white;
 }
 
 .config-header {
@@ -278,7 +278,7 @@ input {
 	float: right;
 	text-align: right;
 	font-weight: bold;
-	color: red;
+	color: #000;
 	padding-top: 10px;
 }
 
