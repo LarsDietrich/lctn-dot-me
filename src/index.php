@@ -4,8 +4,7 @@
 	<head>
 	    <title>lctn.me | A Location Portal - Find it, Share it</title>
 
-		<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css"/>
-
+		<link rel="stylesheet" href="css/screen.css" type="text/css"/>
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
@@ -14,7 +13,6 @@
 	</head>
 
 	<body onload="load()">
-
 
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
