@@ -73,6 +73,7 @@
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/uservoice.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+
 		<script type="text/javascript" src="js/jquery.color.js"></script>
 
 		<script type="text/javascript" src="js/menu.js"></script>

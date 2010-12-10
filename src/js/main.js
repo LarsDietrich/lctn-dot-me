@@ -32,24 +32,29 @@ var myMarker;
 
 function loadUrlParameters() {
 
-	latitude = $.getUrlVars()['lat'];
+	latitude = parseFloat($.getUrlVars()['lat']);
 	if (!latitude) {
 		latitude = 999;
 	}
 
-	longitude = $.getUrlVars()['lng'];
+	longitude = parseFloat($.getUrlVars()['lng']);
 	if (!longitude) {
 		longitude = 999;
 	}
 
-	heading = $.getUrlVars()['heading'];
+	heading = parseInt($.getUrlVars()['heading']);
 	if (!heading) {
 		heading = 0;
 	}
 
-	zoom = $.getUrlVars()['zoom'];
+	zoom = parseInt($.getUrlVars()['zoom']);
 	if (!zoom) {
 		zoom = 12;
+	}
+
+	pitch = parseInt($.getUrlVars()['pitch']);
+	if (!pitch) {
+		pitch = 0;
 	}
 
 	maptype = $.getUrlVars()['maptype'];
@@ -62,11 +67,6 @@ function loadUrlParameters() {
 // load the necessary data, parse command line for location
 // information and show map
 function load() {
-
-	$('#map_container').Draggable( {
-		zIndex : 1000,
-		handle : 'span'
-	});
 
 	loadUrlParameters();
 
@@ -158,14 +158,14 @@ function findMe() {
 function showMap() {
 
 	var myOptions = {
-		zoom : zoom,
 		center : selectedLocation,
-		mapTypeId : maptype,
 		streetViewControl : false
 	}
-
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
+	
+	map.setZoom(zoom);
+	map.setMapTypeId(maptype);
+	
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map,
@@ -173,14 +173,6 @@ function showMap() {
 	});
 
 	var panoOptions = {
-		addressControlOptions : {
-			position : google.maps.ControlPosition.BOTTOM,
-			style : {
-				"fontWeight" : "bold",
-				"backgroundColor" : "#191970",
-				"color" : "#A9203E"
-			}
-		},
 		navigationControlOptions : {
 			style : google.maps.NavigationControlStyle.SMALL
 		},
@@ -192,7 +184,6 @@ function showMap() {
 			.getElementById("streetview"), panoOptions);
 
 	setupListeners();
-
 }
 
 //
