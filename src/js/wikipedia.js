@@ -48,11 +48,11 @@ function processWikiData(data) {
 		for (i = 0; i < limit; i++) {
 			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat
 					+ "," + _articles[i].lng
-					+ ")' onmouseout='normalRow(this)'><td>";
+					+ ", \"images/wikipedia_icon.png\")' onmouseout='normalRow(this)'><td>";
 			wiki += "<a target= '_blank' href='http://"
 					+ _articles[i].wikipediaUrl + "'>" + _articles[i].title
 					+ "</a>&nbsp;";
-			wiki += getWikiLocation(_articles[i]);
+			wiki += getWikiLocation(_articles[i]) + "<br/>";
 			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
 			wiki += _articles[i].summary;
 			wiki += "</td></tr>";

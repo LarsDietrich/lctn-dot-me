@@ -67,7 +67,7 @@ function loadUrlParameters() {
 // load the necessary data, parse command line for location
 // information and show map
 function load() {
-
+	
 	loadUrlParameters();
 
 	// if (isEnabled("beta")) {
@@ -157,6 +157,7 @@ function findMe() {
 //
 function showMap() {
 
+	
 	var myOptions = {
 		center : selectedLocation,
 		streetViewControl : false
@@ -166,10 +167,13 @@ function showMap() {
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
 
+	var image = "images/pin_map.png";
+
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map,
-		title : "You are here"
+		title : "You are here",
+		icon : image
 	});
 
 	var panoOptions = {
@@ -438,6 +442,22 @@ function beta() {
 }
 
 //
+//Display the beta page.
+//
+function loading() {
+	var thediv = document.getElementById('displaybox');
+	if (thediv.style.display == "none") {
+		thediv.style.display = "";
+		thediv.innerHTML = "<span class='displaybox-large'/>Loading...<img src='images/spinner.gif'/></span>";
+	} else {
+		thediv.style.display = "none";
+		thediv.innerHTML = '';
+	}
+	load();
+	return false;
+}
+
+//
 // Queries cookies for option to see if it's set to true. If null,
 // assumes as never set
 // and sets to true.
@@ -480,14 +500,15 @@ function toggleMapSize() {
 //
 // Hilite a row in a pane, also shows point on map, if possible
 //
-function highlightRow(row, lat, lng) {
+function highlightRow(row, lat, lng, icon) {
 	$(row).css("background-color", "#AFD775");
 	var location = new google.maps.LatLng(lat, lng);
 	myMarker = new google.maps.Marker( {
-		position : location,
-		title : ""
+		position : location
 	});
 	myMarker.setMap(map);
+	myMarker.setIcon(icon);
+	myMarker.setZIndex(999);
 }
 
 function normalRow(row) {
@@ -513,6 +534,7 @@ $.extend( {
 		return vars;
 	}
 });
+
 
 $(document)
 		.ready(

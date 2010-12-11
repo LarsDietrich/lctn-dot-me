@@ -11,9 +11,7 @@
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
-		<center>
-			<div id="wiki_stream">No entries found, try a bigger search area</div>
-		</center>
+		<div id="wiki_stream">No entries found, try a bigger search area</div>
 	</div>
 	<span>
 	<div class="footer-text fixed-height-footer">

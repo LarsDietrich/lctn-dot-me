@@ -49,7 +49,7 @@ function processTheseTweets(jsonData) {
 							}
 							tweet = "<tr onmouseover='highlightRow(this,"
 									+ location
-									+ ")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='"
+									+ ", \"images/twitter_icon.gif\")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='"
 									+ value.profile_image_url + "'/></td>";
 							tweet += "<td><span>"
 									+ "<a target= '_blank' href='http://twitter.com/"
