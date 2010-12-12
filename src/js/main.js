@@ -13,6 +13,8 @@ var selectedLocation;
 
 // reference to the position marker on the map (google.maps.Marker)
 var positionMarker;
+// reference to the twtter/wiki marker
+var myMarker;
 
 // reference to the streetview service for looking up details
 var streetViewService = new google.maps.StreetViewService();
@@ -28,7 +30,8 @@ var latitude;
 var longitude;
 var maptype = "roadmap";
 
-var myMarker;
+var cache = new Array(); 
+var currentSearchPosition = 0;
 
 function loadUrlParameters() {
 
@@ -85,10 +88,8 @@ function load() {
 	}
 
 	$(function() {
-
 		// if the function argument is given to overlay, it is
 		// assumed to be the onBeforeLoad event listener.
-
 		$("a[rel]").overlay( {
 			mask : '#C7D9D4',
 			effect : 'apple',
@@ -156,8 +157,6 @@ function findMe() {
 // Loads the Google Map
 //
 function showMap() {
-
-	
 	var myOptions = {
 		center : selectedLocation,
 		streetViewControl : false
@@ -228,10 +227,7 @@ function repositionMarker() {
 	if (!map) {
 		showMap();
 	}
-	if (myMarker) {
-		myMarker.setMap(null);
-	}
-	positionMarker.setMap(null);
+	clearMarkers();
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
 	if (isEnabled("streetview")) {
@@ -254,9 +250,46 @@ function repositionMarker() {
 	updateStats();
 }
 
+//
+// Update the search cache
+//
+function addToCache(location) {
+	cache[cache.length] = location;
+	currentSearchPosition = cache.length == 0 ? 0 : cache.length - 1;
+}
+
+function nextSearch() {
+	if ((currentSearchPosition + 1) < cache.length) {
+		currentSearchPosition++;
+		selectedLocation = cache[currentSearchPosition]; 
+
+		repositionMarker();
+	}
+}
+
+function previousSearch() {
+	if (!(currentSearchPosition == 0)) {
+		currentSearchPosition--;
+		selectedLocation = cache[currentSearchPosition]; 
+		repositionMarker();
+	}
+}
+
+// 
+// Clears markers off the map
+//
+function clearMarkers() {
+	if (positionMarker) {
+		positionMarker.setMap(null);
+	}
+	if (myMarker) {
+		myMarker.setMap(null);
+	}
+}
+
 // Tracks a click on the map for statistics purposes.
 function updateStats() {
-	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng="
+	jx.load("stats.php?do=stat&lat="  + selectedLocation.lat() + "&lng="
 			+ selectedLocation.lng(), function(data) {
 	});
 }
@@ -318,6 +351,7 @@ function locationFromAddr() {
 						if (status == google.maps.GeocoderStatus.OK) {
 							selectedLocation = results[0].geometry.location;
 							repositionMarker();
+							addToCache(selectedLocation);
 						} else {
 							setMessage(
 									"Not able to locate that place, please try something else.",

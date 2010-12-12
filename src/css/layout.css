@@ -290,3 +290,10 @@ input {
 	width: 470px;
 	display: none
 }
+
+.cacheimage {
+	height: 30px;
+    padding: 8px 0 0;
+    vertical-align: top;
+    width: 30px;
+}
