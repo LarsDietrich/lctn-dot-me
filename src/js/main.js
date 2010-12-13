@@ -157,6 +157,8 @@ function findMe() {
 // Loads the Google Map
 //
 function showMap() {
+
+	
 	var myOptions = {
 		center : selectedLocation,
 		streetViewControl : false
@@ -262,7 +264,6 @@ function nextSearch() {
 	if ((currentSearchPosition + 1) < cache.length) {
 		currentSearchPosition++;
 		selectedLocation = cache[currentSearchPosition]; 
-
 		repositionMarker();
 	}
 }
@@ -535,7 +536,7 @@ function toggleMapSize() {
 // Hilite a row in a pane, also shows point on map, if possible
 //
 function highlightRow(row, lat, lng, icon) {
-	$(row).css("background-color", "#AFD775");
+	$(row).css("background-color", "#B0B57B");
 	var location = new google.maps.LatLng(lat, lng);
 	myMarker = new google.maps.Marker( {
 		position : location

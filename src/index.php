@@ -25,12 +25,12 @@
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
 		<?php include("menu.php")?>
-		
-		<div style="float: right;">
-			<div style="color: #4E84A6; font-size: xx-large;display:inline" class="title-text">lctn.me</div>
-			<div style="color: #4E84A6; font-size: small; display:inline" class="title-text">Find it, share it</div>
+<!-- 		
+		<div class="header-name">
+			<div style="font-size: xx-large;display:inline" class="title-text">lctn.me</div>
+			<div style="font-size: small; display:inline" class="title-text">Find it, share it</div>
 		</div>
-
+-->
 		<?php include("container/find.php");?>
 		<?php include("container/share.php")?>
 		<?php include("container/map.php")?>

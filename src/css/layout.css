@@ -1,7 +1,7 @@
 /* Overridden styles of Blueprint to customize layout */
 body {
-	background-color: #ADD5F7;
 	font-family: sans-serif;
+	background-image: url("/images/background2.png");
 }
 
 .header-left {
@@ -24,12 +24,12 @@ body {
 }
 
 .header {
-	background: #AFD775;
+	background: #6F8787;
 	border-radius: 10px 10px 0px 0px;
 	-moz-border-radius: 10px 10px 0px 0px;
-	border-top: 1px solid #AFD775;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	border-top: 1px solid #6F8787;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
 	font-size: x-large;
@@ -39,44 +39,44 @@ body {
 }
 
 .detail {
-	background: #FFFFFF;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	background: #E5DFAE;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
 	overflow: auto;
 }
 
 .detail-map {
-	background: #FFFFFF;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
+	background: #E5DFAE;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
 }
 
 .detail-padded {
-	background: #FFFFFF;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
-	border-bottom: 1px solid #AFD775;
+	background: #E5DFAE;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	border-bottom: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 	overflow: auto;
 }
 
 .footer-text {
-	background: #AFD775;
+	background: #6F8787;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
-	border-bottom: 1px solid #AFD775;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	border-bottom: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 }
 
 .footer-clear {
-	background: #FFFFFF;
+	background: #E5DFAE;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
-	border-left: 1px solid #AFD775;
-	border-right: 1px solid #AFD775;
-	border-bottom: 1px solid #AFD775;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	border-bottom: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 }
 
@@ -157,7 +157,7 @@ input {
 	margin-top: 5px;
 	width: 200px;
 	border: 1px solid black;
-	background-color: #AFD775;
+	background-color: #6F8787;
 	filter: alpha(opacity =     80);
 	opacity: .8;
 	color: black;
@@ -278,7 +278,7 @@ input {
 	float: right;
 	text-align: right;
 	font-weight: bold;
-	color: #000;
+	color: #CC211B;
 	padding-top: 10px;
 }
 
