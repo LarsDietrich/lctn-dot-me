@@ -1,7 +1,7 @@
 /* Overridden styles of Blueprint to customize layout */
 body {
 	font-family: sans-serif;
-	background-image: url("/images/background2.png");
+	background-color: #E5DFAE;
 }
 
 .header-left {
@@ -39,20 +39,20 @@ body {
 }
 
 .detail {
-	background: #E5DFAE;
+	background: #FFF;
 	border-left: 1px solid #6F8787;
 	border-right: 1px solid #6F8787;
 	overflow: auto;
 }
 
 .detail-map {
-	background: #E5DFAE;
+	background: #FFF;
 	border-left: 1px solid #6F8787;
 	border-right: 1px solid #6F8787;
 }
 
 .detail-padded {
-	background: #E5DFAE;
+	background: #FFF;
 	border-left: 1px solid #6F8787;
 	border-right: 1px solid #6F8787;
 	border-bottom: 1px solid #6F8787;
@@ -71,7 +71,7 @@ body {
 }
 
 .footer-clear {
-	background: #E5DFAE;
+	background: #fff;
 	border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
 	border-left: 1px solid #6F8787;

@@ -263,16 +263,16 @@ function addToCache(location) {
 function nextSearch() {
 	if ((currentSearchPosition + 1) < cache.length) {
 		currentSearchPosition++;
-		selectedLocation = cache[currentSearchPosition]; 
-		repositionMarker();
+		$("#address").val(cache[currentSearchPosition]); 
+		locationFromAddr(false);
 	}
 }
 
 function previousSearch() {
 	if (!(currentSearchPosition == 0)) {
 		currentSearchPosition--;
-		selectedLocation = cache[currentSearchPosition]; 
-		repositionMarker();
+		$("#address").val(cache[currentSearchPosition]); 
+		locationFromAddr(false);
 	}
 }
 
@@ -340,7 +340,7 @@ function setMessage(message) {
 //
 // Sets the selectedLocation based on address in address box
 //
-function locationFromAddr() {
+function locationFromAddr(cache) {
 	var address = document.getElementById("address").value;
 	setMessage("");
 	geocoder
@@ -352,7 +352,9 @@ function locationFromAddr() {
 						if (status == google.maps.GeocoderStatus.OK) {
 							selectedLocation = results[0].geometry.location;
 							repositionMarker();
-							addToCache(selectedLocation);
+							if (cache) {
+								addToCache($("#address").val());
+							}
 						} else {
 							setMessage(
 									"Not able to locate that place, please try something else.",
@@ -536,7 +538,7 @@ function toggleMapSize() {
 // Hilite a row in a pane, also shows point on map, if possible
 //
 function highlightRow(row, lat, lng, icon) {
-	$(row).css("background-color", "#B0B57B");
+	$(row).css("background-color", "#AEC2AE");
 	var location = new google.maps.LatLng(lat, lng);
 	myMarker = new google.maps.Marker( {
 		position : location

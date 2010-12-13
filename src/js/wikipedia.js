@@ -54,7 +54,7 @@ function processWikiData(data) {
 					+ "</a>&nbsp;";
 			wiki += getWikiLocation(_articles[i]) + "<br/>";
 			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
-			wiki += _articles[i].summary;
+			wiki += articles[i].summary;
 			wiki += "</td></tr>";
 
 			listOfWikis[j] = wiki;
