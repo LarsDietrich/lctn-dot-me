@@ -431,19 +431,19 @@ function updateUrlWindow(link) {
 
 	output += "<a href=\"http://twitter.com/home/?status=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.jpg\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
 
 	output += "<a href=\"http://www.facebook.com/sharer.php?u=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.jpg\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
 
 	output += "<a href=\"http://del.icio.us/post?url=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.jpg\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
 
 	output += "<a href=\"mailto:?subject=";
 	output += link + "\"";
-	output += "><img class='social-button' src=\"images/email.jpg\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
+	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
 
 	document.getElementById("url-window").innerHTML = output;
 }
