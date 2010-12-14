@@ -13,14 +13,13 @@ var wikisPerPage = 5;
  * parameters supplied.
  * 
  * @param selectedLocation -
- *            the location to get wiki articles for
+ *          the location to get wiki articles for
  * @param range -
- *            the range to check for wiki articles
+ *          the range to check for wiki articles
  */
 function getArticles(selectedLocation, range) {
 	listOfWikis = [];
-	query = "feed/wikipedia.php?lat=" + selectedLocation.lat() + "&lng="
-			+ selectedLocation.lng() + "&range=" + range;
+	query = "feed/wikipedia.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&range=" + range;
 	jx.load(query, function(data) {
 		processWikiData(data);
 	}, "json");
@@ -30,7 +29,7 @@ function getArticles(selectedLocation, range) {
  * Processes the wiki data retrieved and converts it to an array.
  * 
  * @param data -
- *            data to process
+ *          data to process
  */
 function processWikiData(data) {
 	var shtml = '';
@@ -46,12 +45,9 @@ function processWikiData(data) {
 
 	if (_articles) {
 		for (i = 0; i < limit; i++) {
-			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat
-					+ "," + _articles[i].lng
+			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat + "," + _articles[i].lng
 					+ ", \"images/wikipedia_icon.png\")' onmouseout='normalRow(this)'><td>";
-			wiki += "<a target= '_blank' href='http://"
-					+ _articles[i].wikipediaUrl + "'>" + _articles[i].title
-					+ "</a>&nbsp;";
+			wiki += "<a target= '_blank' href='http://" + _articles[i].wikipediaUrl + "'>" + _articles[i].title + "</a>&nbsp;";
 			wiki += getWikiLocation(_articles[i]) + "<br/>";
 			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
 			wiki += articles[i].summary;
@@ -72,15 +68,14 @@ function processWikiData(data) {
  * image will reposition the map.
  * 
  * @param _article -
- *            article with location information
+ *          article with location information
  * @return - hyperlinked image
  */
 function getWikiLocation(_article) {
-	var result = Math.round(_article.lat * 10000) / 10000 + ","
-			+ Math.round(_article.lng * 10000) / 10000;
-	
-	output = "<div title=\"Reposition map to article location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('"
-		+ result + "')\">Go There!</div>";
+	var result = Math.round(_article.lat * 10000) / 10000 + "," + Math.round(_article.lng * 10000) / 10000;
+
+	output = "<div title=\"Reposition map to article location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('" + result
+			+ "')\">Go There!</div>";
 
 	return output;
 }
@@ -93,8 +88,7 @@ function getWikiLocation(_article) {
 function updateWikiLocationInformation() {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 		document.getElementById("wiki_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for wikipedia articles'/>";
-		getArticles(selectedLocation,
-				document.getElementById("wiki_range").value);
+		getArticles(selectedLocation, document.getElementById("wiki_range").value);
 	}
 }
 
@@ -102,7 +96,7 @@ function updateWikiLocationInformation() {
  * Loads the wikipedia container with the contents of listOfWikis.
  * 
  * @param page -
- *            page to display data for.
+ *          page to display data for.
  */
 function updateWikiDisplay(page) {
 	var startItem = (page - 1) * wikisPerPage;
@@ -126,7 +120,7 @@ function updateWikiDisplay(page) {
  * Updates the paging information at the bottom of the wiki container
  * 
  * @param page -
- *            page to create paging for.
+ *          page to create paging for.
  */
 function updateWikiPaging(page) {
 	var totalPages = Math.round(listOfWikis.length / wikisPerPage);
@@ -136,14 +130,11 @@ function updateWikiPaging(page) {
 	var next = "&nbsp;";
 	var previous = "&nbsp;";
 	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateWikiDisplay("
-				+ (page + 1) + ")\"></img>";
+		next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
 	}
 	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateWikiDisplay("
-				+ (page - 1) + ")\"></img>";
+		previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
 	}
 
-	document.getElementById("wiki_footer").innerHTML = "<center>" + previous
-			+ "&nbsp&nbsp;" + next + "</center>";
+	document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
 }
