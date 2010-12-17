@@ -31,30 +31,34 @@
 			<div style="font-size: small; display:inline" class="title-text">Find it, share it</div>
 		</div>
 -->
-		<?php include("container/find.php");?>
-		<?php include("container/share.php")?>
-		<?php include("container/map.php")?>
+		
 		<?php 
-			if ($_COOKIE['option_twitter'] == "true") {
-				include("container/twitter.php");
-			}
-		?>
-		<?php
-			if ($_COOKIE['option_streetview'] == "true") {
-				include("container/streetview.php");
-			}
-		?>
-		<?php
-			if ($_COOKIE['option_wiki'] == "true") {
-				include("container/wiki.php");
-			}
-		?>
-		<?php
-			if ($_COOKIE['option_general'] == "true") {
-				include("container/general.php");
-			}
+//			include("container/find.php");
+//			include("container/share.php");
+//			include("container/map.php");
+//			if ($_COOKIE['option_twitter'] == "true") {
+//				include("container/twitter.php");
+//			}
+//			if ($_COOKIE['option_streetview'] == "true") {
+//				include("container/streetview.php");
+//			}
+//			if ($_COOKIE['option_wiki'] == "true") {
+//				include("container/wiki.php");
+//			}
+//			if ($_COOKIE['option_general'] == "true") {
+//				include("container/general.php");
+//			}
 		?>
 
+		<?php 
+			include("container/find.php");
+			include("container/share.php");
+			include("container/map.php");
+			include("container/twitter.php");
+			include("container/streetview.php");
+			include("container/wiki.php");
+			include("container/general.php");
+		?>
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>

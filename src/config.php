@@ -19,12 +19,19 @@
 
 	    	function setOption(control) {
 	    		$.cookie("option_" + control.id, control.checked, { expires : 365 });
-	    	}
+	    		if (control.checked) {
+		    		showElement(control.id + "_container");
+		    		loadPanel(control.id);
+	    		} else {
+			    	hideElement(control.id + "_container");
+	    		}
+		    }
+
 	    </script>
 	    
 	</head>
 	<body>
-		<div class="config-header">Turn on or off various portal features. Check the box next to the feature to enable it, uncheck to disable. A refresh is required to show the update(s).</div>
+		<div class="config-header">Here you can enable or disable the optional panels. Check the box next to the panel to enable it, uncheck to disable.</div>
 		<br/>
 		<table>
 			<tr class="config-row">

@@ -1,7 +1,7 @@
 <div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="map_container" class="draggable panel">
 	<span>
 		<div class="header">
-			<div onclick="toggleMapSize()" title="Shows a map of the immediate area around the location. Click to expand and contract map">Map</div>
+			<div title="Shows a map of the immediate area around the location. Click to expand and contract map">Map</div>
 		</div>
 	</span>
 	<div class="detail-map">

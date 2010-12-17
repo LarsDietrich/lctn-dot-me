@@ -252,12 +252,15 @@ input {
 .config-row {
 	background: transparent;
 	font-size: medium;
-	color: white;
+	color: #000;
+	  border-radius: 5px 5px 5px 5px;
+	  -moz-border-radius: 5px 5px 5px 5px;
+  background-color: #E5DFAE;
 }
 
 .config-header {
 	font-size: medium;
-	color: white;
+	color: #000;
 	font-family: sans-serif;
 }
 

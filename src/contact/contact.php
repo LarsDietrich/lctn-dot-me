@@ -59,11 +59,11 @@
 				<p class="contact-text">I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<div class="contact-text">Your email address</div>
 				<div>
-					<input style="width:91.6%; font-size: large; background-color: transparent; color: #AFD775" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" />
+					<input style="width:91.6%; font-size: large; background-color: transparent; color: #000" type="text" name="emailFrom" id="emailFrom" value="<?= $_POST['emailFrom']; ?>" />
 				</div>
 				<div class="contact-text">Your message</div>
 				<div>
-					<textarea style="width: 90%; font-size: large; background-color: transparent; color: #AFD775" name="message" id="message"><?= $_POST['message']; ?></textarea>
+					<textarea style="width: 90%; font-size: large; background-color: transparent; color: #000" name="message" id="message"><?= $_POST['message']; ?></textarea>
 				</div>
 				<div>
 					<button class="buttons" type="submit" id="submit">Send Email</button>
