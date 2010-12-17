@@ -19,7 +19,7 @@ After much deliberation (with myself mostly) I decided to go with what I conside
 </ul>
 
 <p>
-The next stumbling block was user experience. How would I represent all this data (with option to add more later) in a way that was simple and fast to use? I decided paging up and down was out, so it would have to be (as close as possible to) a single page, no navigation off the page, no refreshing whatsoever (I hate pages that refresh). I went with a 4 panel layout, 2 small, 2 large with a concept of "paging" between the different data containers. This allows me to add more data as additional containers
+The next stumbling block was user experience. How would I represent all this data (with option to add more later) in a way that was simple and fast to use? I decided paging up and down was out, so it would have to be (as close as possible to) a single page, no navigation off the page, no refreshing whatsoever (I hate pages that refresh). I went with draggable panels (some optional, some not), allowing you to lay it out as you want. This also allows me to add more data at a later stage as additional panels.
 </p>
 
 <b>What it isn't!</b>
@@ -28,25 +28,10 @@ The next stumbling block was user experience. How would I represent all this dat
 This site gathers various bits of information from different location information providers out there. It's intention is not, and never will be, to replace the functionality of these sites entirely. This portal should rather be seen as a consolidation of the core functionality from these providers in one easy to use place with enough functionality to be useful. An example of this is the Google Map, it does not do nearly as much as the full Google Map site does, but that's by design. It allows you to choose a location (with different views) and zoom in and out, thats it. If you would like the full experience I suggest using the Google Map site itself.
 </p>
 
-<b>What it will be...</b>
-<br/>
-
-<p>
-Where would I like to take this? These are some of the ideas I'm toying with / working on:
-</p>
-
-<ul>
-<li>Adding user identity to allow users to store and recall locations they've selected.</li>
-<li>Adding more generic information about the location, like local time, current population, country information.</li>
-<li>Allow users to link to their social networks to pull in the networks location based information (like Facebook Places).</li>
-<li>Adding in points of interest for the location so you can, for example, find a cool coffee shop in the area.</li>
-<li>Adding in simple navigation, allowing you to generate a simple route between two points.</li>
-</ul>
-
-<p>
 There's a nice feedback button on the site that I recommend you use should you have any ideas of your own, I'd like to grow this into a useful location information portal and I think I can do this with your help. Your feedback will help design the site so go ahead and let me know what you want (or don't want!)
 </p>
+<br/>
+<br/>
 <p>Thanks</p>
-<b>Rick</b>
 </body>
 </html>
