@@ -30,7 +30,7 @@ var latitude;
 var longitude;
 var maptype = "roadmap";
 
-var cache = new Array(); 
+var cache = new Array();
 var currentSearchPosition = 0;
 
 function loadUrlParameters() {
@@ -70,7 +70,8 @@ function loadUrlParameters() {
 // load the necessary data, parse command line for location
 // information and show map
 function load() {
-	
+	showPanels();
+
 	loadUrlParameters();
 
 	// if (isEnabled("beta")) {
@@ -112,44 +113,26 @@ function load() {
 //
 function findMe() {
 	if (navigator.geolocation) {
-		navigator.geolocation
-				.getCurrentPosition(
-						function(position) {
-							selectedLocation = new google.maps.LatLng(
-									position.coords.latitude,
-									position.coords.longitude);
-							setMessage(
-									"Repositioning map to best guess of where you are (accuracy not guaranteed)",
-									"info");
-							repositionMarker();
-						},
-						function(error) {
-							setMessage(
-									"Tried to get your location, but there was a problem, sorry",
-									"error");
-							selectedLocation = new google.maps.LatLng(0, 0);
-							repositionMarker();
-						});
+		navigator.geolocation.getCurrentPosition(function(position) {
+			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+			repositionMarker();
+		}, function(error) {
+			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			selectedLocation = new google.maps.LatLng(0, 0);
+			repositionMarker();
+		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
-		geo
-				.getCurrentPosition(
-						function(position) {
-							selectedLocation = new google.maps.LatLng(
-									position.coords.latitude,
-									position.coords.longitude);
-							setMessage(
-									"Repositioning map to best guess of where you are (accuracy not guaranteed)",
-									"info");
-							repositionMarker();
-						},
-						function(error) {
-							selectedLocation = new google.maps.LatLng(0, 0);
-							setMessage(
-									"Tried to get your location, but there was a problem, sorry",
-									"error");
-							repositionMarker();
-						});
+		geo.getCurrentPosition(function(position) {
+			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
+			repositionMarker();
+		}, function(error) {
+			selectedLocation = new google.maps.LatLng(0, 0);
+			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			repositionMarker();
+		});
 	}
 }
 
@@ -158,7 +141,6 @@ function findMe() {
 //
 function showMap() {
 
-	
 	var myOptions = {
 		center : selectedLocation,
 		streetViewControl : false
@@ -178,6 +160,7 @@ function showMap() {
 	});
 
 	var panoOptions = {
+		addressControl : false,
 		navigationControlOptions : {
 			style : google.maps.NavigationControlStyle.SMALL
 		},
@@ -185,8 +168,7 @@ function showMap() {
 		linksControl : true
 	};
 
-	panorama = new google.maps.StreetViewPanorama(document
-			.getElementById("streetview"), panoOptions);
+	panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
 
 	setupListeners();
 }
@@ -209,7 +191,7 @@ function setupListeners() {
 	});
 
 	google.maps.event.addListener(panorama, 'position_changed', function() {
-		selectedLocation = event.latLng;
+		selectedLocation = panorama.getPosition();
 		repositionMarker();
 	});
 
@@ -229,22 +211,13 @@ function repositionMarker() {
 	if (!map) {
 		showMap();
 	}
+	
 	clearMarkers();
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
-	if (isEnabled("streetview")) {
-		streetViewService.getPanoramaByLocation(selectedLocation, 70,
-				processSVData);
-	}
-	if (isEnabled("wiki")) {
-		updateWikiLocationInformation();
-	}
-	if (isEnabled("twitter")) {
-		updateTwitterLocationInformation();
-	}
-	if (isEnabled("general")) {
-		updateWeatherLocationInformation();
-	}
+
+	loadPanels();
+	
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
 	document.getElementById("url").value = "";
@@ -252,6 +225,79 @@ function repositionMarker() {
 	updateStats();
 }
 
+function loadPanel(name) {
+	
+	if (selectedLocation) {
+		if (name == "streetview") {
+			streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+		}
+		
+		if (name == "wiki") {
+			updateWikiLocationInformation();
+		}
+		
+		if (name == "general") {
+			updateWeatherLocationInformation();
+			updateTimezoneLocationInformation();
+			updateGeneralLocationInformation($("#address").val());
+		}
+		
+		if (name == "twitter") {
+			updateTwitterLocationInformation();
+		}
+	}
+	
+}
+
+function loadPanels() {
+	if (isEnabled("streetview")) {
+		loadPanel("streetview");
+	} 	
+
+	if (isEnabled("wiki")) {
+		loadPanel("wiki");
+	} 
+	
+	if (isEnabled("twitter")) {
+		loadPanel("twitter");
+	}	
+	
+	if (isEnabled("general")) {
+		loadPanel("general");
+	}
+}
+
+function showPanels() {
+
+	$("#find_container").css("display", "inline");
+	$("#share_container").css("display", "inline");
+	$("#map_container").css("display", "inline");
+
+	if (isEnabled("streetview")) {
+		$("#streetview_container").css("display", "inline");
+	} else {
+		$("#streetview_container").css("display", "none");
+	}
+	
+	if (isEnabled("wiki")) {
+		$("#wiki_container").css("display", "inline");
+	} else {
+		$("#wiki_container").css("display", "none");
+	}
+	
+	if (isEnabled("twitter")) {
+		$("#twitter_container").css("display", "inline");
+	} else {
+		$("#twitter_container").css("display", "none");
+	}
+	
+	if (isEnabled("general")) {
+		$("#general_container").css("display", "inline");
+	} else {
+		$("#general_container").css("display", "none");
+	}
+
+}
 //
 // Update the search cache
 //
@@ -263,7 +309,7 @@ function addToCache(location) {
 function nextSearch() {
 	if ((currentSearchPosition + 1) < cache.length) {
 		currentSearchPosition++;
-		$("#address").val(cache[currentSearchPosition]); 
+		$("#address").val(cache[currentSearchPosition]);
 		locationFromAddr(false);
 	}
 }
@@ -271,7 +317,7 @@ function nextSearch() {
 function previousSearch() {
 	if (!(currentSearchPosition == 0)) {
 		currentSearchPosition--;
-		$("#address").val(cache[currentSearchPosition]); 
+		$("#address").val(cache[currentSearchPosition]);
 		locationFromAddr(false);
 	}
 }
@@ -290,8 +336,7 @@ function clearMarkers() {
 
 // Tracks a click on the map for statistics purposes.
 function updateStats() {
-	jx.load("stats.php?do=stat&lat="  + selectedLocation.lat() + "&lng="
-			+ selectedLocation.lng(), function(data) {
+	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
 	});
 }
 
@@ -306,7 +351,6 @@ function updateStats() {
 //
 function processSVData(data, status) {
 	if (status == google.maps.StreetViewStatus.OK) {
-		showPanel("streetview_container");
 		var markerPanoID = data.location.pano;
 		panorama.setPano(markerPanoID);
 		panorama.setPov( {
@@ -320,7 +364,6 @@ function processSVData(data, status) {
 		positionMarker.setMap(map);
 		panorama.setVisible(true);
 	} else {
-		hidePanel("streetview_container");
 		setMessage("Streetview not available at this location.", "notice");
 		panorama.setVisible(false);
 	}
@@ -343,24 +386,19 @@ function setMessage(message) {
 function locationFromAddr(cache) {
 	var address = document.getElementById("address").value;
 	setMessage("");
-	geocoder
-			.geocode(
-					{
-						'address' : address
-					},
-					function(results, status) {
-						if (status == google.maps.GeocoderStatus.OK) {
-							selectedLocation = results[0].geometry.location;
-							repositionMarker();
-							if (cache) {
-								addToCache($("#address").val());
-							}
-						} else {
-							setMessage(
-									"Not able to locate that place, please try something else.",
-									"info");
-						}
-					});
+	geocoder.geocode( {
+		'address' : address
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			selectedLocation = results[0].geometry.location;
+			repositionMarker();
+			if (cache) {
+				addToCache($("#address").val());
+			}
+		} else {
+			setMessage("Not able to locate that place, please try something else.", "info");
+		}
+	});
 }
 
 //
@@ -377,34 +415,27 @@ function locationFromAddress(address) {
 // coordinates
 //
 function reverseCodeLatLng() {
-	geocoder
-			.geocode(
-					{
-						'latLng' : selectedLocation
-					},
-					function(results, status) {
-						document.getElementById("timezone_stream").innerHTML = "";
-						output = "";
-						var address = "";
-						if (status == google.maps.GeocoderStatus.OK) {
-							if (results.length > 0) {
-								address = results[0].formatted_address;
-								document.getElementById("address").value = address;
-								updateTimezoneLocationInformation();
-							} else {
-								setMessage(
-										"No addresses were found at this location.",
-										"info");
-							}
-						} else {
-							setMessage(
-									"Unable to determine address from current location",
-									"error");
-						}
-						if (isEnabled("general")) {
-							updateGeneralLocationInformation(address);
-						}
-					});
+	geocoder.geocode( {
+		'latLng' : selectedLocation
+	}, function(results, status) {
+		document.getElementById("timezone_stream").innerHTML = "";
+		output = "";
+		var address = "";
+		if (status == google.maps.GeocoderStatus.OK) {
+			if (results.length > 0) {
+				address = results[0].formatted_address;
+				$("#address").val(address);
+				updateTimezoneLocationInformation();
+			} else {
+				setMessage("No addresses were found at this location.", "info");
+			}
+		} else {
+			setMessage("Unable to determine address from current location", "error");
+		}
+		if (isEnabled("general")) {
+			updateGeneralLocationInformation($("#address").val());
+		}
+	});
 }
 
 //
@@ -413,15 +444,13 @@ function reverseCodeLatLng() {
 //
 function shortenUrl() {
 	root = "http://" + top.location.host + "/";
-	longurl = root + "?lat=" + selectedLocation.lat() + "&lng="
-			+ selectedLocation.lng() + "&heading=" + heading + "&pitch="
-			+ pitch + "&zoom=" + zoom + "&maptype=" + maptype;
+	longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom
+			+ "&maptype=" + maptype;
 	shorturl = "";
-	jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl),
-			function(data) {
-				document.getElementById("url").value = root + data;
-				updateUrlWindow(root + data);
-			});
+	jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) {
+		document.getElementById("url").value = root + data;
+		updateUrlWindow(root + data);
+	});
 }
 
 //
@@ -451,11 +480,8 @@ function updateUrlWindow(link) {
 }
 
 function updateGeneralLocationInformation(address) {
-	var output = "You are positioned at <b>"
-			+ Math.round(selectedLocation.lng() * 10000) / 10000
-			+ "</b> longitude and <b>"
-			+ Math.round(selectedLocation.lat() * 10000) / 10000
-			+ "</b> latitude";
+	var output = "You are positioned at <b>" + Math.round(selectedLocation.lng() * 10000) / 10000 + "</b> longitude and <b>"
+			+ Math.round(selectedLocation.lat() * 10000) / 10000 + "</b> latitude";
 	if (!(address == "")) {
 		output += ", which is also known as <b>" + address + "</b>";
 	}
@@ -475,22 +501,6 @@ function beta() {
 		thediv.style.display = "none";
 		thediv.innerHTML = '';
 	}
-	return false;
-}
-
-//
-//Display the beta page.
-//
-function loading() {
-	var thediv = document.getElementById('displaybox');
-	if (thediv.style.display == "none") {
-		thediv.style.display = "";
-		thediv.innerHTML = "<span class='displaybox-large'/>Loading...<img src='images/spinner.gif'/></span>";
-	} else {
-		thediv.style.display = "none";
-		thediv.innerHTML = '';
-	}
-	load();
 	return false;
 }
 
@@ -534,6 +544,27 @@ function toggleMapSize() {
 	}
 }
 
+function toggleStreetViewSize() {
+	var max_width = "955px";
+	var normal_width = "470px";
+	var max_height = "600px";
+	var normal_height = "465px";
+
+	if ($("#streetview_container").css("width") == max_width) {
+		$("#streetview_container").css("width", normal_width);
+		$("#streetview").css("width", normal_width);
+		$("#streetview_container").css("height", normal_height);
+		$("#streetview").css("height", normal_height);
+		google.maps.event.trigger(map, "resize");
+	} else {
+		$("#streetview_container").css("width", max_width);
+		$("#streetview").css("width", max_width);
+		$("#streetview_container").css("height", max_height);
+		$("#streetview").css("height", max_height);
+		google.maps.event.trigger(map, "resize");
+	}
+}
+
 //
 // Hilite a row in a pane, also shows point on map, if possible
 //
@@ -553,110 +584,55 @@ function normalRow(row) {
 	myMarker.setMap(null);
 }
 
-function hidePanel(name) {
+function hideElement(name) {
 	$("#" + name).css("display", "none");
 }
 
-function showPanel(name) {
-	$("#" + name).css("display", "block");
+function showElement(name) {
+	$("#" + name).css("display", "inline");
 }
+		    
 
 $.extend( {
 	getUrlVars : function() {
 		var vars = {};
-		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-				function(m, key, value) {
-					vars[key] = value;
-				});
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+			vars[key] = value;
+		});
 		return vars;
 	}
 });
 
-
-$(document)
-		.ready(
-				function() {
-					$("div.panel")
-							.each(
-									function() {
-										var control = $(this);
-										$(control)
-												.Draggable(
-														{
-															handle : 'span',
-															zIndex : '1000',
-															onChange : function() {
-																$
-																		.cookie(
-																				$(
-																						control)
-																						.attr(
-																								"id")
-																						+ "_top",
-																				$(
-																						control)
-																						.css(
-																								"top"),
-																				{
-																					expires : 365
-																				});
-																$
-																		.cookie(
-																				$(
-																						control)
-																						.attr(
-																								"id")
-																						+ "_left",
-																				$(
-																						control)
-																						.css(
-																								"left"),
-																				{
-																					expires : 365
-																				});
-															},
-															onStop : function() {
-																$(control)
-																		.css(
-																				"z-index",
-																				"9");
-															},
-															onStart : function() {
-																$("div.panel")
-																		.each(
-																				function() {
-																					$(
-																							this)
-																							.css(
-																									"z-index",
-																									"10");
-																				});
-															},
-															snapDistance : 10,
-															grid : 20
-														})
-
-										$(control).css(
-												"top",
-												($.cookie($(control).attr("id")
-														+ "_top") ? $.cookie($(
-														control).attr("id")
-														+ "_top") : 40));
-										$(control)
-												.css(
-														"left",
-														($.cookie($(control)
-																.attr("id")
-																+ "_left")) ? $
-																.cookie($(
-																		control)
-																		.attr(
-																				"id")
-																		+ "_left")
-																: 20);
-
-										setMessage("Panels can be dragged by clicking on the title and dragging with the mouse");
-
-										$(control).css("display", "inline");
-									});
+$(document).ready(function() {
+	$("div.panel").each(function() {
+		var control = $(this);
+		$(control).Draggable( {
+			handle : 'span',
+			zIndex : '1000',
+			opacity : 0.8,
+			autoSize : true,
+			onChange : function() {
+				$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
+					expires : 365
 				});
+				$.cookie($(control).attr("id") + "_left", $(control).css("left"), {
+					expires : 365
+				});
+			},
+			onStop : function() {
+				$(control).css("z-index", "9");
+			},
+			onStart : function() {
+			},
+			snapDistance : 5,
+			grid : 5
+		})
+
+		$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
+		$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
+
+		setMessage("Panels can be dragged by clicking on the title and dragging with the mouse");
+
+//		$(control).css("display", "inline");
+	});
+});

@@ -50,7 +50,7 @@ function processWikiData(data) {
 			wiki += "<a target= '_blank' href='http://" + _articles[i].wikipediaUrl + "'>" + _articles[i].title + "</a>&nbsp;";
 			wiki += getWikiLocation(_articles[i]) + "<br/>";
 			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
-			wiki += articles[i].summary;
+			wiki += _articles[i].summary;
 			wiki += "</td></tr>";
 
 			listOfWikis[j] = wiki;
@@ -130,10 +130,10 @@ function updateWikiPaging(page) {
 	var next = "&nbsp;";
 	var previous = "&nbsp;";
 	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
+		next = "<img class='footer-icon' src=\"images/next.jpeg\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
 	}
 	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
+		previous = "<img class='footer-icon' src=\"images/previous.jpeg\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
 	}
 
 	document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";

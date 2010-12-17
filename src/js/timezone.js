@@ -37,7 +37,7 @@ function processTimezoneData(jsonData) {
 	var sunset = jsonData.sunset.substring(11);
 	output = "The time at this location is <b>" + time + "</b>, sunrise will be at <b>" + sunrise + "</b> and sunset at <b>" + sunset + "</b>.";
 	document.getElementById("timezone_stream").innerHTML = output;
-	updateBackground(time, sunrise, sunset);
+//	updateBackground(time, sunrise, sunset);
 
 }
 
@@ -52,21 +52,21 @@ function updateTimezoneLocationInformation() {
 	}
 }
 
-function updateBackground(time, sunrise, sunset) {
-	var color = color_morning;
-	
-	if ((time.substring(0,2) > sunset.substring(0,2)) || (time.substring(0,2) < sunrise.substring(0,2))) {
-		color = color_night;
-	} else if ((time.substring(0,2) > sunrise.substring(0,2)) && (time.substring(0,2) <= 9)) {
-		color = color_morning;
-	} else if ((time.substring(0,2) > 9) && (time.substring(0,2) <= 12)) {
-		color = color_late_morning;
-	} else if ((time.substring(0,2) > 12) && (time.substring(0,2) <= 15)) {
-		color = color_midday;
-	} else if ((time.substring(0,2) > 15) && (time.substring(0,2) <= sunset.substring(0,2))) {
-		color = color_afternoon;
-	}
-
-	$("body").animate({backgroundColor: "#" + color}, 1000);
-
-}
+//function updateBackground(time, sunrise, sunset) {
+//	var color = color_morning;
+//	
+//	if ((time.substring(0,2) > sunset.substring(0,2)) || (time.substring(0,2) < sunrise.substring(0,2))) {
+//		color = color_night;
+//	} else if ((time.substring(0,2) > sunrise.substring(0,2)) && (time.substring(0,2) <= 9)) {
+//		color = color_morning;
+//	} else if ((time.substring(0,2) > 9) && (time.substring(0,2) <= 12)) {
+//		color = color_late_morning;
+//	} else if ((time.substring(0,2) > 12) && (time.substring(0,2) <= 15)) {
+//		color = color_midday;
+//	} else if ((time.substring(0,2) > 15) && (time.substring(0,2) <= sunset.substring(0,2))) {
+//		color = color_afternoon;
+//	}
+//
+//	$("body").animate({backgroundColor: "#" + color}, 1000);
+//
+//}

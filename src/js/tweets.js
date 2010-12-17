@@ -237,11 +237,11 @@ function updateTwitterPaging(page) {
 	var previous = "&nbsp;";
 
 	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/arrow-right.png\" onclick=\"updateTwitterDisplay("
+		next = "<img class='footer-icon' src=\"images/next.jpeg\" onclick=\"updateTwitterDisplay("
 				+ (page + 1) + ")\"></img>";
 	}
 	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/arrow-left.png\" onclick=\"updateTwitterDisplay("
+		previous = "<img class='footer-icon' src=\"images/previous.jpeg\" onclick=\"updateTwitterDisplay("
 				+ (page - 1) + ")\"></img>";
 	}
 	document.getElementById("twitter_footer").innerHTML = "<center>" + previous
