@@ -33,11 +33,6 @@
 					if(hasError == false) {
 						$(this).hide();
 						$("#sendEmail buttons").append('<img src="/images/loading.gif" alt="Loading" id="loading" />');
-						alert(emailTo);
-						alert(emailFromVal);
-						alert(messageVal);
-						alert(subject);
-
 						$.post("contact/email.php",
 			   				{ emailTo: emailTo, emailFrom: emailFromVal, subject: subject, message: messageVal },
 			   					function(data){
