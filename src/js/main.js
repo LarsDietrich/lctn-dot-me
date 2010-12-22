@@ -1,28 +1,25 @@
 var user;
 
-var nextAvailableContainer;
-var prevAvailableContainer;
-
-// reference to the main map
+// reference to the main map in the map container.
 var map;
-// reference to the panorama of the streetview
+// reference to the panorama of the streetview.
 var panorama;
 
-// stores current location (google.maps.LatLng)
+// stores current location (of type google.maps.LatLng).
 var selectedLocation;
 
-// reference to the position marker on the map (google.maps.Marker)
+// reference to the position marker on the map (of type google.maps.Marker).
 var positionMarker;
-// reference to the twtter/wiki marker
-var myMarker;
 
-// reference to the streetview service for looking up details
-var streetViewService = new google.maps.StreetViewService();
+// reference to the additional marker on the page, used to show twtter/wiki
+// locations.
+var infoMarker;
 
-// reference to the geocode for coding / decoding addresses
+// reference to the geocoder for coding / decoding addresses.
 var geocoder = new google.maps.Geocoder();
 
-// information on the streetview/map POV
+// information on the streetview/map, this information is saved and reloaded
+// with the generated short url.
 var heading = 0;
 var pitch = 0;
 var zoom = 12;
@@ -30,10 +27,26 @@ var latitude;
 var longitude;
 var maptype = "roadmap";
 
-var cache = new Array();
+// cache to store a history of previously selected locations.
+var locationCache = new Array();
+// position in locationCache the user is currently at.
 var currentSearchPosition = 0;
 
+/**
+ * Loads the parameters passed through on the URL into variables. Used to
+ * preload a location.
+ */
 function loadUrlParameters() {
+
+	$.extend( {
+		getUrlVars : function() {
+			var vars = {};
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+	});
 
 	latitude = parseFloat($.getUrlVars()['lat']);
 	if (!latitude) {
@@ -67,16 +80,18 @@ function loadUrlParameters() {
 
 }
 
-// load the necessary data, parse command line for location
-// information and show map
+/**
+ * This is the entry point for the page. Loads the necessary data, parses the
+ * URL for location information and shows loads the page containers.
+ */
 function load() {
-	showPanels();
+
+	showContainers();
 
 	loadUrlParameters();
 
-	// if (isEnabled("beta")) {
+	// TODO: Remove when live
 	beta();
-	// }
 
 	updateUrlWindow("");
 
@@ -84,68 +99,103 @@ function load() {
 		findMe();
 	} else {
 		selectedLocation = new google.maps.LatLng(latitude, longitude);
-		showMap();
-		repositionMarker();
+		loadMap();
+		reloadContainers();
 	}
 
+	// setup the popup overlay for later use
 	$(function() {
-		// if the function argument is given to overlay, it is
-		// assumed to be the onBeforeLoad event listener.
 		$("a[rel]").overlay( {
 			mask : '#C7D9D4',
 			effect : 'apple',
-
 			onBeforeLoad : function() {
-				// grap wrapper element inside content
+				// grab wrapper element inside content
 			var wrap = this.getOverlay().find(".contentWrap");
 			// load the page specified in the trigger
 			wrap.load(this.getTrigger().attr("href"));
-
 		}
 		});
 	});
 
+	$(document).ready(function() {
+		$("div.panel").each(function() {
+			var control = $(this);
+			$(control).Draggable( {
+				handle : 'span',
+				zIndex : '1000',
+				opacity : 0.8,
+				autoSize : true,
+				onChange : function() {
+					$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
+						expires : 365
+					});
+					$.cookie($(control).attr("id") + "_left", $(control).css("left"), {
+						expires : 365
+					});
+				},
+				onStop : function() {
+					$(control).css("z-index", "9");
+				},
+				onStart : function() {
+				},
+				snapDistance : 5,
+				grid : 5
+			})
+
+			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
+			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
+
+			setMessage("Windows can be dragged by clicking on the title and dragging with the mouse");
+
+			// $(control).css("display", "inline");
+			});
+	});
+
 }
 
-// 
-// Tries to get the users current location using build in
-// geolocation functionality.
-//
+/**
+ * Tries to get the users current location using built in geolocation
+ * functionality. Reloads the containers after attempt.
+ */
 function findMe() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
-			repositionMarker();
+			reloadContainers();
 		}, function(error) {
 			setMessage("Tried to get your location, but there was a problem, sorry", "error");
 			selectedLocation = new google.maps.LatLng(0, 0);
-			repositionMarker();
+			reloadContainers();
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
 		geo.getCurrentPosition(function(position) {
 			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
-			repositionMarker();
+			reloadContainers();
 		}, function(error) {
 			selectedLocation = new google.maps.LatLng(0, 0);
 			setMessage("Tried to get your location, but there was a problem, sorry", "error");
-			repositionMarker();
+			reloadContainers();
 		});
 	}
 }
 
-//
-// Loads the Google Map
-//
-function showMap() {
+/**
+ * Loads the Map in it's container based on the current value of
+ * selectedLocation. Will also set the zoom and maptype if available and
+ * position a marker at the point of selectedLocation. Also adds event listeners
+ * to the map to handle clicks and movement.
+ */
+function loadMap() {
 
-	var myOptions = {
+	var myMapOptions = {
 		center : selectedLocation,
 		streetViewControl : false
 	}
-	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
@@ -155,31 +205,12 @@ function showMap() {
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map,
-		title : "You are here",
 		icon : image
 	});
 
-	var panoOptions = {
-		addressControl : false,
-		navigationControlOptions : {
-			style : google.maps.NavigationControlStyle.SMALL
-		},
-		enableCloseButton : false,
-		linksControl : true
-	};
-
-	panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
-
-	setupListeners();
-}
-
-//
-// Various listeners to listen for changes on the map(s):
-// 
-function setupListeners() {
 	google.maps.event.addListener(map, 'click', function(event) {
 		selectedLocation = event.latLng;
-		repositionMarker();
+		reloadContainers();
 	});
 
 	google.maps.event.addListener(map, 'zoom_changed', function() {
@@ -190,34 +221,28 @@ function setupListeners() {
 		maptype = map.getMapTypeId();
 	});
 
-	google.maps.event.addListener(panorama, 'position_changed', function() {
-		selectedLocation = panorama.getPosition();
-		repositionMarker();
-	});
-
-	google.maps.event.addListener(panorama, 'pov_changed', function() {
-		heading = panorama.getPov().heading;
-		pitch = panorama.getPov().pitch;
-	});
 }
 
-//
-// Moves the marker to a new location specified by selectedLocation.
-// Refreshes screen for anything
-// that uses the location (like tweets and streetview)
-//
-function repositionMarker() {
-
-	if (!map) {
-		showMap();
-	}
-	
+/**
+ * Clears markers from map and reloads the positionMarker based on
+ * selectedLocation.
+ */
+function reloadMarkers() {
 	clearMarkers();
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
 
-	loadPanels();
-	
+}
+
+/**
+ * Reloads container information based on selectedLocation
+ */
+function reloadContainers() {
+	if (!map) {
+		loadMap();
+	}
+	reloadMarkers();
+	loadAllContainers();
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
 	document.getElementById("url").value = "";
@@ -225,49 +250,84 @@ function repositionMarker() {
 	updateStats();
 }
 
-function loadPanel(name) {
-	
+/**
+ * Attempts to load all enabled containers.
+ */
+function loadAllContainers() {
+	if (isEnabled("streetview")) {
+		loadContainer("streetview");
+	}
+
+	if (isEnabled("wiki")) {
+		loadContainer("wiki");
+	}
+
+	if (isEnabled("twitter")) {
+		loadContainer("twitter");
+	}
+
+	if (isEnabled("general")) {
+		loadContainer("general");
+	}
+}
+
+/**
+ * Triggers an update/load of a container and its data.
+ * 
+ * @param name -
+ *          the container name to update/load
+ */
+function loadContainer(name) {
+
 	if (selectedLocation) {
 		if (name == "streetview") {
-			streetViewService.getPanoramaByLocation(selectedLocation, 70, processSVData);
+			if (!panorama) {
+				var panoOptions = {
+					addressControl : false,
+					navigationControlOptions : {
+						style : google.maps.NavigationControlStyle.SMALL
+					},
+					enableCloseButton : false,
+					linksControl : true
+				};
+
+				panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
+
+				google.maps.event.addListener(panorama, 'position_changed', function() {
+					selectedLocation = panorama.getPosition();
+					reloadMarkers();
+				});
+
+				google.maps.event.addListener(panorama, 'pov_changed', function() {
+					heading = panorama.getPov().heading;
+					pitch = panorama.getPov().pitch;
+				});
+
+			}
+			var streetViewService = new google.maps.StreetViewService();
+			streetViewService.getPanoramaByLocation(selectedLocation, 50, processSVData);
 		}
-		
+
 		if (name == "wiki") {
 			updateWikiLocationInformation();
 		}
-		
+
 		if (name == "general") {
 			updateWeatherLocationInformation();
 			updateTimezoneLocationInformation();
 			updateGeneralLocationInformation($("#address").val());
 		}
-		
+
 		if (name == "twitter") {
 			updateTwitterLocationInformation();
 		}
 	}
-	
 }
 
-function loadPanels() {
-	if (isEnabled("streetview")) {
-		loadPanel("streetview");
-	} 	
-
-	if (isEnabled("wiki")) {
-		loadPanel("wiki");
-	} 
-	
-	if (isEnabled("twitter")) {
-		loadPanel("twitter");
-	}	
-	
-	if (isEnabled("general")) {
-		loadPanel("general");
-	}
-}
-
-function showPanels() {
+/**
+ * Displays containers on the page if enabled, hides if disabled.
+ */
+function showContainers() {
 
 	$("#find_container").css("display", "inline");
 	$("#share_container").css("display", "inline");
@@ -278,19 +338,19 @@ function showPanels() {
 	} else {
 		$("#streetview_container").css("display", "none");
 	}
-	
+
 	if (isEnabled("wiki")) {
 		$("#wiki_container").css("display", "inline");
 	} else {
 		$("#wiki_container").css("display", "none");
 	}
-	
+
 	if (isEnabled("twitter")) {
 		$("#twitter_container").css("display", "inline");
 	} else {
 		$("#twitter_container").css("display", "none");
 	}
-	
+
 	if (isEnabled("general")) {
 		$("#general_container").css("display", "inline");
 	} else {
@@ -298,57 +358,68 @@ function showPanels() {
 	}
 
 }
-//
-// Update the search cache
-//
+
+/**
+ * Adds an element to the location search cache (locationCache)
+ * 
+ * @param location -
+ *          a string value of the location (eg. Johannesburg)
+ */
 function addToCache(location) {
-	cache[cache.length] = location;
-	currentSearchPosition = cache.length == 0 ? 0 : cache.length - 1;
+	locationCache[locationCache.length] = location;
+	currentSearchPosition = locationCache.length == 0 ? 0 : locationCache.length - 1;
 }
 
+/**
+ * Triggers a reload of the next item in the locationCache based on the
+ * currentSearchPosition. Traverses the cache in a forward direction.
+ */
 function nextSearch() {
-	if ((currentSearchPosition + 1) < cache.length) {
+	if ((currentSearchPosition + 1) < locationCache.length) {
 		currentSearchPosition++;
-		$("#address").val(cache[currentSearchPosition]);
-		locationFromAddr(false);
+		$("#address").val(locationCache[currentSearchPosition]);
+		locateAndRefresh(false);
 	}
 }
 
+/**
+ * Triggers a reload of the previous item in the locationCache based on the
+ * currentSearchPosition. Traverses the cache in a backward direction.
+ */
 function previousSearch() {
 	if (!(currentSearchPosition == 0)) {
 		currentSearchPosition--;
-		$("#address").val(cache[currentSearchPosition]);
-		locationFromAddr(false);
+		$("#address").val(locationCache[currentSearchPosition]);
+		locateAndRefresh(false);
 	}
 }
 
-// 
-// Clears markers off the map
-//
+/**
+ * Clears all markers from the map.
+ */
 function clearMarkers() {
 	if (positionMarker) {
 		positionMarker.setMap(null);
 	}
-	if (myMarker) {
-		myMarker.setMap(null);
+	if (infoMarker) {
+		infoMarker.setMap(null);
 	}
 }
 
-// Tracks a click on the map for statistics purposes.
+/**
+ * Tracks click statistics by calling stats.php
+ */
 function updateStats() {
 	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
 	});
 }
 
-//
-// Try find street view data, load appropriate panorama panel and
-// set selectedLocation.
-// If the selectedLocation does not have a streetview associated
-// with it, will
-// attempt to find a streetview within a specified distance and
-// reposition the map
-// to that point.
-//
+/**
+ * Try find street view data, load appropriate panorama panel using
+ * selectedLocation. If the selectedLocation does not have a streetview
+ * associated with it, will attempt to find a streetview within a specified
+ * distance and reposition the map to that point.
+ */
 function processSVData(data, status) {
 	if (status == google.maps.StreetViewStatus.OK) {
 		var markerPanoID = data.location.pano;
@@ -358,20 +429,24 @@ function processSVData(data, status) {
 			pitch : pitch,
 			zoom : 1
 		});
-		positionMarker.setMap(null);
-		selectedLocation = data.location.latLng;
-		positionMarker.setPosition(selectedLocation);
-		positionMarker.setMap(map);
+		// positionMarker.setMap(null);
+		// selectedLocation = data.location.latLng;
+		// positionMarker.setPosition(selectedLocation);
+		// positionMarker.setMap(map);
 		panorama.setVisible(true);
+		alert("in processsvdata");
 	} else {
 		setMessage("Streetview not available at this location.", "notice");
 		panorama.setVisible(false);
 	}
 }
 
-// 
-// Sets a message in the upper right message display area
-// 
+/**
+ * Sets the message are in the upper right area
+ * 
+ * @param message -
+ *          message to send, send blank to clear.
+ */
 function setMessage(message) {
 	if (message == "") {
 		document.getElementById("message").innerHTML = "";
@@ -380,10 +455,14 @@ function setMessage(message) {
 	}
 }
 
-//
-// Sets the selectedLocation based on address in address box
-//
-function locationFromAddr(cache) {
+/**
+ * Geocode the current "address" in the address field, set the selectedLocation
+ * to it and reposition the map and reload all data.
+ * 
+ * @param addToCache -
+ *          whether this position should be added to the cache or not.
+ */
+function locateAndRefresh(addToCache) {
 	var address = document.getElementById("address").value;
 	setMessage("");
 	geocoder.geocode( {
@@ -391,8 +470,8 @@ function locationFromAddr(cache) {
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			selectedLocation = results[0].geometry.location;
-			repositionMarker();
-			if (cache) {
+			reloadContainers();
+			if (addToCache) {
 				addToCache($("#address").val());
 			}
 		} else {
@@ -401,19 +480,19 @@ function locationFromAddr(cache) {
 	});
 }
 
-//
-// Reverse geocodes the address, moves the marker to the new
-// location
-//
-function locationFromAddress(address) {
+/**
+ * Use the supplied address to locateAndRefresh()
+ */
+function useAddressToReposition(address) {
 	document.getElementById("address").value = address;
-	locationFromAddr();
+	locateAndRefresh(true);
 }
 
-//
-// Sets the address box based on current selectedLocation
-// coordinates
-//
+/**
+ * Geocode using the currenct selectedLocation value. Used to detemine the
+ * physical address of the location. Also triggers an update of the "general"
+ * information container (timezone, weather, lat/lng).
+ */
 function reverseCodeLatLng() {
 	geocoder.geocode( {
 		'latLng' : selectedLocation
@@ -432,16 +511,17 @@ function reverseCodeLatLng() {
 		} else {
 			setMessage("Unable to determine address from current location", "error");
 		}
+
 		if (isEnabled("general")) {
 			updateGeneralLocationInformation($("#address").val());
 		}
 	});
 }
 
-//
-// Determine the shortened URL based on the current location, saves
-// to DB
-//
+/**
+ * Builds the long URL to be shortened and saved to the database. Calls
+ * shrink.php to do the shortening and saving. Updates the "short Url" box.
+ */
 function shortenUrl() {
 	root = "http://" + top.location.host + "/";
 	longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom
@@ -453,10 +533,13 @@ function shortenUrl() {
 	});
 }
 
-//
-// Updates the icons on the social bar with the current shortened
-// link
-//
+/**
+ * Updates the link url values of the social icons to the supplied link so that
+ * clicking on them will trigger the relevant social add function correctly.
+ * 
+ * @param link -
+ *          the short url to pass to the social zone.
+ */
 function updateUrlWindow(link) {
 	var output = "";
 
@@ -479,6 +562,12 @@ function updateUrlWindow(link) {
 	document.getElementById("url-window").innerHTML = output;
 }
 
+/**
+ * Updates the location information in the General container.
+ * 
+ * @param address -
+ *          string value of the current address.
+ */
 function updateGeneralLocationInformation(address) {
 	var output = "You are positioned at <b>" + Math.round(selectedLocation.lng() * 10000) / 10000 + "</b> longitude and <b>"
 			+ Math.round(selectedLocation.lat() * 10000) / 10000 + "</b> latitude";
@@ -489,14 +578,14 @@ function updateGeneralLocationInformation(address) {
 	document.getElementById("location_stream").innerHTML = output;
 }
 
-//
-// Display the beta page.
-//
+/**
+ * Displays the BETA page
+ */
 function beta() {
 	var thediv = document.getElementById('displaybox');
 	if (thediv.style.display == "none") {
 		thediv.style.display = "";
-		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>This site is still under development, feel free to use it but expect some issues. I cannot take responsibility for the stability and accuracy of data being displayed.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
+		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>This site is still under development, feel free to use it but expect some issues. I take no responsibility for the stability and accuracy of data being displayed.<br/><br/>Please report any issues using the Contact link at the top right of the page.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
 	} else {
 		thediv.style.display = "none";
 		thediv.innerHTML = '';
@@ -504,11 +593,13 @@ function beta() {
 	return false;
 }
 
-//
-// Queries cookies for option to see if it's set to true. If null,
-// assumes as never set
-// and sets to true.
-//
+/**
+ * Tries to load an "option" from the sites cookie. If the option is found,
+ * returns the value (true/false). If it is NOT found, sets it to false
+ * 
+ * @param option -
+ *          option to check for
+ */
 function isEnabled(option) {
 	var result = false;
 	var cookie = $.cookie("option_" + option);
@@ -523,6 +614,9 @@ function isEnabled(option) {
 	return result;
 }
 
+/**
+ * Toggles the map size between large and normal
+ */
 function toggleMapSize() {
 	var max_width = "955px";
 	var normal_width = "470px";
@@ -544,6 +638,9 @@ function toggleMapSize() {
 	}
 }
 
+/**
+ * Toggles the streetview size between large and normal
+ */
 function toggleStreetViewSize() {
 	var max_width = "955px";
 	var normal_width = "470px";
@@ -565,74 +662,56 @@ function toggleStreetViewSize() {
 	}
 }
 
-//
-// Hilite a row in a pane, also shows point on map, if possible
-//
+/**
+ * "Hilites" a row in the active container and shows the point on the map. Used
+ * by wiki and twitter containers
+ * 
+ * @param row -
+ *          the element "row" to hilite
+ * @param location -
+ *          the location to put on the map (google.map.LatLng)
+ * @param icon -
+ *          the icon image to use
+ */
 function highlightRow(row, lat, lng, icon) {
 	$(row).css("background-color", "#AEC2AE");
 	var location = new google.maps.LatLng(lat, lng);
-	myMarker = new google.maps.Marker( {
+	infoMarker = new google.maps.Marker( {
 		position : location
 	});
-	myMarker.setMap(map);
-	myMarker.setIcon(icon);
-	myMarker.setZIndex(999);
+	infoMarker.setMap(map);
+	infoMarker.setIcon(icon);
+	infoMarker.setZIndex(999);
 }
 
+/**
+ * Return the element represented by the row to normal (from hilighted) and
+ * clear the map marker.
+ * 
+ * @param row
+ * @return
+ */
 function normalRow(row) {
 	$(row).css("background-color", "transparent");
-	myMarker.setMap(null);
+	infoMarker.setMap(null);
 }
 
+/**
+ * "Hides" an element by setting it's display to none.
+ * 
+ * @param name -
+ *          id of element to hide
+ */
 function hideElement(name) {
 	$("#" + name).css("display", "none");
 }
 
+/**
+ * "Shows" an element by setting it's display to inline.
+ * 
+ * @param name -
+ *          id of element to hide
+ */
 function showElement(name) {
 	$("#" + name).css("display", "inline");
 }
-		    
-
-$.extend( {
-	getUrlVars : function() {
-		var vars = {};
-		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-			vars[key] = value;
-		});
-		return vars;
-	}
-});
-
-$(document).ready(function() {
-	$("div.panel").each(function() {
-		var control = $(this);
-		$(control).Draggable( {
-			handle : 'span',
-			zIndex : '1000',
-			opacity : 0.8,
-			autoSize : true,
-			onChange : function() {
-				$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
-					expires : 365
-				});
-				$.cookie($(control).attr("id") + "_left", $(control).css("left"), {
-					expires : 365
-				});
-			},
-			onStop : function() {
-				$(control).css("z-index", "9");
-			},
-			onStart : function() {
-			},
-			snapDistance : 5,
-			grid : 5
-		})
-
-		$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
-		$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
-
-		setMessage("Panels can be dragged by clicking on the title and dragging with the mouse");
-
-//		$(control).css("display", "inline");
-	});
-});

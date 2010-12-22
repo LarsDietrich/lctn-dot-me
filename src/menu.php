@@ -5,5 +5,5 @@
 
 	<?php //include("openid/google.php")?>
 
-	<div class="message" id="message"></div>
+	<li><div class="message" id="message"></div></li>
 </ul>

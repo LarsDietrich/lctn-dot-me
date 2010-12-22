@@ -74,7 +74,7 @@ function processWikiData(data) {
 function getWikiLocation(_article) {
 	var result = Math.round(_article.lat * 10000) / 10000 + "," + Math.round(_article.lng * 10000) / 10000;
 
-	output = "<div title=\"Reposition map to article location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"locationFromAddress('" + result
+	output = "<div title=\"Reposition map to article location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
 			+ "')\">Go There!</div>";
 
 	return output;

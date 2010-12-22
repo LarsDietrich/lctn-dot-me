@@ -21,7 +21,7 @@
 	    		$.cookie("option_" + control.id, control.checked, { expires : 365 });
 	    		if (control.checked) {
 		    		showElement(control.id + "_container");
-		    		loadPanel(control.id);
+		    		loadContainer(control.id);
 	    		} else {
 			    	hideElement(control.id + "_container");
 	    		}
