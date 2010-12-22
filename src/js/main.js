@@ -205,7 +205,7 @@ function loadMap() {
 
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
-
+	
 	var image = "images/pin_map.png";
 
 	positionMarker = new google.maps.Marker( {
@@ -263,7 +263,7 @@ function reloadMarkers() {
 	clearMarkers();
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
-
+	map.setCenter(selectedLocation);
 }
 
 /**

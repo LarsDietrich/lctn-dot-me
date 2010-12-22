@@ -32,7 +32,7 @@ body {
 	border-right: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
-	font-size: x-large;
+	font-size: large;
 	color: #000000;
 	text-align: center;
 	cursor: move;
@@ -68,6 +68,7 @@ body {
 	border-right: 1px solid #6F8787;
 	border-bottom: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
+	cursor: move;
 }
 
 .footer-clear {
@@ -89,7 +90,7 @@ body {
 }
 
 .fixed-height-footer {
-	height: 15px;
+	height: 20px;
 }
 
 .weather-icon {

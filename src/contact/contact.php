@@ -42,7 +42,7 @@
 			   				{ emailTo: emailTo, emailFrom: emailFromVal, subject: subject, message: messageVal },
 			   					function(data){
 									$("#sendEmail").slideUp("normal", function() {				   
-										$("#sendEmail").before('<p>Thank you for your feedback!<br><br><i> Close this window by either pressing ESC or clicking on the close button to continue.</i></p>');											
+										$("#sendEmail").before('<p>Thank you for your feedback!<br><br><i> To continue, click the close button or press ESC.</i></p>');											
 									});
 			   					}
 							 );
@@ -54,7 +54,6 @@
 		</script>
 	</head>
 	<body>
-			<?php include('verify.php'); ?>
 			<form action="/" method="post" id="sendEmail">
 				<p class="contact-text">I'd love to hear from you, if you would like to contact me, please fill in the fields below and click send. You email address will not be shared with anyone, the only reason I need it is so that I can contact you back.</p>
 				<div class="contact-text">Your email address</div>
