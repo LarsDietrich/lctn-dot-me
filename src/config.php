@@ -31,7 +31,7 @@
 	    
 	</head>
 	<body>
-		<div class="config-header">Here you can enable or disable the optional panels. Check the box next to the panel to enable it, uncheck to disable.</div>
+		<div class="config-header">Here you can enable or disable the optional windows. Check the box next to the option to enable it, uncheck to disable.</div>
 		<br/>
 		<table>
 			<tr class="config-row">
@@ -42,7 +42,7 @@
 					<input id="streetview" type="checkbox" class="config" onclick="setOption(this);"></input>
 				</td>
 				<td>
-					The panel showing the streetview of the current location (if available)
+					The window showing the streetview of the current location (if available)
 				</td>
 			</tr>
 			<tr class="config-row">
@@ -53,7 +53,7 @@
 					<input id="twitter" type="checkbox" class="config" onclick="setOption(this);"></input>
 				</td>
 				<td>
-					The panel showing tweets around the current location.
+					The window showing tweets around the current location.
 				</td>
 			</tr>
 			<tr class="config-row">
@@ -64,7 +64,7 @@
 					<input id="general" type="checkbox" class="config" onclick="setOption(this);"></input>
 				</td>
 				<td>
-					The panel containing general information.
+					The window containing general information.
 				</td>
 			</tr>
 			<tr class="config-row">
@@ -75,7 +75,7 @@
 					<input id="wiki" type="checkbox" class="config" onclick="setOption(this);"></input>
 				</td>
 				<td>
-					The panel showing wikipedia articles around the location.
+					The window showing wikipedia articles around the location.
 				</td>
 			</tr>
 		</table>

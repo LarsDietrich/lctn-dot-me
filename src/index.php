@@ -2,7 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 	<head>
+
 	    <title>lctn.me | A Location Portal - Find it, Share it</title>
+
+		<noscript>
+			<meta http-equiv="Refresh" content="0; URL=error/noscript.php" />
+		</noscript> 
+
+		<!-- [if IE 6]> 
+			<meta http-equiv="Refresh" content="0; URL=error/ie6.php" />  
+		<![endif] -->
+
 
 		<link rel="stylesheet" href="css/screen.css" type="text/css"/>
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
@@ -11,8 +21,6 @@
 		<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 
 	</head>
-
-	
 
 	<body onload="load()">
 
@@ -24,33 +32,8 @@
 
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
-		<?php include("menu.php")?>
-<!-- 		
-		<div class="header-name">
-			<div style="font-size: xx-large;display:inline" class="title-text">lctn.me</div>
-			<div style="font-size: small; display:inline" class="title-text">Find it, share it</div>
-		</div>
--->
-		
 		<?php 
-//			include("container/find.php");
-//			include("container/share.php");
-//			include("container/map.php");
-//			if ($_COOKIE['option_twitter'] == "true") {
-//				include("container/twitter.php");
-//			}
-//			if ($_COOKIE['option_streetview'] == "true") {
-//				include("container/streetview.php");
-//			}
-//			if ($_COOKIE['option_wiki'] == "true") {
-//				include("container/wiki.php");
-//			}
-//			if ($_COOKIE['option_general'] == "true") {
-//				include("container/general.php");
-//			}
-		?>
-
-		<?php 
+			include("menu.php");
 			include("container/find.php");
 			include("container/share.php");
 			include("container/map.php");

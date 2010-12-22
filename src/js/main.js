@@ -86,6 +86,11 @@ function loadUrlParameters() {
  */
 function load() {
 
+  if (!hasCookieSupport()) {
+  	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
+  	return;
+  }
+
 	showContainers();
 
 	loadUrlParameters();
@@ -100,6 +105,7 @@ function load() {
 	} else {
 		selectedLocation = new google.maps.LatLng(latitude, longitude);
 		loadMap();
+		loadStreetView();
 		reloadContainers();
 	}
 
@@ -224,6 +230,32 @@ function loadMap() {
 }
 
 /**
+ * Loads the StreetView container and sets it's listeners.
+ */
+function loadStreetView() {
+	var panoOptions = {
+		addressControl : false,
+		navigationControlOptions : {
+			style : google.maps.NavigationControlStyle.SMALL
+		},
+		enableCloseButton : false,
+		linksControl : true
+	};
+
+	panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
+
+	google.maps.event.addListener(panorama, 'position_changed', function() {
+		selectedLocation = panorama.getPosition();
+		reloadMarkers();
+	});
+
+	google.maps.event.addListener(panorama, 'pov_changed', function() {
+		heading = panorama.getPov().heading;
+		pitch = panorama.getPov().pitch;
+	});
+
+}
+/**
  * Clears markers from map and reloads the positionMarker based on
  * selectedLocation.
  */
@@ -241,11 +273,16 @@ function reloadContainers() {
 	if (!map) {
 		loadMap();
 	}
+
+	if (!panorama) {
+		loadStreetView();
+	}
+
 	reloadMarkers();
 	loadAllContainers();
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
-	document.getElementById("url").value = "";
+	$("#url").value = "";
 	setMessage("", "");
 	updateStats();
 }
@@ -281,31 +318,8 @@ function loadContainer(name) {
 
 	if (selectedLocation) {
 		if (name == "streetview") {
-			if (!panorama) {
-				var panoOptions = {
-					addressControl : false,
-					navigationControlOptions : {
-						style : google.maps.NavigationControlStyle.SMALL
-					},
-					enableCloseButton : false,
-					linksControl : true
-				};
-
-				panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
-
-				google.maps.event.addListener(panorama, 'position_changed', function() {
-					selectedLocation = panorama.getPosition();
-					reloadMarkers();
-				});
-
-				google.maps.event.addListener(panorama, 'pov_changed', function() {
-					heading = panorama.getPov().heading;
-					pitch = panorama.getPov().pitch;
-				});
-
-			}
 			var streetViewService = new google.maps.StreetViewService();
-			streetViewService.getPanoramaByLocation(selectedLocation, 50, processSVData);
+			streetViewService.getPanoramaByLocation(selectedLocation, 50, processStreetViewData);
 		}
 
 		if (name == "wiki") {
@@ -420,7 +434,7 @@ function updateStats() {
  * associated with it, will attempt to find a streetview within a specified
  * distance and reposition the map to that point.
  */
-function processSVData(data, status) {
+function processStreetViewData(data, status) {
 	if (status == google.maps.StreetViewStatus.OK) {
 		var markerPanoID = data.location.pano;
 		panorama.setPano(markerPanoID);
@@ -434,7 +448,6 @@ function processSVData(data, status) {
 		// positionMarker.setPosition(selectedLocation);
 		// positionMarker.setMap(map);
 		panorama.setVisible(true);
-		alert("in processsvdata");
 	} else {
 		setMessage("Streetview not available at this location.", "notice");
 		panorama.setVisible(false);
@@ -462,7 +475,7 @@ function setMessage(message) {
  * @param addToCache -
  *          whether this position should be added to the cache or not.
  */
-function locateAndRefresh(addToCache) {
+function locateAndRefresh(putInCache) {
 	var address = document.getElementById("address").value;
 	setMessage("");
 	geocoder.geocode( {
@@ -471,7 +484,7 @@ function locateAndRefresh(addToCache) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			selectedLocation = results[0].geometry.location;
 			reloadContainers();
-			if (addToCache) {
+			if (putInCache) {
 				addToCache($("#address").val());
 			}
 		} else {
@@ -504,7 +517,9 @@ function reverseCodeLatLng() {
 			if (results.length > 0) {
 				address = results[0].formatted_address;
 				$("#address").val(address);
-				updateTimezoneLocationInformation();
+				if (isEnabled("general")) {
+					updateTimezoneLocationInformation();
+				}
 			} else {
 				setMessage("No addresses were found at this location.", "info");
 			}
@@ -714,4 +729,14 @@ function hideElement(name) {
  */
 function showElement(name) {
 	$("#" + name).css("display", "inline");
+}
+
+function hasCookieSupport() {
+	$.cookie("iexist", "yes");
+	if (!$.cookie("iexist")) {
+		return false;
+	} else {
+		$.cookie("iexist", "");
+		return true;
+	}
 }
