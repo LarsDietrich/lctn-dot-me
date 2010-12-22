@@ -1,0 +1,32 @@
+/* Styles for Contact Us form */
+div#container {
+	background: transparent;
+	font-size: 1.2em;
+	margin: 0 auto;
+	padding-bottom: 0px;
+	padding-top: 20px;
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 480px;
+	vertical-align: middle;
+}
+
+.clearing {
+	clear: both;
+}
+
+.contact-error {
+	color: #FF3333;
+	font-size: medium;
+	width: 70%;
+}
+
+.buttons {
+	font-size: medium;
+	color: #000000;
+}
+
+.contact-text {
+	font-size: medium;
+	color: #000;
+}
