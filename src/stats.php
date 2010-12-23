@@ -1,6 +1,7 @@
 <?php
 
 require ("includes/sql.php");
+show();
 
 if (isset($_GET["do"])) {
 	$do = $_GET["do"];
@@ -44,7 +45,7 @@ function show() {
 		$i++;
 	}
 
-	echo "{\"total\":\"" + $i + "\", \"result\": " . json_encode($result) . "}";
+	echo "{\"total\":\"" . $i . "\", \"result\": " . json_encode($result) . "}";
 }
 
 function related() {
