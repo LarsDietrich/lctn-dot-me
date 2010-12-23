@@ -8,10 +8,10 @@
 			$(document).ready(function(){
 				$("#submit").click(function(){					   				   
 					var emailTo = "rick@tonoli.co.za";
-					var subject = "An email from lctn.me's contact form";
+					var subject = "An email from the lctn.me contact form";
+
 					var hasError = false;
 					var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-
 					var messageVal = $("#message").val();
 					if(messageVal == '') {
 						$("#error").val("You have not entered a message.");
@@ -37,7 +37,7 @@
 			   				{ emailTo: emailTo, emailFrom: emailFromVal, subject: subject, message: messageVal },
 			   					function(data){
 									$("#sendEmail").slideUp("normal", function() {				   
-										$("#sendEmail").before('<p>Thank you for your feedback!<br><br><i> To continue, click the close button or press ESC.</i></p>');											
+										$("#sendEmail").before('<p>Thank you for your feedback!<br><br> To continue, click the close button or press ESC.</p>');											
 									});
 			   					}
 							 );
