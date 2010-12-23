@@ -53,6 +53,8 @@ function related() {
 	$min_lat = $_GET["lat"] - 1;
 	$max_lat = $_GET["lat"] + 1;
 
+	$total = 0;
+	
 	if ($min_lng < -180) {
 		$min_lng = -1 * ($min_lng + 180);
 	}
@@ -83,7 +85,7 @@ function related() {
 		$i++;
 	}
 
-	echo "{ \"result\": " . json_encode($result) . "}";
+	echo "{\"total\":\"" + $i + "\", \"result\": " . json_encode($result) . "}";
 
 }
 
