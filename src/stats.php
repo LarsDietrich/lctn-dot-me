@@ -26,7 +26,7 @@ function add() {
 	$_query = "INSERT stats (created, longitude, latitude) VALUES ('" . $_now . "', '" . $_lng . "', '" . $_lat . "')";
 	$_sql = new Sql();
 	$_sql->execute($_query);
-	echo("ok");
+	echo("{\"result\":\"ok\"}");
 }
 
 function show() {
@@ -44,7 +44,7 @@ function show() {
 		$i++;
 	}
 
-	echo "{\"result\":" . json_encode($result) . "}";
+	echo "{\"total\":\"" + $i + "\", \"result\": " . json_encode($result) . "}";
 }
 
 function related() {
@@ -54,7 +54,7 @@ function related() {
 	$max_lat = $_GET["lat"] + 1;
 
 	$total = 0;
-	
+
 	if ($min_lng < -180) {
 		$min_lng = -1 * ($min_lng + 180);
 	}
@@ -85,7 +85,7 @@ function related() {
 		$i++;
 	}
 
-	echo "{\"total\":\"" + $i + "\", \"result\": " . json_encode($result) . "}";
+	echo "{\"result\":" . json_encode($result) . "}";
 
 }
 
