@@ -1,7 +1,10 @@
 <div  onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="wiki_container" class="draggable panel">
 	<span>
-		<div class="header" title="Shows all wikipedia articles in the area.">
+		<div class="header-left" title="Shows all wikipedia articles in the area.">
 			Wikipedia
+		</div>
+		<div class="header-right">
+			<img onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
 		</div>
 	</span>
  	<div class="detail-padded">

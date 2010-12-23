@@ -731,6 +731,12 @@ function showElement(name) {
 	$("#" + name).css("display", "inline");
 }
 
+/**
+ * Check for cookie support by attempting to create a cookie and then retrieve
+ * it
+ * 
+ * @return true/false
+ */
 function hasCookieSupport() {
 	$.cookie("iexist", "yes");
 	if (!$.cookie("iexist")) {
@@ -739,4 +745,15 @@ function hasCookieSupport() {
 		$.cookie("iexist", "");
 		return true;
 	}
+}
+
+/**
+ * "Close" a window by setting the cookie option as disabled and refreshing
+ * 
+ * @param container - the control of the container to close
+ */
+function closeWindow(container) {
+	var stuff = container.split("_");
+	$.cookie("option_" + stuff[0], false, { expires : 365 });
+	hideElement(container);
 }

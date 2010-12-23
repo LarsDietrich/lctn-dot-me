@@ -5,22 +5,41 @@ body {
 }
 
 .header-left {
-	width: 150px;
+	width: 440px;
 	display: table-cell;
 	vertical-align: middle;
-}
-
-.header-center {
-	width: 150px;
-	display: table-cell;
 	overflow: hidden;
 	text-align: center;
+	background: #6F8787;
+	border-radius: 10px 0px 0px 0px;
+	-moz-border-radius: 10px 0px 0px 0px;
+	border-top: 1px solid #6F8787;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	padding: 4px 40px 4px 5px;
+	font-weight: bold;
+	font-size: large;
+	color: #000000;
+	text-align: center;
+	cursor: move;
 }
 
 .header-right {
-	width: 150px;
+	width: 10px;
 	display: table-cell;
 	vertical-align: middle;
+	background: #6F8787;
+	border-radius: 0px 10px 0px 0px;
+	-moz-border-radius: 0px 10px 0px 0px;
+	border-top: 1px solid #6F8787;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	padding: 4px 10px 4px 5px;
+	font-weight: bold;
+	font-size: large;
+	color: #000000;
+	text-align: center;
+	cursor: pointer;
 }
 
 .header {
@@ -300,4 +319,8 @@ input {
     padding: 8px 0 0;
     vertical-align: top;
     width: 30px;
+}
+
+.header-image {
+	cursor: pointer;
 }

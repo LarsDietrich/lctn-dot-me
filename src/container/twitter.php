@@ -1,7 +1,10 @@
 <div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="twitter_container" class="draggable panel">
 	<span>
-		<div class="header" title="Shows tweets in the surrounding area for people that have chosen to share their location.">
+		<div class="header-left" title="Shows tweets in the surrounding area for people that have chosen to share their location.">
 			Twitter
+		</div>
+		<div class="header-right">
+			<img onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
 		</div>
 	</span>
  	<div class="detail-padded">

@@ -1,7 +1,10 @@
 <div  onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="streetview_container" class="draggable panel">
 	<span>
-		<div class="header" title="Shows the streetview at the current location, streetview is only available in certain locations.">
+		<div class="header-left" title="Shows the streetview at the current location, streetview is only available in certain locations.">
 			Streetview
+		</div>
+		<div class="header-right">
+			<img onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
 		</div>
 	</span>
 	<div class="detail-map">
