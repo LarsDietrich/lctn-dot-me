@@ -47,7 +47,7 @@ function getWebcams(selectedLocation, range) {
 function updateWebcamLocationInformation(id) {
 	listOfWebcams = new Array();
 	if (id) {
-		processResults(id);
+		processWebcamResults(id);
 	} else {	
 		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 			document.getElementById("webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest webcams'/>";
