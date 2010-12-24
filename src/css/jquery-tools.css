@@ -30,7 +30,7 @@ div.contentWrap {
 	display:none;
 	
 	/* growing background image */
-	background-image:url(/images//white.png);
+	background-image:url(/images/popup.png);
 	
 	/* 
 		width after the growing animation finishes
@@ -52,4 +52,8 @@ div.contentWrap {
 	cursor:pointer;
 	height:35px;
 	width:35px;
+}
+
+.webcam {
+	cursor:pointer;
 }

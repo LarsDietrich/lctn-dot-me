@@ -108,7 +108,7 @@ function load() {
 		loadStreetView();
 		reloadContainers();
 	}
-
+	
 	// setup the popup overlay for later use
 	$(function() {
 		$("a[rel]").overlay( {

@@ -6,11 +6,15 @@ var currentWebcamPage = 1;
 /**
  * Updates the "Webcam" information
  */
-function updateWebcamLocationInformation() {
+function updateWebcamLocationInformation(id) {
 	listOfWebcams = new Array();
-	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest webcams'/>";
-		getWebcams(selectedLocation, $("#webcam_range").val());
+	if (id) {
+		processResults(id);
+	} else {	
+		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+			document.getElementById("webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest webcams'/>";
+			getWebcams(selectedLocation, $("#webcam_range").val());
+		}
 	}
 }
 
@@ -54,28 +58,41 @@ function getWebcams(selectedLocation, range) {
 /**
  * Process the webcam data returned, convert to array.
  * 
- * @param jsonData -
+ * @param data -
  *          webcam data returned
  */
-function processResults(jsonData) {
-	var webcams = jsonData.webcams.webcam;
-	var i = 0;
-	totalWebcams = jsonData.webcams.count;
-	if (webcams) {
-		$.each(webcams, function(index, webcam) {
-			var output = "<tr onmouseover='highlightRow(this," + webcam.latitude	+ "," + webcam.longitude + ", \"images/camera.png\")' onmouseout='normalRow(this)'>";
-			output += "<td><a href=\"" + webcam.url + "\" target=\"_blank\"><img title=\"Click to view on Webcams.Travel\" src=\"" + webcam.thumbnail_url + "\"/></a>";
-			output += "</td><td>This title of this webcam is <b>";
-			output += webcam.title;
-			output += "</b>. It is owned by ";
-			output += "<a href=\"" + webcam.user_url + "\" target=\"_blank\">" + webcam.user + "</a>";
-			output += " and located in " + webcam.city + "<br/>";
-			output += "<div class=\"tweet-age inline\">" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
-			output += "<div title=\"Reposition map to location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"currentWebcamPage = 1;useAddressToReposition('" + webcam.latitude + "," + webcam.longitude 	+ "')\">Go There!</div>";
-			output += "</td></tr>";
-			listOfWebcams[i] = output;	
-			i++;
-		});
+function processResults(data) {
+	if (data.webcams) {
+		var webcams = data.webcams.webcam;
+		if (webcams) {
+			var i = 0;
+			totalWebcams = data.webcams.count;
+			$.each(webcams, function(index, webcam) {
+				var output = "<tr onmouseover='highlightRow(this," + webcam.latitude	+ "," + webcam.longitude + ", \"images/camera.png\")' onmouseout='normalRow(this)'>";
+//				output += "<td><a href=\"" + webcam.url + "\" target=\"_blank\"><img title=\"Click to view on Webcams.Travel\" src=\"" + webcam.thumbnail_url + "\"/></a>";
+				output += "<td><img class=\"pointer\" onclick=\"updateWebcamLocationInformation(" + webcam.webcamid + ")\" title=\"Click to view\"  src=\"" + webcam.thumbnail_url + "\"/>";
+				output += "</td><td>This title of this webcam is <b>";
+				output += webcam.title;
+				output += "</b>. It is owned by ";
+				output += "<a href=\"" + webcam.user_url + "\" target=\"_blank\">" + webcam.user + "</a>";
+				output += " and located in " + webcam.city + "<br/>";
+				output += "<div class=\"tweet-age inline\">" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
+				output += "<div title=\"Reposition map to location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"currentWebcamPage = 1;useAddressToReposition('" + webcam.latitude + "," + webcam.longitude 	+ "')\">Go There!</div>";
+				output += "</td></tr>";
+				listOfWebcams[i] = output;	
+				i++;
+			});
+		}
+	} else  {
+		var output = "<tr><td>";
+		output += "<img id=\"webcam-full\" class=\"webcam-full-image\" src=\"http://images.webcams.travel/webcam/" + data + ".jpg\"/><br/>";
+		output += "<div onclick= \"updateWebcamLocationInformation()\" class=\"tweet-age inline pointer\">Close</div>&nbsp;|&nbsp;";
+		output += "<div onclick= \"$('#webcam-full').attr('src', 'http://images.webcams.travel/webcam/" + data + ".jpg')\" class=\"tweet-age inline pointer\">Refresh</div>";
+		output += "</td></tr>";
+		infoMarker.setMap(null);
+		infoMarker == null;
+		listOfWebcams[0] = output;
+		$("#webcam_footer").html("<center></center>");
 	}
 	updateWebcamDisplay();
 }
@@ -125,18 +142,20 @@ function updateWebcamDisplay() {
  */
 function updateWebcamPaging() {
 
-	totalPages = Math.ceil(totalWebcams / webcamsPerPage);
-
-	var next = "&nbsp;";
-	var previous = "&nbsp;";
-
-	if ((currentWebcamPage + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"currentWebcamPage = currentWebcamPage + 1;updateWebcamLocationInformation()\"></img>";
-	}
+	if (listOfWebcams.length > 1) {
+		totalPages = Math.ceil(totalWebcams / webcamsPerPage);
 	
-	if ((currentWebcamPage - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"currentWebcamPage = currentWebcamPage - 1;updateWebcamLocationInformation()\"></img>";
-	}
+		var next = "&nbsp;";
+		var previous = "&nbsp;";
 	
-	document.getElementById("webcam_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
+		if ((currentWebcamPage + 1) <= totalPages) {
+			next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"currentWebcamPage = currentWebcamPage + 1;updateWebcamLocationInformation()\"></img>";
+		}
+		
+		if ((currentWebcamPage - 1) >= 1) {
+			previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"currentWebcamPage = currentWebcamPage - 1;updateWebcamLocationInformation()\"></img>";
+		}
+		
+		$("#webcam_footer").html("<center>" + previous + "&nbsp&nbsp;" + next + "</center>");
+	}
 }
