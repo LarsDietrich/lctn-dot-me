@@ -4,21 +4,6 @@ var webcamsPerPage = 4;
 var currentWebcamPage = 1;
 
 /**
- * Updates the "Webcam" information
- */
-function updateWebcamLocationInformation(id) {
-	listOfWebcams = new Array();
-	if (id) {
-		processResults(id);
-	} else {	
-		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			document.getElementById("webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest webcams'/>";
-			getWebcams(selectedLocation, $("#webcam_range").val());
-		}
-	}
-}
-
-/**
  * 
  * Generate a list of webcams in the area
  *
@@ -50,9 +35,25 @@ function getWebcams(selectedLocation, range) {
 				+ selectedLocation.lng()
 				+ "&radius=" 
 				+ range 
-				+	"&unit=km&per_page=" + webcamsPerPage + "&page=" + currentWebcamPage + "&format=json&callback=processResults";
+				+	"&unit=km&per_page=" + webcamsPerPage + "&page=" + currentWebcamPage + "&format=json&callback=processWebcamResults";
 		$("body").append(script);
 	});
+}
+
+
+/**
+ * Updates the "Webcam" information
+ */
+function updateWebcamLocationInformation(id) {
+	listOfWebcams = new Array();
+	if (id) {
+		processResults(id);
+	} else {	
+		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+			document.getElementById("webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for latest webcams'/>";
+			getWebcams(selectedLocation, $("#webcam_range").val());
+		}
+	}
 }
 
 /**
@@ -61,7 +62,7 @@ function getWebcams(selectedLocation, range) {
  * @param data -
  *          webcam data returned
  */
-function processResults(data) {
+function processWebcamResults(data) {
 	if (data.webcams) {
 		var webcams = data.webcams.webcam;
 		if (webcams) {

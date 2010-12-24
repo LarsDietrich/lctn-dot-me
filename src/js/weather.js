@@ -57,7 +57,7 @@ function getWeather(selectedLocation) {
 				+ selectedLocation.lat()
 				+ ","
 				+ selectedLocation.lng()
-				+ "&num_of_days=4" + "&callback=processResults";
+				+ "&num_of_days=4" + "&callback=processWeatherResults";
 		$("body").append(script);
 	});
 }
@@ -68,7 +68,7 @@ function getWeather(selectedLocation) {
  * @param jsonData -
  *            weather data returned
  */
-function processResults(jsonData) {
+function processWeatherResults(jsonData) {
 	var shtml = '';
 	var description = "";
 	var icon = "";
