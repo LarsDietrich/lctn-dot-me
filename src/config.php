@@ -35,6 +35,17 @@
 		<br/>
 		<table>
 			<tr class="config-row">
+				<td>
+					<label for="general">General</label>
+				</td>
+				<td>
+					<input id="general" type="checkbox" class="config" onclick="setOption(this);"></input>
+				</td>
+				<td>
+					The window containing general information.
+				</td>
+			</tr>
+			<tr class="config-row">
 				<td width=20%">
 					<label for="streetview">Streetview</label>
 				</td>
@@ -58,13 +69,13 @@
 			</tr>
 			<tr class="config-row">
 				<td>
-					<label for="general">General</label>
+					<label for="webcam">Webcams</label>
 				</td>
 				<td>
-					<input id="general" type="checkbox" class="config" onclick="setOption(this);"></input>
+					<input id="webcam" type="checkbox" class="config" onclick="setOption(this);"></input>
 				</td>
 				<td>
-					The window containing general information.
+					The window showing webcams around the location.
 				</td>
 			</tr>
 			<tr class="config-row">

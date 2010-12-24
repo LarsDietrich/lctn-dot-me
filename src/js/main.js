@@ -306,6 +306,10 @@ function loadAllContainers() {
 	if (isEnabled("general")) {
 		loadContainer("general");
 	}
+
+	if (isEnabled("webcam")) {
+		loadContainer("webcam");
+	}
 }
 
 /**
@@ -334,6 +338,11 @@ function loadContainer(name) {
 
 		if (name == "twitter") {
 			updateTwitterLocationInformation();
+		}
+
+		if (name == "webcam") {
+			currentWebcamPage = 1;
+			updateWebcamLocationInformation();
 		}
 	}
 }
@@ -369,6 +378,12 @@ function showContainers() {
 		$("#general_container").css("display", "inline");
 	} else {
 		$("#general_container").css("display", "none");
+	}
+
+	if (isEnabled("webcam")) {
+		$("#webcam_container").css("display", "inline");
+	} else {
+		$("#webcam_container").css("display", "none");
 	}
 
 }
@@ -710,6 +725,7 @@ function highlightRow(row, lat, lng, icon) {
 function normalRow(row) {
 	$(row).css("background-color", "transparent");
 	infoMarker.setMap(null);
+	infoMarker == null;
 }
 
 /**
@@ -751,7 +767,8 @@ function hasCookieSupport() {
 /**
  * "Close" a window by setting the cookie option as disabled and refreshing
  * 
- * @param container - the control of the container to close
+ * @param container -
+ *          the control of the container to close
  */
 function closeWindow(container) {
 	var stuff = container.split("_");

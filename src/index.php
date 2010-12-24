@@ -41,6 +41,7 @@
 			include("container/streetview.php");
 			include("container/wiki.php");
 			include("container/general.php");
+			include("container/webcam.php");
 //			include("container/ads.php");
 			?>
 
@@ -55,8 +56,9 @@
 		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
 		<script type="text/javascript" src="js/interface.js"></script>
 
-		<script type="text/javascript" src="js/tweets.js"> </script>
+		<script type="text/javascript" src="js/twitter.js"> </script>
 		<script type="text/javascript" src="js/weather.js"> </script>
+		<script type="text/javascript" src="js/webcam.js"> </script>
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/uservoice.js"></script>

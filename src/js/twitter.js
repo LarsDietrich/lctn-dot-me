@@ -47,7 +47,7 @@ function processTheseTweets(jsonData) {
 			tweet = "<tr onmouseover='highlightRow(this," + location
 					+ ", \"images/twitter_icon.gif\")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
 			tweet += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
-					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTimeCreated(value.created_at) + "&nbsp;|&nbsp;"
+					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at) + "&nbsp;|&nbsp;"
 					+ getTweetLocation(value.location) + "</td><tr>";
 			listOfTweets[i] = tweet;
 			i++;
@@ -60,7 +60,7 @@ function processTheseTweets(jsonData) {
 	}
 }
 
-function getTimeCreated(time) {
+function getTwitterTimeCreated(time) {
 	// Fri, 26 Nov 2010 13:32:59 +0000
 	var tweetDate = new Date(eval('"' + time + '"'));
 	var currentDate = new Date();
