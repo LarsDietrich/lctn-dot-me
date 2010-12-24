@@ -100,8 +100,8 @@ function load() {
 
 	updateUrlWindow("");
 
-	if (latitude == 999 || longitude == 999) {
-		findMe();
+	if ($.cookie("lastLocation")) {
+		loadLastLocation();
 	} else {
 		selectedLocation = new google.maps.LatLng(latitude, longitude);
 		loadMap();
@@ -530,6 +530,7 @@ function reverseCodeLatLng() {
 		if (isEnabled("general")) {
 			updateGeneralLocationInformation($("#address").val());
 		}
+		$.cookie("lastLocation", $("#address").val(), { expires : 365 });
 	});
 }
 
@@ -756,4 +757,11 @@ function closeWindow(container) {
 	var stuff = container.split("_");
 	$.cookie("option_" + stuff[0], false, { expires : 365 });
 	hideElement(container);
+}
+
+function loadLastLocation() {
+	var lastLocation = $.cookie("lastLocation");
+	if (lastLocation) {
+		useAddressToReposition(lastLocation);
+	}	
 }

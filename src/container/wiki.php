@@ -4,7 +4,7 @@
 			Wikipedia
 		</div>
 		<div class="header-right">
-			<img onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
+			<img class="window-close" onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
 		</div>
 	</span>
  	<div class="detail-padded">
