@@ -86,6 +86,8 @@ function loadUrlParameters() {
  */
 function load() {
 
+	setConfigOptions();
+	
   if (!hasCookieSupport()) {
   	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
   	return;
@@ -152,8 +154,6 @@ function load() {
 			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
 
 			setMessage("Windows can be dragged by clicking on the title and dragging with the mouse");
-
-			// $(control).css("display", "inline");
 			});
 	});
 
@@ -242,7 +242,7 @@ function loadStreetView() {
 		linksControl : true
 	};
 
-	panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview"), panoOptions);
+	panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview_canvas"), panoOptions);
 
 	google.maps.event.addListener(panorama, 'position_changed', function() {
 		selectedLocation = panorama.getPosition();
@@ -774,6 +774,7 @@ function closeWindow(container) {
 	var stuff = container.split("_");
 	$.cookie("option_" + stuff[0], false, { expires : 365 });
 	hideElement(container);
+	setConfigOptions();
 }
 
 function loadLastLocation() {
