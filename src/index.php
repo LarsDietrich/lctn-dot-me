@@ -42,6 +42,7 @@
 			include("container/wiki.php");
 			include("container/general.php");
 			include("container/webcam.php");
+			include("container/places.php");
 //			include("container/ads.php");
 			?>
 
@@ -50,6 +51,10 @@
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
+
+		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
+
+
 
  		<script type="text/javascript" src="js/gears_init.js"></script> 
 		<script type="text/javascript" src="js/jxs.js"> </script>
@@ -61,6 +66,7 @@
 		<script type="text/javascript" src="js/webcam.js"> </script>
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
+		<script type="text/javascript" src="js/places.js"></script>
 		<script type="text/javascript" src="js/uservoice.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>

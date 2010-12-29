@@ -156,7 +156,6 @@ function load() {
 			setMessage("Windows can be dragged by clicking on the title and dragging with the mouse");
 			});
 	});
-
 }
 
 /**
@@ -310,6 +309,10 @@ function loadAllContainers() {
 	if (isEnabled("webcam")) {
 		loadContainer("webcam");
 	}
+
+	if (isEnabled("places")) {
+		loadContainer("places");
+	}
 }
 
 /**
@@ -340,6 +343,10 @@ function loadContainer(name) {
 			updateTwitterLocationInformation();
 		}
 
+		if (name == "places") {
+			updatePlacesLocationInformation();
+		}
+
 		if (name == "webcam") {
 			currentWebcamPage = 1;
 			updateWebcamLocationInformation();
@@ -360,6 +367,12 @@ function showContainers() {
 		$("#streetview_container").css("display", "inline");
 	} else {
 		$("#streetview_container").css("display", "none");
+	}
+
+	if (isEnabled("places")) {
+		$("#places_container").css("display", "inline");
+	} else {
+		$("#places_container").css("display", "none");
 	}
 
 	if (isEnabled("wiki")) {
@@ -512,8 +525,16 @@ function locateAndRefresh(putInCache) {
  * Use the supplied address to locateAndRefresh()
  */
 function useAddressToReposition(address) {
-	document.getElementById("address").value = address;
+	$("#address").val(address);
 	locateAndRefresh(true);
+}
+
+/**
+ * Helper method to reposition based on coordinates where coords are swapped around (long then lat).
+ */
+function useAddressToRepositionLngLat(address) {
+	addr = address.split(",");
+	useAddressToReposition(addr[1] + "," + addr[0]);
 }
 
 /**
@@ -645,53 +666,53 @@ function isEnabled(option) {
 	return result;
 }
 
-/**
- * Toggles the map size between large and normal
- */
-function toggleMapSize() {
-	var max_width = "955px";
-	var normal_width = "470px";
-	var max_height = "600px";
-	var normal_height = "465px";
-
-	if ($("#map_container").css("width") == max_width) {
-		$("#map_container").css("width", normal_width);
-		$("#map_canvas").css("width", normal_width);
-		$("#map_container").css("height", normal_height);
-		$("#map_canvas").css("height", normal_height);
-		google.maps.event.trigger(map, "resize");
-	} else {
-		$("#map_container").css("width", max_width);
-		$("#map_canvas").css("width", max_width);
-		$("#map_container").css("height", max_height);
-		$("#map_canvas").css("height", max_height);
-		google.maps.event.trigger(map, "resize");
-	}
-}
-
-/**
- * Toggles the streetview size between large and normal
- */
-function toggleStreetViewSize() {
-	var max_width = "955px";
-	var normal_width = "470px";
-	var max_height = "600px";
-	var normal_height = "465px";
-
-	if ($("#streetview_container").css("width") == max_width) {
-		$("#streetview_container").css("width", normal_width);
-		$("#streetview").css("width", normal_width);
-		$("#streetview_container").css("height", normal_height);
-		$("#streetview").css("height", normal_height);
-		google.maps.event.trigger(map, "resize");
-	} else {
-		$("#streetview_container").css("width", max_width);
-		$("#streetview").css("width", max_width);
-		$("#streetview_container").css("height", max_height);
-		$("#streetview").css("height", max_height);
-		google.maps.event.trigger(map, "resize");
-	}
-}
+///**
+// * Toggles the map size between large and normal
+// */
+//function toggleMapSize() {
+//	var max_width = "955px";
+//	var normal_width = "470px";
+//	var max_height = "600px";
+//	var normal_height = "465px";
+//
+//	if ($("#map_container").css("width") == max_width) {
+//		$("#map_container").css("width", normal_width);
+//		$("#map_canvas").css("width", normal_width);
+//		$("#map_container").css("height", normal_height);
+//		$("#map_canvas").css("height", normal_height);
+//		google.maps.event.trigger(map, "resize");
+//	} else {
+//		$("#map_container").css("width", max_width);
+//		$("#map_canvas").css("width", max_width);
+//		$("#map_container").css("height", max_height);
+//		$("#map_canvas").css("height", max_height);
+//		google.maps.event.trigger(map, "resize");
+//	}
+//}
+//
+///**
+// * Toggles the streetview size between large and normal
+// */
+//function toggleStreetViewSize() {
+//	var max_width = "955px";
+//	var normal_width = "470px";
+//	var max_height = "600px";
+//	var normal_height = "465px";
+//
+//	if ($("#streetview_container").css("width") == max_width) {
+//		$("#streetview_container").css("width", normal_width);
+//		$("#streetview").css("width", normal_width);
+//		$("#streetview_container").css("height", normal_height);
+//		$("#streetview").css("height", normal_height);
+//		google.maps.event.trigger(map, "resize");
+//	} else {
+//		$("#streetview_container").css("width", max_width);
+//		$("#streetview").css("width", max_width);
+//		$("#streetview_container").css("height", max_height);
+//		$("#streetview").css("height", max_height);
+//		google.maps.event.trigger(map, "resize");
+//	}
+//}
 
 /**
  * "Hilites" a row in the active container and shows the point on the map. Used
@@ -715,6 +736,12 @@ function highlightRow(row, lat, lng, icon) {
 	infoMarker.setZIndex(999);
 }
 
+/**
+ * Helper to call hilight row with longitude and latitude supplied in reverse order.
+ */
+function highlightLngLatRow(row, lng, lat, icon) {
+	highlightRow(row, lat, lng, icon);
+}
 /**
  * Return the element represented by the row to normal (from hilighted) and
  * clear the map marker.

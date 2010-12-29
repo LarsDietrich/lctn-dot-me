@@ -121,7 +121,7 @@ function formatTwitterText(text) {
 function getTweetLocation(text) {
 	var output = "";
 	result = cleanTweetLocation(text);
-	title = "Reposition map to tweet location";
+	title = "Reposition map to " + result;
 	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
 			+ "')\">Go There!</div>";
 
