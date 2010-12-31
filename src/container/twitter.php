@@ -19,7 +19,7 @@
 	</div>
 	<span>
 	<div class="footer-text fixed-height-footer">
-              <div id="twitter_footer"></div>
+              <div id="twitter_footer" class="footer"></div>
 	</div>
 	</span>
 </div>

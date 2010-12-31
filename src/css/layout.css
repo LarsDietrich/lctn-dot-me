@@ -122,7 +122,7 @@ body {
 }
 
 .fixed-height-footer {
-	height: 13px;
+	height: 17px;
 }
 
 .weather-icon {
@@ -341,6 +341,7 @@ input {
 	padding: 8px 0 0;
 	vertical-align: top;
 	width: 30px;
+	cursor: pointer;
 }
 
 .header-image {
@@ -365,4 +366,7 @@ input {
 	position: absolute;
 	top: 7px;
 	left: 5px;
+}
+
+.footer {
 }
