@@ -127,8 +127,7 @@ function load() {
 
 	$(document).ready(function() {
 
-		var top = $(window).height() - 35;
-		$("#message_container").css("top", top + "px" );
+		$("#message_container").css("top", "0px" );
 		$("#message_container").css("left", '-500px');
 
 		$("div.panel").each(function() {
@@ -497,14 +496,13 @@ function setMessage(message) {
 	if (message == "") {
 		$('#message').html("");
 	} else {
-		var top = $(window).height() - 35;
 		$('#message').html(message);
 		$("#message_container").animate({
-		  top: top + "px",
+		  top: "0px",
 		  left: "0px",
 		  opacity: 1
 		}, 500, 'swing', function() {
-			$("#message_container").delay(3000).animate({left: "-500px", top: top + "px", opacity: '.0'}, 500, 'swing', function() {});
+			$("#message_container").delay(3000).animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
 		});
 	}		
 }
