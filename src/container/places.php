@@ -17,8 +17,9 @@
 -->
 			I'm looking for  
 			<select name="places_category" id="places_category" onchange="updatePlacesLocationInformation();" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }">
-				<option value="Restaurant">Restaurants</option>
-				<option value="Hotel">Hotels</option>
+				<option value="Restaurant">somewhere to eat</option>
+				<option value="Hotel">somewhere to stay</option>
+				<option value="Travel">travel related stuff</option>
 			</select>
 			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
 		</center>
