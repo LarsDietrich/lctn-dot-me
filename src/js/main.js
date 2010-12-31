@@ -527,7 +527,7 @@ function locateAndRefresh(putInCache) {
 				addToCache($("#address").val());
 			}
 		} else {
-			setMessage("Not able to locate that place, please try something else.", "info");
+			setMessage("Sorry, could not find it, try search for something else.", "info");
 		}
 	});
 }
