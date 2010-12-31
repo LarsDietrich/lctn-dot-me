@@ -1,3 +1,4 @@
+<!-- Decode the incoming short link and generate a long url -->
 <?php
 
 require("includes/functions.php");

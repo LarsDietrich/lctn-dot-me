@@ -1,6 +1,6 @@
 var listOfPlaces = [];
-var placesFilter = [];
 var placesPerPage = 5;
+var placesCategory;
 
 /**
  * Generate Places based on location
@@ -34,6 +34,7 @@ var placesPerPage = 5;
  */
 function getSimpleGeoPlaces(selectedLocation, range, category, query) {
 	var client = new simplegeo.PlacesClient('NXBFea3eNcBf3MbgjuTgCF6sSWyLQVKX');
+	placesCategory = category;
 	listOfPlaces = [];
 	var placesOptions = {
 			radius : range,
@@ -62,12 +63,15 @@ function processSimpleGeoPlacesResults(error, data) {
 		$.each(features, function(index, value) {
 			var properties = value.properties;
 			var coordinates = value.geometry.coordinates;
-			var output = "<tr onmouseover='highlightLngLatRow(this," + coordinates + ", \"images/find.png\")' onmouseout='normalRow(this)'>";
+			var output = "<tr onmouseover='highlightLngLatRow(this," + coordinates + ", \"images/" + placesCategory + ".png\")' onmouseout='normalRow(this)'>";
 			output += "<td>";
 			output += "<b>" + properties.name + "</b><br/>";
 			if (properties.phone) { output += "Tel: " + properties.phone + "<br/>"; } else { output += "Phone: Not Listed<br/>";}
-			if (properties.address) { output += "Address: " + properties.address + "<br/>"; } else { output += "Address: Not Listed<br/>";}
-			output += "<div title=\"Reposition to this location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToRepositionLngLat('" + value.geometry.coordinates	+ "')\">Go There!</div>";
+			if (properties.address) { output += "Address: " + properties.address + "," + properties.city + "<br/>"; } else { output += "Address: Not Listed<br/>";}
+			output += "<div title=\"Reposition to this location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToRepositionLngLat('" + value.geometry.coordinates	+ "')\">Go There!</div>&nbsp;|&nbsp;";
+			output += "<a href=\"";
+			output += "http://www.google.com/search?hl=en&q=%22" + properties.name + "%22&btnG=Google+Search";
+			output += "\" target=\"_blank\"><div title=\"Find out more\" class=\"tweet-age inline\" style=\"cursor: pointer;\">Google It!</div></a>";
 			output += "</td></tr>";
 			listOfPlaces[i] = output;
 			i++;

@@ -94,7 +94,7 @@ function load() {
   }
 
 	showContainers();
-
+	
 	loadUrlParameters();
 
 	// TODO: Remove when live
@@ -126,6 +126,11 @@ function load() {
 	});
 
 	$(document).ready(function() {
+
+		var top = $(window).height() - 35;
+		$("#message_container").css("top", top + "px" );
+		$("#message_container").css("left", '-500px');
+
 		$("div.panel").each(function() {
 			var control = $(this);
 			$(control).Draggable( {
@@ -153,8 +158,8 @@ function load() {
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
 			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
 
-			setMessage("Windows can be dragged by clicking on the title and dragging with the mouse");
 			});
+		
 	});
 }
 
@@ -282,7 +287,7 @@ function reloadContainers() {
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
 	$("#url").value = "";
-	setMessage("", "");
+	setMessage("");
 	updateStats();
 }
 
@@ -490,10 +495,18 @@ function processStreetViewData(data, status) {
  */
 function setMessage(message) {
 	if (message == "") {
-		document.getElementById("message").innerHTML = "";
+		$('#message').html("");
 	} else {
-		document.getElementById('message').innerHTML = message;
-	}
+		var top = $(window).height() - 35;
+		$('#message').html(message);
+		$("#message_container").animate({
+		  top: top + "px",
+		  left: "0px",
+		  opacity: 1
+		}, 500, 'swing', function() {
+			$("#message_container").delay(3000).animate({left: "-500px", top: top + "px", opacity: '.0'}, 500, 'swing', function() {});
+		});
+	}		
 }
 
 /**
@@ -730,10 +743,12 @@ function highlightRow(row, lat, lng, icon) {
 	var location = new google.maps.LatLng(lat, lng);
 	infoMarker = new google.maps.Marker( {
 		position : location
+	
 	});
 	infoMarker.setMap(map);
 	infoMarker.setIcon(icon);
 	infoMarker.setZIndex(999);
+	
 }
 
 /**
@@ -810,3 +825,10 @@ function loadLastLocation() {
 		useAddressToReposition(lastLocation);
 	}	
 }
+
+function googleIt(query) {
+	$("#search_container").css("display", "inline");
+	updateSearchResultsInformation(query);
+}
+
+

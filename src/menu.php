@@ -10,6 +10,6 @@
 		<li><a><label title="Toggle the window showing webcams around the location" id="webcam" class="config" onclick="setConfigOption(this);">Webcams</label></a></li>
 		<li><a><label title="Toggle the window showing wikipedia articles around the location" id="wiki" class="config" onclick="setConfigOption(this);">Wikipedia</label></a></li>
 	    <li><img src="/images/topnav_bg_divider.png"/></li>
-		<li><div class="message" id="message"></div></li>
+<!-- 		<li><div class="message" id="message"></div></li> -->
 	</ul>
 	

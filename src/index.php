@@ -34,6 +34,20 @@
 
 		<?php 
 			include("menu.php");
+		?>
+			<div id="addthis" class="addthis">
+				<!-- AddThis Button BEGIN -->
+				<div class="addthis_toolbox addthis_pill_combo addthis_toolbox addthis_default_style ">
+				<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+				<a class="addthis_button_tweet"></a>
+				<a class="addthis_counter addthis_pill_style"></a>
+				</div>
+				<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
+				<!-- AddThis Button END -->
+			</div>
+	
+		<?php 
 			include("container/find.php");
 			include("container/share.php");
 			include("container/map.php");
@@ -43,7 +57,8 @@
 			include("container/general.php");
 			include("container/webcam.php");
 			include("container/places.php");
-//			include("container/ads.php");
+			include("container/message.php");
+			//			include("container/ads.php");
 			?>
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
