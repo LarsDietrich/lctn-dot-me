@@ -57,7 +57,7 @@
 				</div>
 				<div class="contact-text">Your message</div>
 				<div>
-					<textarea style="width: 90%; font-size: large; background-color: transparent; color: #000; border-color: #000" name="message" id="message"><?= $_POST['message']; ?></textarea>
+					<textarea style="width: 90%; font-size: medium; background-color: transparent; color: #000; border-color: #000" name="message" id="message"><?= $_POST['message']; ?></textarea>
 				</div>
 				<div>
 					<button class="buttons" type="submit" id="submit">Send Email</button>

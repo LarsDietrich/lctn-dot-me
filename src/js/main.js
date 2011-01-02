@@ -15,6 +15,8 @@ var positionMarker;
 // locations.
 var infoMarker;
 
+var infowindow = new google.maps.InfoWindow();
+
 // reference to the geocoder for coding / decoding addresses.
 var geocoder = new google.maps.Geocoder();
 
@@ -208,15 +210,20 @@ function loadMap() {
 
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
-	
-	var image = "images/pin_map.png";
+//  var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34, primaryColor: '#0000FF', cornercolor:'#0000EE'});
 
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
-		map : map,
-		icon : image
+		map : map
+//		icon : icon
 	});
 
+  google.maps.event.addListener(positionMarker, 'click', function() {
+  	infowindow.setContent($("#address").val());
+  	infowindow.open(map, positionMarker);
+  });
+
+	
 	google.maps.event.addListener(map, 'click', function(event) {
 		selectedLocation = event.latLng;
 		reloadContainers();
@@ -264,6 +271,7 @@ function loadStreetView() {
  */
 function reloadMarkers() {
 	clearMarkers();
+	infowindow.close();
 	positionMarker.setPosition(selectedLocation);
 	positionMarker.setMap(map);
 	map.setCenter(selectedLocation);
@@ -317,6 +325,10 @@ function loadAllContainers() {
 	if (isEnabled("places")) {
 		loadContainer("places");
 	}
+
+//	if (isEnabled("route")) {
+//		loadContainer("route");
+//	}
 }
 
 /**
@@ -350,6 +362,10 @@ function loadContainer(name) {
 		if (name == "places") {
 			updatePlacesLocationInformation();
 		}
+
+//		if (name == "route") {
+//			updateRouteInformation();
+//		}
 
 		if (name == "webcam") {
 			currentWebcamPage = 1;
@@ -401,6 +417,12 @@ function showContainers() {
 		$("#webcam_container").css("display", "inline");
 	} else {
 		$("#webcam_container").css("display", "none");
+	}
+
+	if (isEnabled("route")) {
+		$("#route_container").css("display", "inline");
+	} else {
+		$("#route_container").css("display", "none");
 	}
 
 }

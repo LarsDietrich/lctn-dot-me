@@ -170,9 +170,4 @@ function updateWeatherDisplay() {
 	output += "</td></tr></table>";
 
 	document.getElementById("weather_stream").innerHTML = output;
-	if (isEnabled("popup")) {
-		$("[title]").tooltip( {
-			effect : 'slide'
-		});
-	}
 }

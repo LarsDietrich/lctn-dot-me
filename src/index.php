@@ -58,6 +58,7 @@
 			include("container/webcam.php");
 			include("container/places.php");
 			include("container/message.php");
+			include("container/route.php");
 			//			include("container/ads.php");
 			?>
 
@@ -82,6 +83,7 @@
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/places.js"></script>
+		<script type="text/javascript" src="js/route.js"></script>
 		<script type="text/javascript" src="js/uservoice.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
