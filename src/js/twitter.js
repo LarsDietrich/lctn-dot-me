@@ -1,7 +1,6 @@
-// holds all the tweets entries found
+// holds all the tweet entries found
 var listOfTweets = [];
-// limit the number of tweets per page
-var tweetsPerPage = 7;
+var tweetsFound = false;
 /**
  * Entry method for generating tweets, calls the twitter service using selected
  * parameters. Once complete, calls a method to process the results.
@@ -55,11 +54,18 @@ function processTheseTweets(jsonData) {
 
 		if (listOfTweets.length == 0) {
 			listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
+		} else {
+			tweetsFound = true;
 		}
-		updateTwitterDisplay(1);
+		
+		updateTwitterDisplay();
 	}
 }
 
+/**
+ * Parses the time value of the tweet to get the "time ago" value
+ * @param time
+ */
 function getTwitterTimeCreated(time) {
 	// Fri, 26 Nov 2010 13:32:59 +0000
 	var tweetDate = new Date(eval('"' + time + '"'));
@@ -176,51 +182,21 @@ function updateTwitterLocationInformationFromHashTag(value) {
 
 /**
  * Loads the twitter container with data from the listOfTweets array.
- * 
- * @param page -
- *          the page number to display tweets for
- * 
  */
-function updateTwitterDisplay(page) {
-	var startItem = (page - 1) * tweetsPerPage;
-	var endItem = page * tweetsPerPage;
-	var output = "";
-
-	if (endItem > listOfTweets.length) {
-		endItem = listOfTweets.length;
-	}
-
-	output += "<table>";
-
-	for (i = startItem; i < endItem; i++) {
+function updateTwitterDisplay() {
+	var output = "<table>";
+	for (i = 0; i < listOfTweets.length; i++) {
 		output += listOfTweets[i];
 	}
-
 	output += "</table>";
 	output += "<div style='text-align=right'><img src=\"images/powered-by-twitter-sig.gif\"/></>";
-	document.getElementById("tweet_stream").innerHTML = output;
-	updateTwitterPaging(page);
+	$("#tweet_stream").html(output);
+	updateTwitterFooter();
 }
 
 /**
- * Updates the paging information at the bottom of the twitter container
- * 
- * @param page -
- *          current page number.
+ * Updates the footer information at the bottom of the twitter container
  */
-function updateTwitterPaging(page) {
-	var totalPages = Math.round(listOfTweets.length / tweetsPerPage);
-	if (totalPages < (listOfTweets.length / tweetsPerPage)) {
-		totalPages++;
-	}
-	var next = "&nbsp;";
-	var previous = "&nbsp;";
-
-	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
-	}
-	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
-	}
-	document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
+function updateTwitterFooter() {
+	$("#twitter_footer").html(tweetsFound?"<center>" + listOfTweets.length + " tweets</center>" : "<center>No tweets</center>");
 }

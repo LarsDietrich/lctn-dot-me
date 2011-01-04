@@ -1,5 +1,5 @@
 var listOfPlaces = [];
-var placesPerPage = 5;
+var placesFound = false;
 var placesCategory;
 
 /**
@@ -79,8 +79,10 @@ function processSimpleGeoPlacesResults(error, data) {
 	}
 	if (listOfPlaces.length == 0) {
 		listOfPlaces[0] = "No places found, reasons for this include:<ul><li>No places matched the name you supplied or</li><li>No places were found matching the category you chose or</li><li>Even though we are continually adding new places, we may not have places for the current location you chose.</li></ul>";
+	} else {
+		placesFound = true;
 	}
-	updatePlacesDisplay(1);
+	updatePlacesDisplay();
 }
 
 /**
@@ -95,47 +97,20 @@ function updatePlacesLocationInformation() {
 
 /**
  * Loads the places container with data from the listOfPlaces array.
- * 
- * @param page -
- *          the page number to display places for
- * 
  */
 function updatePlacesDisplay(page) {
-	var startItem = (page - 1) * placesPerPage;
-	var endItem = page * placesPerPage;
-	var output = "";
-
-	if (endItem > listOfPlaces.length) {
-		endItem = listOfPlaces.length;
-	}
-	output += "<table>";
-	for (i = startItem; i < endItem; i++) {
+	var output = "<table>";
+	for (i = 0; i < listOfPlaces.length; i++) {
 		output += listOfPlaces[i];
 	}
 	output += "</table>";
 	$("#places_stream").html(output);
-	updatePlacesPaging(page);
+	updatePlacesFooter();
 }
 
 /**
- * Updates the paging information at the bottom of the places container
- * 
- * @param page -
- *          current page number.
+ * Updates the footer information at the bottom of the places container
  */
-function updatePlacesPaging(page) {
-	var totalPages = Math.round(listOfPlaces.length / placesPerPage);
-	if (totalPages < (listOfPlaces.length / placesPerPage)) {
-		totalPages++;
-	}
-	var next = "&nbsp;";
-	var previous = "&nbsp;";
-
-	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"updatePlacesDisplay(" + (page + 1) + ")\"></img>";
-	}
-	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"updatePlacesDisplay(" + (page - 1) + ")\"></img>";
-	}
-	document.getElementById("places_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
+function updatePlacesFooter() {
+	$("#places_footer").html(placesFound?"<center>" + listOfPlaces.length + " places</center>" : "<center>No places</center>");
 }

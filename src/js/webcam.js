@@ -1,7 +1,5 @@
 var listOfWebcams = [];
-var totalWebcams;
-var webcamsPerPage = 4;
-var currentWebcamPage = 1;
+var webcamsFound = false;
 
 /**
  * 
@@ -28,7 +26,7 @@ function getWebcams(selectedLocation, range) {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
 		script.src = "http://api.webcams.travel/rest?method=wct.webcams.list_nearby&devid=05a232850706aea3b0b03db356358f24&lat=" + selectedLocation.lat() + "&lng="
-				+ selectedLocation.lng() + "&radius=" + range + "&unit=km&per_page=" + webcamsPerPage + "&page=" + currentWebcamPage
+				+ selectedLocation.lng() + "&radius=" + range + "&unit=km"
 				+ "&format=json&callback=processWebcamResults";
 		$("body").append(script);
 	});
@@ -61,8 +59,7 @@ function processWebcamResults(data) {
 		if (webcams) {
 			var i = 0;
 			totalWebcams = data.webcams.count;
-			$
-					.each(
+			$.each(
 							webcams,
 							function(index, webcam) {
 								var output = "<tr onmouseover='highlightRow(this," + webcam.latitude + "," + webcam.longitude
@@ -97,7 +94,6 @@ function processWebcamResults(data) {
 		infoMarker.setMap(null);
 		infoMarker == null;
 		listOfWebcams[0] = output;
-		$("#webcam_footer").html("<center></center>");
 	}
 	updateWebcamDisplay();
 }
@@ -120,43 +116,23 @@ function getWebcamTimeCreated(time) {
 }
 
 /**
- * Load the webcam display based on whats in weather array.
+ * Load the webcam display based on whats in webcam array.
  */
 function updateWebcamDisplay() {
 	var output = "<table>";
 	for (i = 0; i < listOfWebcams.length; i++) {
 		output += listOfWebcams[i];
 	}
-	output += "</tr><tr><td colspan='6' class='weather-text'>";
+	output += "</tr><tr><td colspan='2'>";
 	output += "Powered by <a href=\"http://www.webcams.travel/\" title=\"Webcams Worldwide\" target=\"_blank\">Webcams.Travel</a>";
 	output += "</td></tr></table>";
-	document.getElementById("webcam_stream").innerHTML = output;
-
-	updateWebcamPaging();
+	$("#webcam_stream").html(output);
+	updateWebcamFooter();
 }
 
 /**
- * Updates the paging information at the bottom of the window
- * 
- * @param page -
- *          current page number.
+ * Updates the footer information at the bottom of the window
  */
-function updateWebcamPaging() {
-
-	if (listOfWebcams.length > 1) {
-		totalPages = Math.ceil(totalWebcams / webcamsPerPage);
-
-		var next = "&nbsp;";
-		var previous = "&nbsp;";
-
-		if ((currentWebcamPage + 1) <= totalPages) {
-			next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"currentWebcamPage = currentWebcamPage + 1;updateWebcamLocationInformation()\"></img>";
-		}
-
-		if ((currentWebcamPage - 1) >= 1) {
-			previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"currentWebcamPage = currentWebcamPage - 1;updateWebcamLocationInformation()\"></img>";
-		}
-
-		$("#webcam_footer").html("<center>" + previous + "&nbsp&nbsp;" + next + "</center>");
-	}
+function updateWebcamFooter() {
+		$("#webcam_footer").html(webcamsFound?"<center>" + listOfWebcams.length + " webcams</center>" : "<center>No webcams</center>");
 }

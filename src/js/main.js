@@ -846,9 +846,14 @@ function loadLastLocation() {
 	}	
 }
 
-function googleIt(query) {
-	$("#search_container").css("display", "inline");
-	updateSearchResultsInformation(query);
+/**
+ * Zoom to a point on the map
+ * @param lat - latitude
+ * @param lng - longitude
+ * @param zoom - zoom leve
+ */
+function zoomToPoint(lat, lng, zoom) {
+	var point = new google.maps.LatLng(lat, lng);
+	map.setCenter(point);
+	map.setZoom(zoom);
 }
-
-

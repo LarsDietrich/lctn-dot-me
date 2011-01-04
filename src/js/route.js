@@ -70,9 +70,3 @@ function updateRouteDisplay() {
 	output += "</table>";
 	$("#route_stream").html(output);
 }
-
-function zoomToPoint(lat, lng) {
-	var point = new google.maps.LatLng(lat, lng);
-	map.setCenter(point);
-	map.setZoom(15);
-}
