@@ -38,7 +38,6 @@
 			<div id="addthis" class="addthis">
 				<!-- AddThis Button BEGIN -->
 				<div class="addthis_toolbox addthis_pill_combo addthis_toolbox addthis_default_style ">
-				<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
 				<a class="addthis_button_tweet"></a>
 				<a class="addthis_counter addthis_pill_style"></a>
 				</div>
@@ -46,8 +45,39 @@
 				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
 				<!-- AddThis Button END -->
 			</div>
-	
-		<?php 
+
+			<div id="facebook-login" class="facebook-login">
+		      <div id="fb-root"></div>
+		      <script src="http://connect.facebook.net/en_US/all.js"></script>
+		      <script>
+		         FB.init({ 
+		            appId:'179640572057712', cookie:true, status: true, xfbml:true 
+		         });
+
+		         FB.Event.subscribe('auth.login', function(response) {
+		           window.location.reload();
+		         });
+
+		         if (FB.getSession()) {
+					user = FB.getSession().uid;
+			     }
+		      </script>
+
+		      <?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+ 				  <fb:profile-pic uid='loggedinuser' width='25px' height='25px'></fb:profile-pic>
+ 				  &nbsp;You are logged in as <fb:name uid='loggedinuser' useyou='false'></fb:name> 
+			  <?php } else {?>
+	  		      <fb:login-button>Login with Facebook</fb:login-button>
+			  <?php }?>
+			</div>
+
+		      <?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+				<div class="facebook-like">
+					<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
+				</div>
+ 			  <?php }?>
+
+		    <?php 
 			include("container/find.php");
 			include("container/share.php");
 			include("container/map.php");
@@ -59,7 +89,7 @@
 			include("container/places.php");
 			include("container/message.php");
 			include("container/route.php");
-			//			include("container/ads.php");
+			//		include("container/ads.php");
 			?>
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>

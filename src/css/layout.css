@@ -364,9 +364,25 @@ input {
 
 .addthis {
 	position: absolute;
-	top: 7px;
+	top: 40px;
 	left: 5px;
 }
 
 .footer {
+}
+
+.facebook-login {
+	position: absolute;
+	top: 5px;
+	left: 7px;
+	font-size: small;
+	font-weight: bold;
+}
+
+.facebook-like {
+	position: absolute;
+	top: 40px;
+	left: 228px;
+	font-size: small;
+	font-weight: bold;
 }
