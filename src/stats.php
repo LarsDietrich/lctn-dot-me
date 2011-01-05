@@ -21,25 +21,25 @@ if (isset($_GET["do"])) {
  * { "stat": [ {"longitude": "10.000", "latitude": "20.000" } ]
  */
 function add() {
-	$_lng = $_GET["lng"];
-	$_lat = $_GET["lat"];
-	$_now = date("Y-m-d H:i:s");
-	$_query = "INSERT stats (created, longitude, latitude) VALUES ('" . $_now . "', '" . $_lng . "', '" . $_lat . "')";
-	$_sql = new Sql();
-	$_sql->execute($_query);
+	$lng = $_GET["lng"];
+	$lat = $_GET["lat"];
+	$now = date("Y-m-d H:i:s");
+	$query = "INSERT stats (created, longitude, latitude) VALUES ('" . $now . "', '" . $lng . "', '" . $lat . "')";
+	$sql = new Sql();
+	$sql->execute($query);
 	echo("{\"result\":\"ok\"}");
 }
 
 function show() {
-	$_query = "SELECT created, latitude, longitude FROM stats";
-	$_sql = new Sql();
-	$_results = $_sql->execute($_query);
+	$query = "SELECT created, latitude, longitude FROM stats";
+	$sql = new Sql();
+	$results = $sql->execute($query);
 
 	$result = array();
 
 	$i = 0;
 
-	while ($row = mysql_fetch_array($_results, MYSQL_NUM)) {
+	while ($row = mysql_fetch_array($results, MYSQL_NUM)) {
 		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'created' => $row[0]);
 		$result[$i] = $arr;
 		$i++;
@@ -72,15 +72,15 @@ function related() {
 		$min_lng = -1 * ($min_lng - 90);
 	}
 
-	$_query = "SELECT created, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
-	$_sql = new Sql();
-	$_results = $_sql->execute($_query);
+	$query = "SELECT created, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
+	$sql = new Sql();
+	$results = $sql->execute($query);
 
 	$result = array();
 
 	$i = 0;
 
-	while ($row = mysql_fetch_array($_results, MYSQL_NUM)) {
+	while ($row = mysql_fetch_array($results, MYSQL_NUM)) {
 		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'microtime' => $row[0]);
 		$result[$i] = $arr;
 		$i++;

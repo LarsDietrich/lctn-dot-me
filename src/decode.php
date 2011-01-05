@@ -2,15 +2,17 @@
 <?php
 
 require("includes/functions.php");
-
+//$_url="rse1";
 $_url= mysql_escape_string($_GET["decode"]);
 $_longUrl = getLongUrl($_url);
 
 if ($_longUrl == "") {
-	$_longUrl = "error/404.php";
-} 
+	$result = "error/404.php";
+	die();
+} else {
+	$result = "?q=" . base64_encode($_longUrl);
+}
 
-header("location:$_longUrl");
-
+header("location:$result");
 
 ?>

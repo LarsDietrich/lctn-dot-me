@@ -1,6 +1,6 @@
 <?php
 require("includes/sql.php");
-$result = getShortUrl($_GET["url"], $_GET["shorturl"]);
+$result = getShortUrl($_GET["url"], $_GET["shorturl"], $_GET["user"]);
 echo $result;
 
 /**
@@ -12,7 +12,7 @@ echo $result;
  * @param $longUrl - url to shorten
  * @param $shortUrl - custom short url to use
  */
-function getShortUrl($longUrl, $shortUrl) {
+function getShortUrl($longUrl, $shortUrl, $user) {
 	$_sql = new Sql();
 	$_exists = longUrlExists($longUrl);
 
@@ -32,7 +32,7 @@ function getShortUrl($longUrl, $shortUrl) {
 	}
 
 	$_now = date("Y-m-d H:i:s");
-	$_query = "insert into url (longurl, shorturl, openid, created) values ('" . $_longUrl . "','" . $shortUrl . "', 'TEST', '" . $_now . "')";
+	$_query = "insert into url (longurl, shorturl, openid, created) values ('" . $_longUrl . "','" . $shortUrl . "','" . $user . "', '" . $_now . "')";
 	$_sql->execute($_query);
 	return $shortUrl;
 }

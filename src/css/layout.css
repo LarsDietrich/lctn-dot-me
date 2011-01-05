@@ -386,3 +386,12 @@ input {
 	font-size: small;
 	font-weight: bold;
 }
+
+.statistics {
+	position: absolute;
+	top: 70px;
+	left: 7px;
+	font-size: large;
+	font-weight: bold;
+	color: #888F51;
+}

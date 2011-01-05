@@ -35,11 +35,10 @@ var locationCache = new Array();
 var currentSearchPosition = 0;
 
 /**
- * Loads the parameters passed through on the URL into variables. Used to
+ * Decodes and loads the parameters passed through on the URL into variables. Used to
  * preload a location.
  */
 function loadUrlParameters() {
-
 	$.extend( {
 		getUrlVars : function() {
 			var vars = {};
@@ -50,36 +49,16 @@ function loadUrlParameters() {
 		}
 	});
 
-	latitude = parseFloat($.getUrlVars()['lat']);
-	if (!latitude) {
-		latitude = 999;
-	}
-
-	longitude = parseFloat($.getUrlVars()['lng']);
-	if (!longitude) {
-		longitude = 999;
-	}
-
-	heading = parseInt($.getUrlVars()['heading']);
-	if (!heading) {
-		heading = 0;
-	}
-
-	zoom = parseInt($.getUrlVars()['zoom']);
-	if (!zoom) {
-		zoom = 12;
-	}
-
-	pitch = parseInt($.getUrlVars()['pitch']);
-	if (!pitch) {
-		pitch = 0;
-	}
-
-	maptype = $.getUrlVars()['maptype'];
-	if (!maptype) {
-		maptype = "roadmap";
-	}
-
+	if ($.getUrlVars()['q']) {
+		var encodedString = $.getUrlVars()['q'];
+		var data = JSON.parse(Base64.decode(encodedString));
+		latitude = data.lat?parseFloat(data.lat):0;
+		longitude = data.lng?parseFloat(data.lng):0;
+		heading = data.heading?parseInt(data.heading):0;
+		zoom = data.zoom?parseInt(data.zoom):12;
+		pitch = data.pitch?parseInt(data.pitch):0;
+		maptype = data.maptype?data.maptype:"roadmap";
+	}	
 }
 
 /**
@@ -210,12 +189,13 @@ function loadMap() {
 
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
-//  var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34, primaryColor: '#0000FF', cornercolor:'#0000EE'});
+// var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34,
+// primaryColor: '#0000FF', cornercolor:'#0000EE'});
 
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map
-//		icon : icon
+// icon : icon
 	});
 
   google.maps.event.addListener(positionMarker, 'click', function() {
@@ -296,6 +276,7 @@ function reloadContainers() {
 	$("#url").value = "";
 	setMessage("");
 	updateStats();
+	getStatistics();
 }
 
 /**
@@ -326,9 +307,9 @@ function loadAllContainers() {
 		loadContainer("places");
 	}
 
-//	if (isEnabled("route")) {
-//		loadContainer("route");
-//	}
+	if (isEnabled("user")) {
+		loadContainer("user");
+	}
 }
 
 /**
@@ -363,13 +344,14 @@ function loadContainer(name) {
 			updatePlacesLocationInformation();
 		}
 
-//		if (name == "route") {
-//			updateRouteInformation();
-//		}
-
 		if (name == "webcam") {
 			currentWebcamPage = 1;
 			updateWebcamLocationInformation();
+		}
+
+		if (name == "user") {
+			$("#user-name").html("You");
+			updateUserInformation();
 		}
 	}
 }
@@ -423,6 +405,12 @@ function showContainers() {
 		$("#route_container").css("display", "inline");
 	} else {
 		$("#route_container").css("display", "none");
+	}
+
+	if (isEnabled("user")) {
+		$("#user_container").css("display", "inline");
+	} else {
+		$("#user_container").css("display", "none");
 	}
 
 }
@@ -563,7 +551,8 @@ function useAddressToReposition(address) {
 }
 
 /**
- * Helper method to reposition based on coordinates where coords are swapped around (long then lat).
+ * Helper method to reposition based on coordinates where coords are swapped
+ * around (long then lat).
  */
 function useAddressToRepositionLngLat(address) {
 	addr = address.split(",");
@@ -609,10 +598,15 @@ function reverseCodeLatLng() {
  */
 function shortenUrl() {
 	root = "http://" + top.location.host + "/";
-	longurl = root + "?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&heading=" + heading + "&pitch=" + pitch + "&zoom=" + zoom
-			+ "&maptype=" + maptype;
-	shorturl = "";
-	jx.load("shrink.php?shorturl=" + shorturl + "&url=" + escape(longurl), function(data) {
+	var longUrl = "{\"lat\":\"" + selectedLocation.lat() + "\",";
+	longUrl += "\"lng\":\"" + selectedLocation.lng() + "\",";
+	longUrl += "\"heading\":\"" + heading + "\",";
+	longUrl += "\"pitch\":\"" + pitch + "\",";
+	longUrl += "\"zoom\":\"" + zoom + "\",";
+	longUrl += "\"maptype\":\"" + maptype + "\"}";
+	var shortUrl = "";
+	user = user?user:"Unknown";
+	jx.load("shrink.php?shorturl=" + shortUrl + "&url=" + escape(longUrl) + "&user=" + user, function(data) {
 		document.getElementById("url").value = root + data;
 		updateUrlWindow(root + data);
 	});
@@ -699,53 +693,53 @@ function isEnabled(option) {
 	return result;
 }
 
-///**
+// /**
 // * Toggles the map size between large and normal
 // */
-//function toggleMapSize() {
-//	var max_width = "955px";
-//	var normal_width = "470px";
-//	var max_height = "600px";
-//	var normal_height = "465px";
+// function toggleMapSize() {
+// var max_width = "955px";
+// var normal_width = "470px";
+// var max_height = "600px";
+// var normal_height = "465px";
 //
-//	if ($("#map_container").css("width") == max_width) {
-//		$("#map_container").css("width", normal_width);
-//		$("#map_canvas").css("width", normal_width);
-//		$("#map_container").css("height", normal_height);
-//		$("#map_canvas").css("height", normal_height);
-//		google.maps.event.trigger(map, "resize");
-//	} else {
-//		$("#map_container").css("width", max_width);
-//		$("#map_canvas").css("width", max_width);
-//		$("#map_container").css("height", max_height);
-//		$("#map_canvas").css("height", max_height);
-//		google.maps.event.trigger(map, "resize");
-//	}
-//}
+// if ($("#map_container").css("width") == max_width) {
+// $("#map_container").css("width", normal_width);
+// $("#map_canvas").css("width", normal_width);
+// $("#map_container").css("height", normal_height);
+// $("#map_canvas").css("height", normal_height);
+// google.maps.event.trigger(map, "resize");
+// } else {
+// $("#map_container").css("width", max_width);
+// $("#map_canvas").css("width", max_width);
+// $("#map_container").css("height", max_height);
+// $("#map_canvas").css("height", max_height);
+// google.maps.event.trigger(map, "resize");
+// }
+// }
 //
-///**
+// /**
 // * Toggles the streetview size between large and normal
 // */
-//function toggleStreetViewSize() {
-//	var max_width = "955px";
-//	var normal_width = "470px";
-//	var max_height = "600px";
-//	var normal_height = "465px";
+// function toggleStreetViewSize() {
+// var max_width = "955px";
+// var normal_width = "470px";
+// var max_height = "600px";
+// var normal_height = "465px";
 //
-//	if ($("#streetview_container").css("width") == max_width) {
-//		$("#streetview_container").css("width", normal_width);
-//		$("#streetview").css("width", normal_width);
-//		$("#streetview_container").css("height", normal_height);
-//		$("#streetview").css("height", normal_height);
-//		google.maps.event.trigger(map, "resize");
-//	} else {
-//		$("#streetview_container").css("width", max_width);
-//		$("#streetview").css("width", max_width);
-//		$("#streetview_container").css("height", max_height);
-//		$("#streetview").css("height", max_height);
-//		google.maps.event.trigger(map, "resize");
-//	}
-//}
+// if ($("#streetview_container").css("width") == max_width) {
+// $("#streetview_container").css("width", normal_width);
+// $("#streetview").css("width", normal_width);
+// $("#streetview_container").css("height", normal_height);
+// $("#streetview").css("height", normal_height);
+// google.maps.event.trigger(map, "resize");
+// } else {
+// $("#streetview_container").css("width", max_width);
+// $("#streetview").css("width", max_width);
+// $("#streetview_container").css("height", max_height);
+// $("#streetview").css("height", max_height);
+// google.maps.event.trigger(map, "resize");
+// }
+// }
 
 /**
  * "Hilites" a row in the active container and shows the point on the map. Used
@@ -772,7 +766,8 @@ function highlightRow(row, lat, lng, icon) {
 }
 
 /**
- * Helper to call hilight row with longitude and latitude supplied in reverse order.
+ * Helper to call hilight row with longitude and latitude supplied in reverse
+ * order.
  */
 function highlightLngLatRow(row, lng, lat, icon) {
 	highlightRow(row, lat, lng, icon);
@@ -848,9 +843,13 @@ function loadLastLocation() {
 
 /**
  * Zoom to a point on the map
- * @param lat - latitude
- * @param lng - longitude
- * @param zoom - zoom leve
+ * 
+ * @param lat -
+ *          latitude
+ * @param lng -
+ *          longitude
+ * @param zoom -
+ *          zoom leve
  */
 function zoomToPoint(lat, lng, zoom) {
 	var point = new google.maps.LatLng(lat, lng);
