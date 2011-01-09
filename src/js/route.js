@@ -48,13 +48,17 @@ function processRouteLookup(result, status) {
 /**
  * Updates the "route" information
  */
-function updateRouteInformation() {
-	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		$("#route_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Loading route'/>");
-		var start = $("#route_from").val();
-		var end = selectedLocation.lat() + "," + selectedLocation.lng();
-		getRoute(start, end);
+function updateRouteInformation(start, end) {
+	if (!start) {
+		start = $("#route_from").val();
 	}
+	if (!end) {
+		end = selectedLocation.lat() + "," + selectedLocation.lng();
+	}
+	if (start && end) {
+		$("#route_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Loading route'/>");
+		getRoute(start, end);
+	} 
 }
 
 /**
@@ -69,4 +73,18 @@ function updateRouteDisplay() {
 	}
 	output += "</table>";
 	$("#route_stream").html(output);
+}
+
+/**
+ * Activates the Directions window and plots a route from the selected location to the location specified.
+ * 
+ * @param location
+ */
+function getRouteToLocation(location) {
+	if (!isEnabled("route")) {
+		$("#route_container").css("display", "inline");
+	}
+	var start = selectedLocation.lat() + "," + selectedLocation.lng();
+	var end = location;
+	updateRouteInformation(start, end);
 }

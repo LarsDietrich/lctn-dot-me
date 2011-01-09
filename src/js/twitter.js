@@ -39,12 +39,13 @@ function processTheseTweets(jsonData) {
 
 	if (results) {
 		$.each(results, function(index, value) {
-			var location = "999,999";
-			if (isNumeric(value.location)) {
+			var location = cleanTweetLocation(value.location);
+			if (isNumeric(location)) {
 				location = value.location;
+			} else {
+				location = "999,999";
 			}
-			tweet = "<tr onmouseover='highlightRow(this," + location
-					+ ", \"images/twitter_icon.gif\")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
+			tweet = "<tr onmouseover='highlightRow(this," + location + ", \"images/twitter_icon.gif\", \"images/shadow-twitter_icon.png\")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
 			tweet += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
 					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at) + "&nbsp;|&nbsp;"
 					+ getTweetLocation(value.location) + "</td><tr>";
@@ -83,7 +84,7 @@ function getTwitterTimeCreated(time) {
 	} else {
 		response = Math.round(seconds / 86400) + " day(s) ago";
 	}
-	return "<div class='tweet-age inline'>" + response + "</div>";
+	return "<div class='item-subtext inline'>" + response + "</div>";
 }
 
 /**
@@ -128,7 +129,7 @@ function getTweetLocation(text) {
 	var output = "";
 	result = cleanTweetLocation(text);
 	title = "Reposition map to " + result;
-	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
+	output = "<div title=\"" + title + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
 			+ "')\">Go There!</div>";
 
 	return output;

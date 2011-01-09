@@ -34,6 +34,8 @@
 
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
+		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none;"></div>
+		
 		<?php 
 			include("menu.php");
 		?>
@@ -126,7 +128,7 @@
 		<script type="text/javascript" src="js/base64.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>
-
+		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
 	</body>
 
 </html>

@@ -68,10 +68,10 @@ function processSimpleGeoPlacesResults(error, data) {
 			output += "<b>" + properties.name + "</b><br/>";
 			if (properties.phone) { output += "Tel: " + properties.phone + "<br/>"; } else { output += "Phone: Not Listed<br/>";}
 			if (properties.address) { output += "Address: " + properties.address + "," + properties.city + "<br/>"; } else { output += "Address: Not Listed<br/>";}
-			output += "<div title=\"Reposition to this location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToRepositionLngLat('" + value.geometry.coordinates	+ "')\">Go There!</div>&nbsp;|&nbsp;";
+			output += "<div title=\"Reposition to this location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToRepositionLngLat('" + value.geometry.coordinates	+ "')\">Go There!</div>&nbsp;|&nbsp;";
 			output += "<a href=\"";
 			output += "http://www.google.com/search?hl=en&q=%22" + properties.name + "%22&btnG=Google+Search";
-			output += "\" target=\"_blank\"><div title=\"Find out more\" class=\"tweet-age inline\" style=\"cursor: pointer;\">Google It!</div></a>";
+			output += "\" target=\"_blank\"><div title=\"Find out more\" class=\"item-subtext inline\" style=\"cursor: pointer;\">Google It!</div></a>";
 			output += "</td></tr>";
 			listOfPlaces[i] = output;
 			i++;

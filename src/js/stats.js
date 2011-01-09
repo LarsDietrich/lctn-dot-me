@@ -12,7 +12,7 @@ function getStatistics() {
  * Process the statistics.
  */
 function processStatistics(data) {
-	$("#statistics").html("People have searched for places " + data.total + " times in the last " + getStatsTimeStart(data.result[0].created));
+	$("#statistics").html(data.total + " searches in " + getStatsTimeStart(data.result[0].created) + " and counting...");
 }
 
 /**

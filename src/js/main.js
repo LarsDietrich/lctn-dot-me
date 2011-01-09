@@ -673,6 +673,24 @@ function beta() {
 }
 
 /**
+ * Display an image fullscreen as an overlay.
+ * 
+ * @param imageUrl - url of image to display
+ */
+function fullscreenImage(imageUrl) {
+	var popup = $('#displaybox-no-opacity');
+	if (popup.css("display") == "none") {
+		popup.css("display", "");
+		popup.html("<img src=\"" + imageUrl+ "\" class=\"image-fullscreen\"/>");
+		setMessage("Click to close");
+	} else {
+		popup.css("display", "none");
+		popup.html("");
+	}
+	return false;
+}
+
+/**
  * Tries to load an "option" from the sites cookie. If the option is found,
  * returns the value (true/false). If it is NOT found, sets it to false
  * 
@@ -752,17 +770,36 @@ function isEnabled(option) {
  * @param icon -
  *          the icon image to use
  */
-function highlightRow(row, lat, lng, icon) {
+function highlightRow(row, lat, lng, icon, shadow_icon) {
+
+	if (infoMarker) {
+		infoMarker.setMap(null);
+	}
+	
 	$(row).css("background-color", "#AEC2AE");
 	var location = new google.maps.LatLng(lat, lng);
+  var image = new google.maps.MarkerImage(icon,
+      new google.maps.Size(32.0, 32.0),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(16.0, 16.0)
+  );
+  
 	infoMarker = new google.maps.Marker( {
-		position : location
-	
+		position : location,
+		icon : image
 	});
-	infoMarker.setMap(map);
-	infoMarker.setIcon(icon);
+
+  if (shadow_icon) {
+	  var shadow = new google.maps.MarkerImage(shadow_icon,
+	      new google.maps.Size(49.0, 32.0),
+	      new google.maps.Point(0, 0),
+	      new google.maps.Point(16.0, 16.0)
+	  );
+		infoMarker.setShadow(shadow);
+  }
+
+  infoMarker.setMap(map);
 	infoMarker.setZIndex(999);
-	
 }
 
 /**
@@ -856,3 +893,4 @@ function zoomToPoint(lat, lng, zoom) {
 	map.setCenter(point);
 	map.setZoom(zoom);
 }
+
