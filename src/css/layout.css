@@ -1,5 +1,6 @@
 html {
 	background: url(/images/bg.jpg) no-repeat center center fixed;
+	background-color: #E5DFAE;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -134,22 +135,22 @@ body {
 
 .weather-icon {
 	height: 50px;
-	width: 50x;
+	width: 50px;
 }
 
 .wind-direction-icon {
 	height: 12px;
-	width: 12x;
+	width: 12px;
 }
 
 .precipitation-icon {
 	height: 12px;
-	width: 12x;
+	width: 12px;
 }
 
 .thermometer-icon {
 	height: 15px;
-	width: 18x;
+	width: 18px;
 }
 
 .weather-text {
@@ -340,15 +341,15 @@ input {
 .panel {
 	width: 470px;
 	display: none;
-	filter: alpha(opacity =         90);
-	opacity: .9;
+	filter: alpha(opacity =         1);
+	opacity: 1;
 }
 
 .cacheimage {
-	height: 30px;
-	padding: 8px 0 0;
+	height: 27px;
+	padding: 8px 0px 0px 5px;
 	vertical-align: top;
-	width: 30px;
+	width: 27px;
 	cursor: pointer;
 }
 
@@ -374,10 +375,6 @@ input {
 	position: absolute;
 	top: 40px;
 	left: 5px;
-}
-
-.footer {
-	
 }
 
 .facebook-login {
