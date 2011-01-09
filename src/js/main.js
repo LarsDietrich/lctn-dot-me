@@ -526,16 +526,15 @@ function setMessage(message) {
  */
 function locateAndRefresh(putInCache) {
 	var address = document.getElementById("address").value;
-	setMessage("");
 	geocoder.geocode( {
 		'address' : address
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			selectedLocation = results[0].geometry.location;
-			reloadContainers();
 			if (putInCache) {
 				addToCache($("#address").val());
 			}
+			reloadContainers();
 		} else {
 			setMessage("Sorry, could not find it, try search for something else.", "info");
 		}

@@ -1,7 +1,6 @@
 <?php
 
 require ("includes/sql.php");
-show();
 
 if (isset($_GET["do"])) {
 	$do = $_GET["do"];
@@ -31,7 +30,7 @@ function add() {
 }
 
 function show() {
-	$query = "SELECT created, latitude, longitude FROM stats";
+	$query = "SELECT created, latitude, longitude FROM stats order by created asc";
 	$sql = new Sql();
 	$results = $sql->execute($query);
 
@@ -53,7 +52,7 @@ function related() {
 	$max_lng = $_GET["lng"] + 1;
 	$min_lat = $_GET["lat"] - 1;
 	$max_lat = $_GET["lat"] + 1;
-
+	
 	$total = 0;
 
 	if ($min_lng < -180) {
@@ -72,7 +71,7 @@ function related() {
 		$min_lng = -1 * ($min_lng - 90);
 	}
 
-	$query = "SELECT created, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created DESC limit 5";
+	$query = "SELECT created, latitude, longitude FROM stats WHERE longitude < " . $max_lng . " AND longitude > " . $min_lng . " AND latitude < " . $max_lat . " AND latitude > " . $min_lat . " ORDER BY created ASC";
 	$sql = new Sql();
 	$results = $sql->execute($query);
 
@@ -81,13 +80,13 @@ function related() {
 	$i = 0;
 
 	while ($row = mysql_fetch_array($results, MYSQL_NUM)) {
-		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'microtime' => $row[0]);
+		$arr = array('longitude' => $row[2], 'latitude' => $row[1], 'created' => $row[0]);
 		$result[$i] = $arr;
 		$i++;
 	}
 
-	echo "{\"result\":" . json_encode($result) . "}";
-
+	echo "{\"total\":\"" . $i . "\", \"result\": " . json_encode($result) . "}";
+	
 }
 
 ?>

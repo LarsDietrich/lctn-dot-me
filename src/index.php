@@ -24,7 +24,8 @@
 
 	<body onload="load()">
 
-		<div class="statistics" id="statistics"></div>
+		<div class="statistics-total" id="statistics-total"></div>
+		<div class="statistics-near" id="statistics-near"></div>
 		
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
