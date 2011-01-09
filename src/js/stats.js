@@ -2,17 +2,29 @@
  * Get statistics
  */
 function getStatistics() {
-	var query = "stats.php";
+	var query = "stats.php?do=show";
 	jx.load(query, function(data) {
-		processStatistics(data);
+		processStatisticsTotal(data);
+	}, "json");
+
+	query = "stats.php?do=related&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng();
+	jx.load(query, function(data) {
+		processStatisticsNear(data);
 	}, "json");
 }
 
 /**
- * Process the statistics.
+ * Process the statistics for totals.
  */
-function processStatistics(data) {
-	$("#statistics").html(data.total + " searches in " + getStatsTimeStart(data.result[0].created) + " and counting...");
+function processStatisticsTotal(data) {
+	$("#statistics-total").html(data.total + " total searches in the last " + getStatsTimeStart(data.result[0].created));
+}
+
+/**
+ * Process the statistics for near.
+ */
+function processStatisticsNear(data) {
+	$("#statistics-near").html(data.total + " searches near the current location in the last " + getStatsTimeStart(data.result[0].created));
 }
 
 /**

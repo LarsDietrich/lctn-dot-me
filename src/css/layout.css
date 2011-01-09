@@ -394,13 +394,22 @@ input {
 	font-weight: bold;
 }
 
-.statistics {
+.statistics-total {
 	position: absolute;
-	top: 70px;
+	top: 65px;
 	left: 7px;
-	font-size: large;
+	font-size: small;
 	font-weight: bold;
-	color: #888F51;
+	color: #113355;
+}
+
+.statistics-near {
+	position: absolute;
+	top: 85px;
+	left: 7px;
+	font-size: small;
+	font-weight: bold;
+	color: #113355;
 }
 
 .image-fullscreen {
