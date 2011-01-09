@@ -108,6 +108,7 @@
 				<include name=".htaccess" />
 				<include name="**/*.htm" />
 				<include name="**/configure*" />
+				<include name="**/*.swf"/>
 			</fileset>
 		</copy>
 	</target>
