@@ -149,6 +149,8 @@ function load() {
  */
 function findMe() {
 
+	var location = geoip_latitude() + "," + geoip_longitude();
+	useAddressToReposition(location);
 	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -276,7 +278,6 @@ function reloadContainers() {
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
 	$("#url").value = "";
-	setMessage("");
 	updateStats();
 	getStatistics();
 }
