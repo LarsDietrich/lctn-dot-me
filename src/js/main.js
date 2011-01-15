@@ -149,12 +149,11 @@ function load() {
  */
 function findMe() {
 
+	setMessage("Looking up your location may not always work or be accurate.");
 //	var location = geoip_latitude() + "," + geoip_longitude();
 //	useAddressToReposition(location);
 //	
 	if (navigator.geolocation) {
-		alert("navigator");
-		alert(navigator.geolocation);
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
