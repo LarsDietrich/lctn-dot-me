@@ -1,7 +1,6 @@
 var listOfRoute = [];
 var directionsDisplay = new google.maps.DirectionsRenderer();
 var directionsService = new google.maps.DirectionsService();
-
 /**
  * Generate a route
  * 
@@ -17,7 +16,7 @@ function getRoute(start, end) {
 		travelMode : google.maps.DirectionsTravelMode.DRIVING
 	};
 	directionsService.route(request, function(result, status) {
-		processRouteLookup(result, status);
+		processRouteLookup(result, status, start, end);
 	});
 
 }
@@ -25,7 +24,7 @@ function getRoute(start, end) {
 /**
  * Process the route data returned, convert to array.
  */
-function processRouteLookup(result, status) {
+function processRouteLookup(result, status, start, end) {
 	if (status == google.maps.DirectionsStatus.OK) {
 		directionsDisplay.setDirections(result);
 
@@ -34,7 +33,7 @@ function processRouteLookup(result, status) {
 	  for (var i = 0; i < myRoute.steps.length; i++) {
 	  	var location = myRoute.steps[i].start_point.lat() + "," + myRoute.steps[i].start_point.lng();
 			var output = "<tr class=\"pointer\" onmouseover='highlightRow(this," + location	+ ", \"images/route-marker.png\")' onmouseout='normalRow(this)' onclick='zoomToPoint(" + location + ")'><td>";
-	  	output += i + ".&nbsp;" + myRoute.steps[i].instructions;
+	  	output += myRoute.steps[i].instructions;
 	  	output += "</td></tr>";
 	  	listOfRoute[i] = output;
 	  }
@@ -42,7 +41,7 @@ function processRouteLookup(result, status) {
 	} else {
 		setMessage("Route lookup failed: " + status);
 	}
-	updateRouteDisplay();
+	updateRouteDisplay(start, end);
 }
 
 /**
@@ -64,15 +63,16 @@ function updateRouteInformation(start, end) {
 /**
  * Load the route display based on whats in route array.
  */
-function updateRouteDisplay() {
+function updateRouteDisplay(start, end) {
 	var output = "<table>";
-  output += "<tr><td>Directions from <b>" + $("#route_from").val() + "</b> to <b>" + $("#address").val() + "</b> :</td</tr>";
-  output += "<tr><td><hr/></td</tr>";
+  output += "<tr><td>To get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end + "</div></b></td</tr>";
 	for (i = 0; i < listOfRoute.length; i++) {
 		output += listOfRoute[i];
 	}
 	output += "</table>";
 	$("#route_stream").html(output);
+	renderAddress("start");
+	renderAddress("end");
 }
 
 /**
@@ -85,6 +85,25 @@ function getRouteToLocation(location) {
 		$("#route_container").css("display", "inline");
 	}
 	var start = selectedLocation.lat() + "," + selectedLocation.lng();
+	$("#route_from").val($("#address").val());
 	var end = location;
 	updateRouteInformation(start, end);
 }
+
+function renderAddress(control) {
+	var split = $("#route_" + control).html().split(",");
+	var location = new google.maps.LatLng(split[0], split[1]);
+	geocoder.geocode( {
+		'latLng' : location
+	}, function(results, status) {
+		var address = "";
+		if (status == google.maps.GeocoderStatus.OK) {
+			if (results.length > 0) {
+				address = results[0].formatted_address;
+				$("#route_" + control).html(address);
+			}
+		}
+	});
+}
+
+

@@ -35,8 +35,8 @@ var locationCache = new Array();
 var currentSearchPosition = 0;
 
 /**
- * Decodes and loads the parameters passed through on the URL into variables. Used to
- * preload a location.
+ * Decodes and loads the parameters passed through on the URL into variables.
+ * Used to preload a location.
  */
 function loadUrlParameters() {
 	$.extend( {
@@ -82,14 +82,14 @@ function load() {
 	beta();
 
 	updateUrlWindow("");
-
+	
 	if ($.cookie("lastLocation")) {
 		loadLastLocation();
 	} else {
-		selectedLocation = new google.maps.LatLng(latitude, longitude);
-		loadMap();
-		loadStreetView();
-		reloadContainers();
+		findMe();
+//		loadMap();
+//		loadStreetView();
+//		reloadContainers();
 	}
 	
 	// setup the popup overlay for later use
@@ -148,28 +148,30 @@ function load() {
  * functionality. Reloads the containers after attempt.
  */
 function findMe() {
+
+	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
-			reloadContainers();
+			var location = position.coords.latitude + "," + position.coords.longitude;
+			useAddressToReposition(location);
 		}, function(error) {
 			setMessage("Tried to get your location, but there was a problem, sorry", "error");
-			selectedLocation = new google.maps.LatLng(0, 0);
-			reloadContainers();
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
 		geo.getCurrentPosition(function(position) {
-			selectedLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			setMessage("Repositioning map to best guess of where you are (accuracy not guaranteed)", "info");
-			reloadContainers();
+			var location = position.coords.latitude + "," + position.coords.longitude;
+			useAddressToReposition(location);
 		}, function(error) {
-			selectedLocation = new google.maps.LatLng(0, 0);
 			setMessage("Tried to get your location, but there was a problem, sorry", "error");
-			reloadContainers();
 		});
+	} else {
+		var location = geoip_latitude() + "," + geoip_longitude();
+		useAddressToReposition(location);
 	}
+
+
+
 }
 
 /**
@@ -567,7 +569,7 @@ function reverseCodeLatLng() {
 	geocoder.geocode( {
 		'latLng' : selectedLocation
 	}, function(results, status) {
-		document.getElementById("timezone_stream").innerHTML = "";
+		$("#timezone_stream").html("");
 		output = "";
 		var address = "";
 		if (status == google.maps.GeocoderStatus.OK) {
@@ -674,7 +676,8 @@ function beta() {
 /**
  * Display an image fullscreen as an overlay.
  * 
- * @param imageUrl - url of image to display
+ * @param imageUrl -
+ *          url of image to display
  */
 function fullscreenImage(imageUrl) {
 	var popup = $('#displaybox-no-opacity');
@@ -759,25 +762,23 @@ function isEnabled(option) {
 // }
 
 /**
- * "Hilites" a row in the active container and shows the point on the map. Used
- * by wiki and twitter containers
+ * "Hilites" a row in the active container and shows the point on the map. 
  * 
  * @param row -
- *          the element "row" to hilite
- * @param location -
- *          the location to put on the map (google.map.LatLng)
- * @param icon -
- *          the icon image to use
+ *          the element "row" to hilite, must have data- elements for data set
+ *          (data-latitude, data-longitude, data-image, data-shadow-image)
  */
-function highlightRow(row, lat, lng, icon, shadow_icon) {
+function highlightRow(row) {
+
+	$(row).css("background-color", "#AEC2AE");
 
 	if (infoMarker) {
 		infoMarker.setMap(null);
 	}
 	
-	$(row).css("background-color", "#AEC2AE");
-	var location = new google.maps.LatLng(lat, lng);
-  var image = new google.maps.MarkerImage(icon,
+	var location = new google.maps.LatLng($(row).attr("data-latitude"), $(row).attr("data-longitude"));
+
+	var image = new google.maps.MarkerImage($(row).attr("data-image"),
       new google.maps.Size(32.0, 32.0),
       new google.maps.Point(0, 0),
       new google.maps.Point(16.0, 16.0)
@@ -788,8 +789,8 @@ function highlightRow(row, lat, lng, icon, shadow_icon) {
 		icon : image
 	});
 
-  if (shadow_icon) {
-	  var shadow = new google.maps.MarkerImage(shadow_icon,
+  if ($(row).attr("data-shadow-image")) {
+	  var shadow = new google.maps.MarkerImage($(row).attr("data-shadow-image"),
 	      new google.maps.Size(49.0, 32.0),
 	      new google.maps.Point(0, 0),
 	      new google.maps.Point(16.0, 16.0)
@@ -799,15 +800,9 @@ function highlightRow(row, lat, lng, icon, shadow_icon) {
 
   infoMarker.setMap(map);
 	infoMarker.setZIndex(999);
+
 }
 
-/**
- * Helper to call hilight row with longitude and latitude supplied in reverse
- * order.
- */
-function highlightLngLatRow(row, lng, lat, icon) {
-	highlightRow(row, lat, lng, icon);
-}
 /**
  * Return the element represented by the row to normal (from hilighted) and
  * clear the map marker.

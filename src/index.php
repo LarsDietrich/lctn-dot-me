@@ -107,6 +107,8 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
+		<script type="text/javascript" src="http://j.maxmind.com/app/geoip.js"></script>
+
 
  		<script type="text/javascript" src="js/gears_init.js"></script> 
 		<script type="text/javascript" src="js/jxs.js"> </script>
@@ -130,6 +132,7 @@
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>
 		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
+
 	</body>
 
 </html>
