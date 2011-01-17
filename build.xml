@@ -81,8 +81,7 @@
 -->
 
 	<target name="js.minify">
-<!--
-		<apply executable="java" parallel="false">
+	    <apply executable="java" parallel="false">
 	        <fileset dir="${src.dir}/js" includes="*.js"/>
 	        <arg line="-jar"/>
 	        <arg path="lib/yuicompressor.jar"/>
@@ -91,7 +90,6 @@
 	        <mapper type="glob" from="*.js" to="*.js"/>
 	        <targetfile/>
 	    </apply>
--->
 		<move todir="${build.dir}/js">
 	        <fileset dir="." includes="*.js"/>
 		</move>
