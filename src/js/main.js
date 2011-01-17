@@ -602,7 +602,7 @@ function reverseCodeLatLng() {
 function shortenUrl() {
 	root = "http://" + top.location.host + "/";
 	var longUrl = '{"lat":"' + selectedLocation.lat() + '",';
-	longUrl += '"lng":\"' + selectedLocation.lng() + '",';
+	longUrl += '"lng":"' + selectedLocation.lng() + '",';
 	longUrl += '"heading":"' + heading + '",';
 	longUrl += '"pitch":"' + pitch + '",';
 	longUrl += '"zoom":"' + zoom + '",';
