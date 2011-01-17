@@ -50,7 +50,7 @@
 				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
 				<!-- AddThis Button END -->
 			</div>
-
+<!-- 
 			<div id="facebook-login" class="facebook-login">
 		      <div id="fb-root"></div>
 		      <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -81,9 +81,9 @@
 					<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
 				</div>
  			  <?php }?>
+	 -->	    
 
 		    <?php 
-		    
 		    
 		    
 			include("container/find.php");
