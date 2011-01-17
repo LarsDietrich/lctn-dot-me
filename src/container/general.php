@@ -1,7 +1,10 @@
 <div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="general_container" class="draggable panel">
 	<span>
-		<div class="header" title="Shows general information about the location.">
+		<div class="header-left" title="Shows general information about the location.">
 			General
+		</div>
+		<div class="header-right">
+			<img class="window-close" onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
 		</div>
     </span>
 	<div class="detail-padded fixed-height-block">

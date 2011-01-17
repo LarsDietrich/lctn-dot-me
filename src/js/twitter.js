@@ -1,7 +1,7 @@
-// holds all the tweets entries found
+// holds all the tweet entries found
 var listOfTweets = [];
-// limit the number of tweets per page
-var tweetsPerPage = 7;
+var tweetsFound = false;
+
 /**
  * Entry method for generating tweets, calls the twitter service using selected
  * parameters. Once complete, calls a method to process the results.
@@ -36,38 +36,52 @@ function processTheseTweets(jsonData) {
 	var results = jsonData.results;
 	var warning = jsonData.warning;
 	var i = 0;
-	var tweet = "";
+	var output = "";
 
 	if (results) {
 		$.each(results, function(index, value) {
-			var location = "999,999";
-			if (isNumeric(value.location)) {
-				location = value.location;
+			var location = cleanTweetLocation(value.location);
+			var latitude = 999;
+			var longitude = 999;
+			if (isNumeric(location)) {
+				latitude = location.split(",")[0];
+				longitude = location.split(",")[1];
 			}
-			tweet = "<tr onmouseover='highlightRow(this," + location
-					+ ", \"images/twitter_icon.gif\")' onmouseout='normalRow(this)'><td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
-			tweet += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
-					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTimeCreated(value.created_at) + "&nbsp;|&nbsp;"
-					+ getTweetLocation(value.location) + "</td><tr>";
-			listOfTweets[i] = tweet;
+
+			var cleanedLocation = cleanTweetLocation(value.location);
+
+			output = "<tr data-latitude=\"" + latitude + "\" data-longitude=\"" + longitude
+					+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
+			output += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
+					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at) + "&nbsp;|&nbsp;";
+			output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>" + "&nbsp;|&nbsp;";
+			output += "<div title=\"Get directions to " + cleanedLocation + "location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+			output += "</td><tr>";
+			listOfTweets[i] = output;
 			i++;
 		});
 
 		if (listOfTweets.length == 0) {
 			listOfTweets[0] = "No tweets found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>Search phrase not found, try search for something else.</li><li>The Twitter Search Service may be experiencing problems, try again later.</li></ul>";
+		} else {
+			tweetsFound = true;
 		}
-		updateTwitterDisplay(1);
+
+		updateTwitterDisplay();
 	}
 }
 
-function getTimeCreated(time) {
+/**
+ * Parses the time value of the tweet to get the "time ago" value
+ * 
+ * @param time
+ */
+function getTwitterTimeCreated(time) {
 	// Fri, 26 Nov 2010 13:32:59 +0000
 	var tweetDate = new Date(eval('"' + time + '"'));
 	var currentDate = new Date();
 	var seconds = Math.ceil((currentDate.getTime() - tweetDate.getTime()) / 1000);
-
 	var response = "";
-
 	if (seconds < 60) {
 		response = seconds + " second(s) ago";
 	} else if (seconds >= 60 && seconds < 3600) {
@@ -77,7 +91,7 @@ function getTimeCreated(time) {
 	} else {
 		response = Math.round(seconds / 86400) + " day(s) ago";
 	}
-	return "<div class='tweet-age inline'>" + response + "</div>";
+	return "<div class='item-subtext inline'>" + response + "</div>";
 }
 
 /**
@@ -111,28 +125,17 @@ function formatTwitterText(text) {
 }
 
 /**
- * Takes the location supplied by the tweet and hyperlinks it to enable the
- * repositioning of the map when clicked.
+ * Cleans the tweet location, strips out extra characters.
  * 
  * @param text -
- *          the location information
- * @return hyperlinked location text
+ *          the tweet location text.
  */
-function getTweetLocation(text) {
-	var output = "";
-	result = cleanTweetLocation(text);
-	title = "Reposition map to tweet location";
-	output = "<div title=\"" + title + "\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
-			+ "')\">Go There!</div>";
-
-	return output;
-}
-
 function cleanTweetLocation(text) {
 	var result = text.replace("\u00dcT: ", "");
 	result = result.replace("iPhone: ", "");
 	return result;
 }
+
 /**
  * Determine if text supplied is numeric.
  * 
@@ -160,8 +163,8 @@ function isNumeric(text) {
  */
 function updateTwitterLocationInformation() {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		document.getElementById("tweet_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>";
-		getTweets(selectedLocation, document.getElementById("filter").value, document.getElementById("tweet_range").value);
+		$("#tweet_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>");
+		getTweets(selectedLocation, $("#filter").val(), $("#tweet_range").val());
 	}
 }
 
@@ -170,57 +173,32 @@ function updateTwitterLocationInformation() {
  * hashtag
  */
 function updateTwitterLocationInformationFromHashTag(value) {
-	document.getElementById("filter").value = value;
+	$("#filter").val(value);
 	updateTwitterLocationInformation();
 }
 
 /**
  * Loads the twitter container with data from the listOfTweets array.
- * 
- * @param page -
- *          the page number to display tweets for
- * 
  */
-function updateTwitterDisplay(page) {
-	var startItem = (page - 1) * tweetsPerPage;
-	var endItem = page * tweetsPerPage;
-	var output = "";
-
-	if (endItem > listOfTweets.length) {
-		endItem = listOfTweets.length;
-	}
-
-	output += "<table>";
-
-	for (i = startItem; i < endItem; i++) {
+function updateTwitterDisplay() {
+	var output = "<table>";
+	for (i = 0; i < listOfTweets.length; i++) {
 		output += listOfTweets[i];
 	}
-
 	output += "</table>";
 	output += "<div style='text-align=right'><img src=\"images/powered-by-twitter-sig.gif\"/></>";
-	document.getElementById("tweet_stream").innerHTML = output;
-	updateTwitterPaging(page);
+	$("#tweet_stream").html(output);
+	$("table tr", "#tweet_stream").hover(function() {
+		highlightRow($(this));
+	}, function() {
+		normalRow($(this));
+	});
+	updateTwitterFooter();
 }
 
 /**
- * Updates the paging information at the bottom of the twitter container
- * 
- * @param page -
- *          current page number.
+ * Updates the footer information at the bottom of the twitter container
  */
-function updateTwitterPaging(page) {
-	var totalPages = Math.round(listOfTweets.length / tweetsPerPage);
-	if (totalPages < (listOfTweets.length / tweetsPerPage)) {
-		totalPages++;
-	}
-	var next = "&nbsp;";
-	var previous = "&nbsp;";
-
-	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"updateTwitterDisplay(" + (page + 1) + ")\"></img>";
-	}
-	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"updateTwitterDisplay(" + (page - 1) + ")\"></img>";
-	}
-	document.getElementById("twitter_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
+function updateTwitterFooter() {
+	$("#twitter_footer").html(tweetsFound ? "<center>" + listOfTweets.length + " tweets</center>" : "<center>No tweets</center>");
 }

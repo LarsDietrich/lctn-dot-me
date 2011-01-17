@@ -6,7 +6,7 @@
 //	 {"summary":"Obersee is a lake on Oberseealp in the Canton of Glarus, Switzerland. Its surface area is 0.24 km².  (...)","distance":"9.7244","title":"Obersee (Glarus)","wikipediaUrl":"en.wikipedia.org/wiki/Obersee_%28Glarus%29","elevation":0,"countryCode":"CH","lng":9.01388888888889,"feature":"waterbody","lang":"en","lat":47.08694444444445,"population":0}
 //]}
 var listOfWikis = [];
-var wikisPerPage = 5;
+var wikisFound = false;
 
 /**
  * Calls the wikipedia backend php script to retrieve wiki articles for the
@@ -48,18 +48,18 @@ function processWikiData(data) {
 			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat + "," + _articles[i].lng
 					+ ", \"images/wikipedia_icon.png\")' onmouseout='normalRow(this)'><td>";
 			wiki += "<a target= '_blank' href='http://" + _articles[i].wikipediaUrl + "'>" + _articles[i].title + "</a>&nbsp;";
-			wiki += getWikiLocation(_articles[i]) + "<br/>";
-			// wiki += "</td></tr><tr><td style=\"text-align: justify\">";
-			wiki += _articles[i].summary;
+			wiki += _articles[i].summary + "<br/>";
+			wiki += getWikiLocation(_articles[i]);
 			wiki += "</td></tr>";
-
 			listOfWikis[j] = wiki;
 			j++;
 		}
 		if (listOfWikis.length == 0) {
 			listOfWikis[0] = "No entries found, try a bigger search area";
+		} else {
+			wikisFound = true;
 		}
-		updateWikiDisplay(1);
+		updateWikiDisplay();
 	}
 }
 
@@ -73,8 +73,7 @@ function processWikiData(data) {
  */
 function getWikiLocation(_article) {
 	var result = Math.round(_article.lat * 10000) / 10000 + "," + Math.round(_article.lng * 10000) / 10000;
-
-	output = "<div title=\"Reposition map to article location\" class=\"tweet-age inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
+	output = "<div title=\"Reposition map to article location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
 			+ "')\">Go There!</div>";
 
 	return output;
@@ -94,47 +93,20 @@ function updateWikiLocationInformation() {
 
 /**
  * Loads the wikipedia container with the contents of listOfWikis.
- * 
- * @param page -
- *          page to display data for.
  */
-function updateWikiDisplay(page) {
-	var startItem = (page - 1) * wikisPerPage;
-	var endItem = page * wikisPerPage;
+function updateWikiDisplay() {
 	var output = "<table>";
-
-	if (endItem > listOfWikis.length) {
-		endItem = listOfWikis.length;
-	}
-	for (i = startItem; i < endItem; i++) {
+	for (i = 0; i < listOfWikis.length; i++) {
 		output += listOfWikis[i];
 	}
 	output += "</table>";
-
-	document.getElementById("wiki_stream").innerHTML = output;
-
-	updateWikiPaging(page);
+	$("#wiki_stream").html(output);
+	updateWikiFooter();
 }
 
 /**
- * Updates the paging information at the bottom of the wiki container
- * 
- * @param page -
- *          page to create paging for.
+ * Updates the footer information at the bottom of the wiki container
  */
-function updateWikiPaging(page) {
-	var totalPages = Math.round(listOfWikis.length / wikisPerPage);
-	if (totalPages < (listOfWikis.length / wikisPerPage)) {
-		totalPages++;
-	}
-	var next = "&nbsp;";
-	var previous = "&nbsp;";
-	if ((page + 1) <= totalPages) {
-		next = "<img class='footer-icon' src=\"images/next.png\" onclick=\"updateWikiDisplay(" + (page + 1) + ")\"></img>";
-	}
-	if ((page - 1) >= 1) {
-		previous = "<img class='footer-icon' src=\"images/previous.png\" onclick=\"updateWikiDisplay(" + (page - 1) + ")\"></img>";
-	}
-
-	document.getElementById("wiki_footer").innerHTML = "<center>" + previous + "&nbsp&nbsp;" + next + "</center>";
+function updateWikiFooter() {
+	$("#wiki_footer").html(wikisFound?"<center>" + listOfWikis.length + " articles</center>" : "<center>No articles</center>");
 }

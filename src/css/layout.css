@@ -1,3 +1,12 @@
+html {
+	background: url(/images/bg.jpg) no-repeat center center fixed;
+	background-color: #E5DFAE;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
 /* Overridden styles of Blueprint to customize layout */
 body {
 	font-family: sans-serif;
@@ -5,22 +14,41 @@ body {
 }
 
 .header-left {
-	width: 150px;
+	width: 440px;
 	display: table-cell;
 	vertical-align: middle;
-}
-
-.header-center {
-	width: 150px;
-	display: table-cell;
 	overflow: hidden;
 	text-align: center;
+	background: #6F8787;
+	border-radius: 10px 0px 0px 0px;
+	-moz-border-radius: 10px 0px 0px 0px;
+	border-top: 1px solid #6F8787;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	padding: 4px 0px 4px 30px;
+	font-weight: bold;
+	font-size: 13px;
+	color: #000000;
+	text-align: center;
+	cursor: move;
 }
 
 .header-right {
-	width: 150px;
+	width: 10px;
 	display: table-cell;
 	vertical-align: middle;
+	background: #6F8787;
+	border-radius: 0px 10px 0px 0px;
+	-moz-border-radius: 0px 10px 0px 0px;
+	border-top: 1px solid #6F8787;
+	border-left: 1px solid #6F8787;
+	border-right: 1px solid #6F8787;
+	padding: 0px 10px 4px 4px;
+	font-weight: bold;
+	font-size: 13px;
+	color: #000000;
+	text-align: center;
+	cursor: pointer;
 }
 
 .header {
@@ -32,7 +60,7 @@ body {
 	border-right: 1px solid #6F8787;
 	padding: 4px 10px 4px 5px;
 	font-weight: bold;
-	font-size: large;
+	font-size: 13px;
 	color: #000000;
 	text-align: center;
 	cursor: move;
@@ -43,6 +71,18 @@ body {
 	border-left: 1px solid #6F8787;
 	border-right: 1px solid #6F8787;
 	overflow: auto;
+}
+
+.detail-message {
+	padding: 10px 10px 10px 10px;
+	height: 15px;
+	font-size: small;
+	font-weight: bolder;
+	color: white;
+	background: red;
+	border-radius: 0px 10px 10px 0px;
+	-moz-border-radius: 0px 10px 10px 0px;
+	text-align: center;
 }
 
 .detail-map {
@@ -90,27 +130,27 @@ body {
 }
 
 .fixed-height-footer {
-	height: 20px;
+	height: 17px;
 }
 
 .weather-icon {
 	height: 50px;
-	width: 50x;
+	width: 50px;
 }
 
 .wind-direction-icon {
 	height: 12px;
-	width: 12x;
+	width: 12px;
 }
 
 .precipitation-icon {
 	height: 12px;
-	width: 12x;
+	width: 12px;
 }
 
 .thermometer-icon {
 	height: 15px;
-	width: 18x;
+	width: 18px;
 }
 
 .weather-text {
@@ -136,7 +176,7 @@ body {
 
 a:link {
 	font-weight: bold;
-	color: #2C5700;
+	color: #2C00;
 	text-decoration: none;
 }
 
@@ -159,7 +199,7 @@ input {
 	width: 200px;
 	border: 1px solid black;
 	background-color: #6F8787;
-	filter: alpha(opacity =     80);
+	filter: alpha(opacity =                 80);
 	opacity: .8;
 	color: black;
 	font-size: 0.95em;
@@ -254,9 +294,9 @@ input {
 	background: transparent;
 	font-size: medium;
 	color: #000;
-	  border-radius: 5px 5px 5px 5px;
-	  -moz-border-radius: 5px 5px 5px 5px;
-  background-color: #E5DFAE;
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	background-color: #AEC2AE;
 }
 
 .config-header {
@@ -269,8 +309,9 @@ input {
 	vertical-align: middle;
 }
 
-.tweet-age {
+.item-subtext {
 	color: gray;
+	font-size: xx-small;
 }
 
 .twitter-pic {
@@ -286,18 +327,92 @@ input {
 	padding-top: 10px;
 }
 
+.message-box {
+	width: 470px;
+	filter: alpha(opacity =         0);
+	opacity: .0;
+	position: absolute;
+}
+
 .draggable {
 	position: absolute;
 }
 
 .panel {
 	width: 470px;
-	display: none
+	display: none;
+	filter: alpha(opacity =         1);
+	opacity: 1;
 }
 
 .cacheimage {
-	height: 30px;
-    padding: 8px 0 0;
-    vertical-align: top;
-    width: 30px;
+	height: 27px;
+	padding: 8px 0px 0px 5px;
+	vertical-align: top;
+	width: 27px;
+	cursor: pointer;
+}
+
+.header-image {
+	cursor: pointer;
+}
+
+.window-close {
+	width: 23px;
+	height: 23px;
+}
+
+.webcam-full-image {
+	width: 445px;
+	height: 322px;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.addthis {
+	position: absolute;
+	top: 40px;
+	left: 5px;
+}
+
+.facebook-login {
+	position: absolute;
+	top: 5px;
+	left: 7px;
+	font-size: small;
+	font-weight: bold;
+	color: #000;
+}
+
+.facebook-like {
+	position: absolute;
+	top: 40px;
+	left: 228px;
+	font-size: small;
+	font-weight: bold;
+}
+
+.statistics-total {
+	position: absolute;
+	top: 65px;
+	left: 7px;
+	font-size: small;
+	font-weight: bold;
+	color: #113355;
+}
+
+.statistics-near {
+	position: absolute;
+	top: 85px;
+	left: 7px;
+	font-size: small;
+	font-weight: bold;
+	color: #113355;
+}
+
+.image-fullscreen {
+	height: 100%;
+	width: 100%;
 }

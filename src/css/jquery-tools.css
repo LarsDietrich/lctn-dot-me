@@ -11,8 +11,8 @@
 /* use a semi-transparent image for the overlay */
 #overlay {
 	background-image:
-		url(/images/E5DFAE.png);
-	color: #AFD775;
+		url(/images/popup.png);
+	color: #AEC2AE;
 	height: 460px;
 }
 
@@ -30,7 +30,7 @@ div.contentWrap {
 	display:none;
 	
 	/* growing background image */
-	background-image:url(/images//white.png);
+	background-image:url(/images/popup.png);
 	
 	/* 
 		width after the growing animation finishes
