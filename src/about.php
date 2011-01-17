@@ -15,9 +15,10 @@ We support the following location based information
 <li>Twitter - Shows all the tweets in the area, where people have opted to add location.</li>
 <li>Streetview (Google) - Not available everywhere but awesome where it is, shows you what the place looked like when Google last took a picture of it.</li>
 <li>Wikipedia - Shows you any wikipedia articles in the area. </li>
-<li>Places - Shows points of interest based on filter criteria, currently only supports limited areas, but more will be added later. </li>
+<li>Places - Shows points of interest based on filter criteria, only supports limited areas (US & Canada), but more will be added later. </li>
 <li>Webcams - Shows webcams available in the area. </li>
 <li>General - Some general information about the area, like weather, you current coordinates and local time.</li>
+<li>Directions - Displays a route from point A to point B.</li>
 </ul>
 
 <p>
@@ -32,7 +33,6 @@ This site gathers various bits of information from different location informatio
 <p>
 There's a nice feedback button on the site that I recommend you use should you have any ideas of your own, I'd like to grow this into a useful location information portal and I think I can do this with your help. Your feedback will help design the site so go ahead and let me know what you want (or don't want!)
 </p>
-<br/>
 <br/>
 <p>Thanks</p>
 </body>

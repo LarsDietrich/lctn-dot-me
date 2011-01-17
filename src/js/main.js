@@ -1,3 +1,5 @@
+var version = "0.0.8";
+
 var user;
 
 // reference to the main map in the map container.
@@ -670,7 +672,7 @@ function beta() {
 	var thediv = document.getElementById('displaybox');
 	if (thediv.style.display == "none") {
 		thediv.style.display = "";
-		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>This site is still under development, feel free to use it but expect some issues. I take no responsibility for the stability and accuracy of data being displayed.<br/><br/>Please report any issues using the Contact link at the top right of the page.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
+		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>Version " + version + "<br/><br/>This site is still under development, feel free to use it but expect some issues. I take no responsibility for the stability and accuracy of data being displayed.<br/><br/>Please report any issues using the Contact link at the top right of the page.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
 	} else {
 		thediv.style.display = "none";
 		thediv.innerHTML = '';
