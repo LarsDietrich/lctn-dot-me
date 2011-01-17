@@ -51,7 +51,6 @@ function loadUrlParameters() {
 
 	if ($.getUrlVars()['q']) {
 		var encodedString = $.getUrlVars()['q'];
-		alert(Base64.decode(encodedString));
 		var data = JSON.parse(Base64.decode(encodedString));
 		latitude = data.lat?parseFloat(data.lat):0;
 		longitude = data.lng?parseFloat(data.lng):0;
@@ -602,12 +601,12 @@ function reverseCodeLatLng() {
  */
 function shortenUrl() {
 	root = "http://" + top.location.host + "/";
-	var longUrl = "{\"lat\":\"" + selectedLocation.lat() + "\",";
-	longUrl += "\"lng\":\"" + selectedLocation.lng() + "\",";
-	longUrl += "\"heading\":\"" + heading + "\",";
-	longUrl += "\"pitch\":\"" + pitch + "\",";
-	longUrl += "\"zoom\":\"" + zoom + "\",";
-	longUrl += "\"maptype\":\"" + maptype + "\"}";
+	var longUrl = '{"lat":"' + selectedLocation.lat() + '",';
+	longUrl += '"lng":\"' + selectedLocation.lng() + '",';
+	longUrl += '"heading":"' + heading + '",';
+	longUrl += '"pitch":"' + pitch + '",';
+	longUrl += '"zoom":"' + zoom + '",';
+	longUrl += '"maptype":"' + maptype + '"}';
 	var shortUrl = "";
 	user = user?user:"Unknown";
 	jx.load("shrink.php?shorturl=" + shortUrl + "&url=" + escape(longUrl) + "&user=" + user, function(data) {
