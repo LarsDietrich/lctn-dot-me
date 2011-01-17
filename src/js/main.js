@@ -207,7 +207,6 @@ function loadMap() {
   	infowindow.setContent($("#address").val());
   	infowindow.open(map, positionMarker);
   });
-
 	
 	google.maps.event.addListener(map, 'click', function(event) {
 		selectedLocation = event.latLng;
@@ -607,6 +606,9 @@ function shortenUrl() {
 	longUrl += '"pitch":"' + pitch + '",';
 	longUrl += '"zoom":"' + zoom + '",';
 	longUrl += '"maptype":"' + maptype + '"}';
+	
+	alert(selectedLocation.lat());
+	alert(selectedLocation.lng());
 	
 	var shortUrl = "";
 	user = user?user:"Unknown";

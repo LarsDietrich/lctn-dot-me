@@ -97,7 +97,8 @@
 			include("container/places.php");
 			include("container/message.php");
 			include("container/route.php");
-			include("container/user.php");
+
+			// include("container/user.php");
 			//		include("container/ads.php");
 			?>
 
