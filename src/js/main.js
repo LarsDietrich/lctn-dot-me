@@ -90,8 +90,8 @@ function load() {
 	} else {
 //		findMe();
 		loadMap();
-		loadStreetView();
-		reloadContainers();
+//		loadStreetView();
+//		reloadContainers();
 	}
 	
 	// setup the popup overlay for later use
