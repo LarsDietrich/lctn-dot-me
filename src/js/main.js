@@ -609,8 +609,8 @@ function shortenUrl() {
 	longUrl += '"maptype":"' + maptype + '"}';
 	var shortUrl = "";
 	user = user?user:"Unknown";
-	jx.load("shrink.php?shorturl=" + shortUrl + "&url=" + escape(longUrl) + "&user=" + user, function(data) {
-		document.getElementById("url").value = root + data;
+	jx.load("shrink.php?shorturl=" + shortUrl + "&url=" + longUrl + "&user=" + user, function(data) {
+		$("#url").val(root + data);
 		updateUrlWindow(root + data);
 	});
 }
