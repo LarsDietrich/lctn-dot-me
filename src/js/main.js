@@ -52,6 +52,8 @@ function loadUrlParameters() {
 	if ($.getUrlVars()['q']) {
 		var encodedString = $.getUrlVars()['q'];
 		var data = JSON.parse(Base64.decode(encodedString));
+		alert(JSON.stringify(data));
+		
 		latitude = data.lat?parseFloat(data.lat):0;
 		longitude = data.lng?parseFloat(data.lng):0;
 		heading = data.heading?parseInt(data.heading):0;
