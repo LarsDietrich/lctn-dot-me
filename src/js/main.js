@@ -609,9 +609,6 @@ function shortenUrl() {
 	longUrl += '"zoom":"' + zoom + '",';
 	longUrl += '"maptype":"' + maptype + '"}';
 	
-	alert(selectedLocation.lat());
-	alert(selectedLocation.lng());
-	
 	var shortUrl = "";
 	user = user?user:"Unknown";
 	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
