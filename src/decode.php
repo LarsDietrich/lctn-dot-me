@@ -12,6 +12,6 @@ if ($longUrl == "") {
 	$output = "index.php?q=" . base64_encode($longUrl);
 }
 
-header("Location: $output", TRUE, 301);
+header("Location: $output");
 
 ?>
