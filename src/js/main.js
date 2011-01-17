@@ -60,6 +60,7 @@ function loadUrlParameters() {
 		zoom = data.zoom?parseInt(data.zoom):12;
 		pitch = data.pitch?parseInt(data.pitch):0;
 		maptype = data.maptype?data.maptype:"roadmap";
+		selectedLocation =  new google.maps.LatLng(latitude, longitude);
 	}	
 }
 
@@ -85,13 +86,14 @@ function load() {
 
 	updateUrlWindow("");
 	
-	if ($.cookie("lastLocation")) {
-		loadLastLocation();
+	if (selectedLocation) {
+		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
 	} else {
-//		findMe();
-		loadMap();
-//		loadStreetView();
-//		reloadContainers();
+		if ($.cookie("lastLocation")) {
+			loadLastLocation();
+		} else {
+			loadMap();
+		}
 	}
 	
 	// setup the popup overlay for later use
@@ -152,8 +154,8 @@ function load() {
 function findMe() {
 
 	setMessage("Looking up your location may not always work or be accurate.");
-//	var location = geoip_latitude() + "," + geoip_longitude();
-//	useAddressToReposition(location);
+// var location = geoip_latitude() + "," + geoip_longitude();
+// useAddressToReposition(location);
 //	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -766,7 +768,7 @@ function isEnabled(option) {
 // }
 
 /**
- * "Hilites" a row in the active container and shows the point on the map. 
+ * "Hilites" a row in the active container and shows the point on the map.
  * 
  * @param row -
  *          the element "row" to hilite, must have data- elements for data set
