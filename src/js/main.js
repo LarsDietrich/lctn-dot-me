@@ -607,9 +607,10 @@ function shortenUrl() {
 	longUrl += '"pitch":"' + pitch + '",';
 	longUrl += '"zoom":"' + zoom + '",';
 	longUrl += '"maptype":"' + maptype + '"}';
+	
 	var shortUrl = "";
 	user = user?user:"Unknown";
-	jx.load("shrink.php?shorturl=" + shortUrl + "&url=" + longUrl + "&user=" + user, function(data) {
+	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
 		$("#url").val(root + data);
 		updateUrlWindow(root + data);
 	});

@@ -9,7 +9,7 @@ if ($longUrl == "") {
 	$output = "error/404.php";
 	die();
 } else {
-	$output = "index.php?q=" . base64_encode($longUrl);
+	$output = "index.php?q=" . $longUrl;
 }
 
 header("Location: $output");
