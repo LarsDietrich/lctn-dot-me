@@ -50,9 +50,9 @@ function processTheseTweets(jsonData) {
 
 			var cleanedLocation = cleanTweetLocation(value.location);
 
-			output = "<tr data-latitude=\"" + latitude + "\" data-longitude=\"" + longitude
-					+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
-			output += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
+			output = "<tr data-latitude=\"" + latitude + "\" data-longitude=\"" + longitude	+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
+			output += "<td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
+			output += "<td><span><a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
 					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at) + "&nbsp;|&nbsp;";
 			output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>" + "&nbsp;|&nbsp;";
 			output += "<div title=\"Get directions to " + cleanedLocation + "location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
