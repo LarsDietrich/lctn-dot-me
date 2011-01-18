@@ -28,16 +28,17 @@ function processRouteLookup(result, status, start, end) {
 	if (status == google.maps.DirectionsStatus.OK) {
 		directionsDisplay.setDirections(result);
 
-	  var myRoute = result.routes[0].legs[0];
-	  
-	  for (var i = 0; i < myRoute.steps.length; i++) {
-	  	var location = myRoute.steps[i].start_point.lat() + "," + myRoute.steps[i].start_point.lng();
-			var output = "<tr class=\"pointer\" onmouseover='highlightRow(this," + location	+ ", \"images/route-marker.png\")' onmouseout='normalRow(this)' onclick='zoomToPoint(" + location + ")'><td>";
-	  	output += myRoute.steps[i].instructions;
-	  	output += "</td></tr>";
-	  	listOfRoute[i] = output;
-	  }
-	
+		var myRoute = result.routes[0].legs[0];
+
+		for ( var i = 0; i < myRoute.steps.length; i++) {
+			var location = myRoute.steps[i].start_point.lat() + "," + myRoute.steps[i].start_point.lng();
+			var output = "<tr class=\"pointer\" onmouseover='highlightRow(this," + location
+					+ ", \"images/route-marker.png\")' onmouseout='normalRow(this)' onclick='zoomToPoint(" + location + ")'><td>";
+			output += myRoute.steps[i].instructions;
+			output += "</td></tr>";
+			listOfRoute[i] = output;
+		}
+
 	} else {
 		setMessage("Route lookup failed: " + status);
 	}
@@ -57,7 +58,7 @@ function updateRouteInformation(start, end) {
 	if (start && end) {
 		$("#route_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Loading route'/>");
 		getRoute(start, end);
-	} 
+	}
 }
 
 /**
@@ -65,9 +66,15 @@ function updateRouteInformation(start, end) {
  */
 function updateRouteDisplay(start, end) {
 	var output = "<table>";
-  output += "<tr><td>To get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end + "</div></b></td</tr>";
-	for (i = 0; i < listOfRoute.length; i++) {
-		output += listOfRoute[i];
+	if (listOfRoute.length == 0) {
+		output += "<tr><td>I have no idea how to get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end
+				+ "</div></b>, try a different location.</td</tr>";
+	} else {
+		output += "<tr><td>To get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end
+				+ "</div></b></td</tr>";
+		for (i = 0; i < listOfRoute.length; i++) {
+			output += listOfRoute[i];
+		}
 	}
 	output += "</table>";
 	$("#route_stream").html(output);
@@ -76,7 +83,8 @@ function updateRouteDisplay(start, end) {
 }
 
 /**
- * Activates the Directions window and plots a route from the selected location to the location specified.
+ * Activates the Directions window and plots a route from the selected location
+ * to the location specified.
  * 
  * @param location
  */
@@ -105,5 +113,3 @@ function renderAddress(control) {
 		}
 	});
 }
-
-

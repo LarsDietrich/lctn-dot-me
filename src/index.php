@@ -24,6 +24,21 @@
 
 	<body onload="load()">
 
+		<div id="find" class="find inline">
+			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
+			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
+			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
+			<input type="button" title="Find this location on the map" name="find" value="Find" class="find-button" onclick="locateAndRefresh(true);"/>
+			<input class="find-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
+<!-- 
+			<input title="Click Shorten to generate a short url. The link will point back to this location and open the page as you see it (with live data updated)." type="text" class="shorten-url" name="url" id="url" value="" readonly="readonly"/>
+ -->
+		</div>
+ 		<div id="url" class="inline"></div>
+
+		<div class="share-window" id="share-window"></div>
+
+
 		<div class="statistics-total" id="statistics-total"></div>
 		<div class="statistics-near" id="statistics-near"></div>
 		
@@ -42,14 +57,14 @@
 		?>
 			<div id="addthis" class="addthis">
 				<!-- AddThis Button BEGIN -->
-				<div class="addthis_toolbox addthis_pill_combo addthis_toolbox addthis_default_style ">
+				<div class="addthis_toolbox addthis_default_style ">
 				<a class="addthis_button_tweet"></a>
 				<a class="addthis_counter addthis_pill_style"></a>
 				</div>
-				<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
-				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
 				<!-- AddThis Button END -->
 			</div>
+			<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+			<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
 <!-- 
 			<div id="facebook-login" class="facebook-login">
 		      <div id="fb-root"></div>
@@ -86,8 +101,8 @@
 		    <?php 
 		    
 		    
-			include("container/find.php");
-			include("container/share.php");
+//			include("container/find.php");
+//			include("container/share.php");
 			include("container/map.php");
 			include("container/twitter.php");
 			include("container/streetview.php");

@@ -1,5 +1,7 @@
-var version = "0.0.8";
+// current version of web app
+var version = "0.0.9";
 
+// logged in user id
 var user;
 
 // reference to the main map in the map container.
@@ -616,12 +618,26 @@ function shortenUrl() {
 	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
 		$("#url").val(root + data);
 		updateUrlWindow(root + data);
+		$("#share-window").animate({
+		  top: "0px",
+		  left: "0px",
+		  opacity: 1
+		}, 500, 'swing', function() {});
 	});
 }
 
 /**
+ * Hides the share bar after a certain amount of time;
+ * 
+ * @param timeout - how long to wait before hiding bar (ms)
+ */
+function hideShareBar(timeout) {
+	$("#share-window").animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
+}
+/**
  * Updates the link url values of the social icons to the supplied link so that
- * clicking on them will trigger the relevant social add function correctly.
+ * clicking on them will trigger the relevant social add function correctly with the
+ * shortened link.
  * 
  * @param link -
  *          the short url to pass to the social zone.
@@ -629,23 +645,27 @@ function shortenUrl() {
 function updateUrlWindow(link) {
 	var output = "";
 
-	output += "<a href=\"http://twitter.com/home/?status=";
+	output += "<img class=\"find-navigate\" src=\"/images/close.png\" onclick=\"hideShareBar()\"/>&nbsp;";
+	
+	output += "<div class=\"share-text\">Share this location (" + link + "): </div>";
+	
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://twitter.com/home/?status=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this location to the world.\" alt=\"Twitter\"></img></a>";
 
-	output += "<a href=\"http://www.facebook.com/sharer.php?u=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://www.facebook.com/sharer.php?u=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the location with your Facebook friends.\" alt=\"Facebook\"></img></a>";
 
-	output += "<a href=\"http://del.icio.us/post?url=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://del.icio.us/post?url=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the location to your Del.icio.us bookmarks.\" alt=\"Del.icio.us\"></img></a>";
 
-	output += "<a href=\"mailto:?subject=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"mailto:?subject=Have a look at this location&body=";
 	output += link + "\"";
-	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
+	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the location to a friend.\" alt=\"Send by Email\"></img></a>";
 
-	document.getElementById("url-window").innerHTML = output;
+	$("#share-window").html(output);
 }
 
 /**
@@ -888,9 +908,9 @@ function loadLastLocation() {
  * @param zoom -
  *          zoom leve
  */
-function zoomToPoint(lat, lng, zoom) {
+function zoomToPoint(lat, lng) {
 	var point = new google.maps.LatLng(lat, lng);
 	map.setCenter(point);
-	map.setZoom(zoom);
+	map.setZoom(17);
 }
 
