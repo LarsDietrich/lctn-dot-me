@@ -1,6 +1,9 @@
 var listOfRoute = [];
 var directionsDisplay = new google.maps.DirectionsRenderer();
 var directionsService = new google.maps.DirectionsService();
+var totalDistance;
+var totalDuration;
+
 /**
  * Generate a route
  * 
@@ -29,12 +32,29 @@ function processRouteLookup(result, status, start, end) {
 		directionsDisplay.setDirections(result);
 
 		var myRoute = result.routes[0].legs[0];
-
+		totalDistance = myRoute.distance.value / 1000;
+		totalDuration = myRoute.duration.value;
+		
 		for ( var i = 0; i < myRoute.steps.length; i++) {
 			var location = myRoute.steps[i].start_point.lat() + "," + myRoute.steps[i].start_point.lng();
-			var output = "<tr class=\"pointer\" onmouseover='highlightRow(this," + location
-					+ ", \"images/route-marker.png\")' onmouseout='normalRow(this)' onclick='zoomToPoint(" + location + ")'><td>";
+			var output = "<tr data-latitude=\"" + myRoute.steps[i].start_point.lat() + "\" data-longitude=\"" + myRoute.steps[i].start_point.lng()
+					+ "\" data-image=\"\" class=\"pointer\" onmouseover='highlightRow(this)' onmouseout='normalRow(this)' onclick='zoomToPoint(" + location + ")'><td>";
 			output += myRoute.steps[i].instructions;
+			if (i < myRoute.steps.length - 1) {
+				var distance = myRoute.steps[i].distance.value;
+				if (distance < 1000) {
+					output += ", travel for <b>" + distance + " meters</b> then... "
+				} else {
+					output += ", travel for <b>" + (distance / 1000) + " km</b> then... "
+				}
+			} else {
+				var distance = myRoute.steps[i].distance.value;
+				if (distance < 1000) {
+					output += "after <b>" + distance + " meters</b>"
+				} else {
+					output += "after <b>" + (distance / 1000) + " km</b> "
+				}
+			}
 			output += "</td></tr>";
 			listOfRoute[i] = output;
 		}
@@ -67,15 +87,16 @@ function updateRouteInformation(start, end) {
 function updateRouteDisplay(start, end) {
 	var output = "<table>";
 	if (listOfRoute.length == 0) {
-		output += "<tr><td>I have no idea how to get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end
-				+ "</div></b>, try a different location.</td</tr>";
+		output += "<tr><td>I have no idea how to get from <b><div class=\"inline\" id=\"route_start\">" + start
+				+ "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end + "</div></b>, try a different location.</td</tr>";
 	} else {
 		output += "<tr><td>To get from <b><div class=\"inline\" id=\"route_start\">" + start + "</div></b> to <b><div class=\"inline\" id=\"route_end\">" + end
-				+ "</div></b></td</tr>";
+				+ "</div></b>, a distance of about <b>" + totalDistance + "km</b></td</tr>";
 		for (i = 0; i < listOfRoute.length; i++) {
 			output += listOfRoute[i];
 		}
 	}
+	//	output += "<tr><td>Total travel time approximately<b>" + totalDuration + "</b></td</tr>";
 	output += "</table>";
 	$("#route_stream").html(output);
 	renderAddress("start");
