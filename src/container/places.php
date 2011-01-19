@@ -1,4 +1,4 @@
-<div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="places_container" class="draggable panel">
+<div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="places_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Shows places of interest in the area.">
 			Places

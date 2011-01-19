@@ -24,6 +24,13 @@
 
 	<body onload="load()">
 
+		<div id="map_canvas" class="map_background"></div>
+
+		<div style="z-index: 10000; display: inline;" id="message_container" class="message-box">
+			<div class="detail-message" id="message">
+			</div>
+		</div>
+
 		<div id="find" class="find inline">
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
@@ -38,10 +45,11 @@
 
 		<div class="share-window" id="share-window"></div>
 
+		<div id="statistics_window" class="statistics_window">
+			<div class="statistics-total" id="statistics-total"></div>
+			<div class="statistics-near" id="statistics-near"></div>
+		</div>
 
-		<div class="statistics-total" id="statistics-total"></div>
-		<div class="statistics-near" id="statistics-near"></div>
-		
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
 			<!-- the external content is loaded inside this tag -->
@@ -50,7 +58,7 @@
 
 		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
-		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none;"></div>
+		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
 		
 		<?php 
 			include("menu.php");
@@ -103,14 +111,14 @@
 		    
 //			include("container/find.php");
 //			include("container/share.php");
-			include("container/map.php");
+//			include("container/map.php");
 			include("container/twitter.php");
 			include("container/streetview.php");
 			include("container/wiki.php");
 			include("container/general.php");
 			include("container/webcam.php");
-			include("container/places.php");
-			include("container/message.php");
+//			include("container/places.php");
+//			include("container/message.php");
 			include("container/route.php");
 
 			// include("container/user.php");

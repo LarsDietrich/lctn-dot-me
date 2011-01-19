@@ -1,4 +1,4 @@
-<div style="z-index: 1100; display: inline;" id="user_container" class="draggable panel">
+<div  onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="user_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Things you've done.">
 			<div id="user-name"></div>

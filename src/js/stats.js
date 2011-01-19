@@ -18,6 +18,7 @@ function getStatistics() {
  */
 function processStatisticsTotal(data) {
 	$("#statistics-total").html(data.total + " total searches in the last " + getStatsTimeStart(data.result[0].created));
+	$("#statistics_window").css("display", "inline");
 }
 
 /**
@@ -25,6 +26,7 @@ function processStatisticsTotal(data) {
  */
 function processStatisticsNear(data) {
 	$("#statistics-near").html(data.total + " searches near the current location in the last " + getStatsTimeStart(data.result[0].created));
+	$("#statistics_window").css("display", "inline");
 }
 
 /**

@@ -124,6 +124,7 @@ function load() {
 				zIndex : '1000',
 				opacity : 0.8,
 				autoSize : true,
+				
 				onChange : function() {
 					$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
 						expires : 365
@@ -137,8 +138,9 @@ function load() {
 				},
 				onStart : function() {
 				},
-				snapDistance : 5,
-				grid : 5
+				snapDistance : 10,
+				grid : 10,
+				containment : 'document'
 			})
 
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
@@ -193,7 +195,16 @@ function loadMap() {
 
 	var myMapOptions = {
 		center : selectedLocation,
-		streetViewControl : false
+		streetViewControl : false,
+		mapTypeControlOptions : {
+			position : google.maps.ControlPosition.BOTTOM_LEFT,
+			style : google.maps.MapTypeControlStyle.DROPDOWN_MENU
+		},
+		navigationControlOptions : {
+			style : google.maps.NavigationControlStyle.DEFAULT,
+			position : google.maps.ControlPosition.BOTTOM_LEFT
+		},
+		scaleControl : true
 	}
 
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
