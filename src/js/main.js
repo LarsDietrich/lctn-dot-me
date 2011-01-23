@@ -55,13 +55,31 @@ function loadUrlParameters() {
 
 	if ($.getUrlVars()['q']) {
 		var encodedString = $.getUrlVars()['q'];
+		alert(JSON.stringify(Base64.decode(encodedString)));
 		var data = JSON.parse(Base64.decode(encodedString));
-		latitude = data.lat?parseFloat(data.lat):0;
-		longitude = data.lng?parseFloat(data.lng):0;
-		heading = data.heading?parseInt(data.heading):0;
-		zoom = data.zoom?parseInt(data.zoom):12;
-		pitch = data.pitch?parseInt(data.pitch):0;
-		maptype = data.maptype?data.maptype:"roadmap";
+		// map
+		var map = data.map;
+		latitude = map.lat?parseFloat(map.lat):0;
+		longitude = map.lng?parseFloat(map.lng):0;
+		maptype = map.type?map.type:"roadmap";
+		zoom = map.zoom?parseInt(map.zoom):12;
+
+		// streetview
+		if (data.sv) {
+			if (!isEnabled("streetview")) {
+				setConfigOption("streetview");
+			}
+			heading = data.sv.heading?parseInt(data.sv.heading):0;
+			pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
+		}
+
+		if (data.tw) {
+			if (!isEnabled("twitter")) {
+				setConfigOption("twitter");
+			}
+			$("#tweet_range").val(data.tw.range);
+			$("#tweet_filter").val(data.tw.filter);
+		}
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
 	}	
 }
@@ -616,14 +634,32 @@ function reverseCodeLatLng() {
  * shrink.php to do the shortening and saving. Updates the "short Url" box.
  */
 function shortenUrl() {
+	/**
+	 * {"map":{"lat":"0","lng":"0","maptype":":"roadmap","zoom":"0"},"streetview":{"heading":"0","pitch":"0"}}
+	 */
 	root = "http://" + top.location.host + "/";
-	var longUrl = '{"lat":"' + selectedLocation.lat() + '",';
+	var longUrl = '{';
+	// map
+	longUrl += '"map":';
+	longUrl += '{"lat":"' + selectedLocation.lat() + '",';
 	longUrl += '"lng":"' + selectedLocation.lng() + '",';
-	longUrl += '"heading":"' + heading + '",';
-	longUrl += '"pitch":"' + pitch + '",';
 	longUrl += '"zoom":"' + zoom + '",';
-	longUrl += '"maptype":"' + maptype + '"}';
+	longUrl += '"type":"' + maptype + '"},';
 	
+	if (isEnabled("streetview")) {
+		longUrl += '"sv":{';
+		longUrl += '"heading":"' + heading + '",';
+		longUrl += '"pitch":"' + pitch + '"},';
+	}
+
+	if (isEnabled("twitter")) {
+		longUrl += '"tw":{';
+		longUrl += '"range":"' + $("#tweet_range").val() + '",';
+		longUrl += '"filter":"' + $("#tweet_filter").val()+  '"}';
+	}
+
+	longUrl += '}';
+
 	var shortUrl = "";
 	user = user?user:"Unknown";
 	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
@@ -640,15 +676,16 @@ function shortenUrl() {
 /**
  * Hides the share bar after a certain amount of time;
  * 
- * @param timeout - how long to wait before hiding bar (ms)
+ * @param timeout -
+ *          how long to wait before hiding bar (ms)
  */
 function hideShareBar(timeout) {
 	$("#share-window").animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
 }
 /**
  * Updates the link url values of the social icons to the supplied link so that
- * clicking on them will trigger the relevant social add function correctly with the
- * shortened link.
+ * clicking on them will trigger the relevant social add function correctly with
+ * the shortened link.
  * 
  * @param link -
  *          the short url to pass to the social zone.
@@ -749,54 +786,6 @@ function isEnabled(option) {
 	}
 	return result;
 }
-
-// /**
-// * Toggles the map size between large and normal
-// */
-// function toggleMapSize() {
-// var max_width = "955px";
-// var normal_width = "470px";
-// var max_height = "600px";
-// var normal_height = "465px";
-//
-// if ($("#map_container").css("width") == max_width) {
-// $("#map_container").css("width", normal_width);
-// $("#map_canvas").css("width", normal_width);
-// $("#map_container").css("height", normal_height);
-// $("#map_canvas").css("height", normal_height);
-// google.maps.event.trigger(map, "resize");
-// } else {
-// $("#map_container").css("width", max_width);
-// $("#map_canvas").css("width", max_width);
-// $("#map_container").css("height", max_height);
-// $("#map_canvas").css("height", max_height);
-// google.maps.event.trigger(map, "resize");
-// }
-// }
-//
-// /**
-// * Toggles the streetview size between large and normal
-// */
-// function toggleStreetViewSize() {
-// var max_width = "955px";
-// var normal_width = "470px";
-// var max_height = "600px";
-// var normal_height = "465px";
-//
-// if ($("#streetview_container").css("width") == max_width) {
-// $("#streetview_container").css("width", normal_width);
-// $("#streetview").css("width", normal_width);
-// $("#streetview_container").css("height", normal_height);
-// $("#streetview").css("height", normal_height);
-// google.maps.event.trigger(map, "resize");
-// } else {
-// $("#streetview_container").css("width", max_width);
-// $("#streetview").css("width", max_width);
-// $("#streetview_container").css("height", max_height);
-// $("#streetview").css("height", max_height);
-// google.maps.event.trigger(map, "resize");
-// }
-// }
 
 /**
  * "Hilites" a row in the active container and shows the point on the map.
@@ -924,4 +913,3 @@ function zoomToPoint(lat, lng) {
 	map.setCenter(point);
 	map.setZoom(17);
 }
-

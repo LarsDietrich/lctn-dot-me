@@ -19,24 +19,27 @@ function setConfigOptions() {
  *          control to check/uncheck
  */
 function setConfigOption(control) {
-	var current = $.cookie("option_" + control.id);
 
+	var container = control.id?control.id:control;
+	
+	var current = $.cookie("option_" + container);
+	
 	if (current == "true") {
 		current = "false";
 	} else {
 		current = "true";
 	}
 
-	$.cookie("option_" + control.id, current, {
+	$.cookie("option_" + container, current, {
 		expires : 365
 	});
 	
 	if (current == "true") {
-		$("#" + control.id).css("color", "white");
-		showElement(control.id + "_container");
-		loadContainer(control.id);
+		$("#" + container).css("color", "white");
+		showElement(container + "_container");
+		loadContainer(container);
 	} else {
-		$("#" + control.id).css("color", "black");
-		hideElement(control.id + "_container");
+		$("#" + container).css("color", "black");
+		hideElement(container + "_container");
 	}
 }
