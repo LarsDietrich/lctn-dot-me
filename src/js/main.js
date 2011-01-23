@@ -55,7 +55,6 @@ function loadUrlParameters() {
 
 	if ($.getUrlVars()['q']) {
 		var encodedString = $.getUrlVars()['q'];
-		alert(JSON.stringify(Base64.decode(encodedString)));
 		var data = JSON.parse(Base64.decode(encodedString));
 		// map
 		var map = data.map;
@@ -80,6 +79,14 @@ function loadUrlParameters() {
 			$("#tweet_range").val(data.tw.range);
 			$("#tweet_filter").val(data.tw.filter);
 		}
+
+		if (data.wc) {
+			if (!isEnabled("webcam")) {
+				setConfigOption("webcam");
+			}
+			$("#webcam_range").val(data.wc.range);
+		}
+		
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
 	}	
 }
@@ -655,9 +662,14 @@ function shortenUrl() {
 	if (isEnabled("twitter")) {
 		longUrl += '"tw":{';
 		longUrl += '"range":"' + $("#tweet_range").val() + '",';
-		longUrl += '"filter":"' + $("#tweet_filter").val()+  '"}';
+		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"}';
 	}
 
+	if (isEnabled("webcam")) {
+		longUrl += '"wc":{';
+		longUrl += '"range":"' + $("#webcam_range").val() + '"}';
+	}
+	
 	longUrl += '}';
 
 	var shortUrl = "";
