@@ -10,7 +10,7 @@
  	<div class="detail-padded">
 		<center>
 			From <input title="Where to get directions from" type="text" name="route_from" id="route_from" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
-			<input type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
+			<input class="action-button" type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">

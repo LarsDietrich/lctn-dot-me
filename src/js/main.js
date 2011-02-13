@@ -134,7 +134,7 @@ function start(data) {
 	showContainers();
 	
 	// TODO: Remove when live
-	beta();
+	//beta();
 
 	updateUrlWindow("");
 
@@ -198,6 +198,34 @@ function start(data) {
 
 			});
 		
+		$("#startup").overlay({
+			// custom top position
+			top: 200,
+			// some mask tweaks suitable for facebox-looking dialogs
+			mask: {
+				// you might also consider a "transparent" color for the mask
+				color: '#fff',
+				// load mask a little faster
+				loadSpeed: 200,
+				// very transparent
+				opacity: 0.8
+			},
+
+			// disable this for modal dialog-type of overlays
+			closeOnClick: false,
+
+			// load it immediately after the construction
+			load: true
+
+		});
+		
+		$(".config").each(function() {
+			var control = $(this);
+			$(control).tooltip({ position: "bottom center", opacity: 0.9});
+		});
+		
+		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
+
 	});
 }
 
@@ -206,17 +234,21 @@ function start(data) {
  * functionality. Reloads the containers after attempt.
  */
 function findMe() {
-
-	setMessage("Looking up your location may not always work or be accurate.");
+	
+	
+	setMessage("Accuracy not guaranteed.");
 // var location = geoip_latitude() + "," + geoip_longitude();
 // useAddressToReposition(location);
 //	
+
+	loading();
+	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			setMessage("There was a problem trying to determine your current location.", "error");
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
@@ -224,14 +256,12 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			setMessage("There was a problem trying to determine your current location.", "error");
 		});
 	} else {
 		var location = geoip_latitude() + "," + geoip_longitude();
 		useAddressToReposition(location);
 	}
-
-
 
 }
 
@@ -594,6 +624,7 @@ function setMessage(message) {
  *          whether this position should be added to the cache or not.
  */
 function locateAndRefresh(putInCache) {
+	loading();
 	var address = document.getElementById("address").value;
 	geocoder.geocode( {
 		'address' : address
@@ -607,6 +638,7 @@ function locateAndRefresh(putInCache) {
 		} else {
 			setMessage("Sorry, could not find it, try search for something else.", "info");
 		}
+		loading_end();
 	});
 }
 
@@ -650,7 +682,7 @@ function reverseCodeLatLng() {
 				setMessage("No addresses were found at this location.", "info");
 			}
 		} else {
-			setMessage("Unable to determine address from current location", "error");
+			setMessage("Unable to determine physical address from current location", "error");
 		}
 
 		if (isEnabled("general")) {
@@ -769,21 +801,6 @@ function updateGeneralLocationInformation(address) {
 	}
 	output += ".";
 	document.getElementById("location_stream").innerHTML = output;
-}
-
-/**
- * Displays the BETA page
- */
-function beta() {
-	var thediv = document.getElementById('displaybox');
-	if (thediv.style.display == "none") {
-		thediv.style.display = "";
-		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>Version " + version + "<br/><br/>This site is still under development, feel free to use it but expect some issues. I take no responsibility for the stability and accuracy of data being displayed.<br/><br/>Please report any issues using the Contact link at the top right of the page.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
-	} else {
-		thediv.style.display = "none";
-		thediv.innerHTML = '';
-	}
-	return false;
 }
 
 /**

@@ -10,7 +10,7 @@
  	<div class="detail-padded">
 		<center>
 			Find me articles within <input title="How big an area would you like to see wikipedia articles for?" class="short-text" type="text" name="wiki_range" id="wiki_range" value="1" onkeypress="if (event.keyCode == 13) { updateWikiLocationInformation(); }"/> km
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
+			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWikiLocationInformation();"/>								
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">

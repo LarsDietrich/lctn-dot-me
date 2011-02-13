@@ -21,7 +21,7 @@
 				<option value="Hotel">somewhere to stay</option>
 				<option value="Travel">travel related stuff</option>
 			</select>
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
+			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
