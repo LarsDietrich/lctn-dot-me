@@ -198,6 +198,8 @@
 		<script type="text/javascript" src="js/base64.js"></script>
 <!-- Flowplayer Javascript for playing movies -->
 		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
+<!-- Script for Printing -->
+		<script type="text/javascript" src="js/jqprint.js"></script>
 
 <!-- Custom Javascripts for each window -->
 		<script type="text/javascript" src="js/twitter.js"> </script>

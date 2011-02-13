@@ -11,6 +11,8 @@
 		<center>
 			From <input title="Where to get directions from" type="text" name="route_from" id="route_from" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
 			<input class="action-button" type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
+			&nbsp;
+			<input class="action-button" type="button" id="print_route" name="print_route" value="Print" onclick="$('#route_stream').jqprint()"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
