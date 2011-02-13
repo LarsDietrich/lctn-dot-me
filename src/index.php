@@ -35,8 +35,8 @@
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
 			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
-			<input type="button" title="Find this location on the map" name="find" value="Find" class="find-button" onclick="locateAndRefresh(true);"/>
-			<input class="find-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
+			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
+			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
 		</div>
 
 		<div class="share-window" id="share-window"></div>

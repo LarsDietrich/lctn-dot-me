@@ -10,7 +10,7 @@
  	<div class="detail-padded">
 		<center>
 			Show me all the webcams for <input title="How big of an area would you like to search for webcams?" class="short-text" type="text" name="webcam_range" id="webcam_range" value="5" onkeypress="if (event.keyCode == 13) { updateWebcamLocationInformation(); }"/> km(s)
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWebcamLocationInformation();"/>
+			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="updateWebcamLocationInformation();"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">

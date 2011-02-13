@@ -383,13 +383,22 @@ input {
 	z-index: 1002;
 }
 
-.find-button {
+.action-button {
 	height: 25px;
 	font-weight: bold;
-	border: 1px solid transparent;
+	border: 1px solid darkSkyBlue;
 	border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
-	width: 50px;
+	width: 55px;
+	text-align: center;
+}
+
+.action-button-semi-wide {
+	width: 75px;
+}
+
+.action-button-wide {
+	width: 100px;
 }
 
 .find-address {

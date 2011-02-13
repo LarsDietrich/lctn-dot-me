@@ -60,7 +60,7 @@
 					<textarea style="width: 90%; font-size: medium; background-color: transparent; color: #000; border-color: #000" name="message" id="message"><?= $_POST['message']; ?></textarea>
 				</div>
 				<div>
-					<button class="buttons" type="submit" id="submit">Send Email</button>
+					<button class="action-button action-button-wide" type="submit" id="submit">Send Email</button>
 					<input type="hidden" name="submitted" id="submitted" value="true"/>
 					<input style="background-color: transparent; border: none;" type="text" id="error" class="contact-error" disabled="disabled"/>
 				</div>

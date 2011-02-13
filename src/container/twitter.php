@@ -11,7 +11,7 @@
 		<center>
 			Search for <input title="Enter a search term to filter tweets, comma seperate for multiple terms (eg. party, cool)" type="text" name="tweet_filter" id="tweet_filter" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/>
 			in <input title="How big an area would you like to search for tweets in?" class="short-text" type="text" name="tweet_range" id="tweet_range" value="1" onkeypress="if (event.keyCode == 13) { updateTwitterLocationInformation(); }"/> km
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
+			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="updateTwitterLocationInformation();"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
