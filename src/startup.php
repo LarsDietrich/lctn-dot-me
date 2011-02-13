@@ -13,6 +13,9 @@
 ... and then easily <b>share</b> it with friends.
 <br/>
 <br/>
+Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and change to <b>fullscreen</b> (normally F11).
+<br/>
+<br/>
 <p>
 <button class="close action-button action-button-wide">Let me try!</button>
 </p>
