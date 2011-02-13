@@ -10,7 +10,7 @@ if (isset($_GET["decode"])) {
 		$output = "error/404.php";
 		die();
 	} else {
-		$output = "?url=" . $url;
+		$output = "index.php?url=" . $url;
 	}
 	header("Location: $output");
 } else if (isset($_GET["url"])) {
