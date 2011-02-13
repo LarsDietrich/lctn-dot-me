@@ -3,10 +3,8 @@
 	<title>lctn.me | About</title>
 </head>
 <body style="color: white">
-<b>What is it?</b>
-<br/>
 <p>
-LCTN.ME is a portal website that aggregates location based information into a single place. You select a point on the planet and information is loaded relative to that point. You can then "share" this location with people via the social links supplied.
+LCTN.ME is a portal that aggregates location based information into a single place. You select a point on the planet and information is loaded relative to that point. You can then "share" this location with people via the social links supplied.
 </p>
 <p>
 We support the following location based information

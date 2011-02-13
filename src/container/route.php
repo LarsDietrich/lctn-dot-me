@@ -1,4 +1,4 @@
-<div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="route_container" class="draggable panel">
+<div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="route_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Route information">
 			Directions
@@ -10,7 +10,9 @@
  	<div class="detail-padded">
 		<center>
 			From <input title="Where to get directions from" type="text" name="route_from" id="route_from" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
-			<input type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
+			<input class="action-button" type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
+			&nbsp;
+			<input class="action-button" type="button" id="print_route" name="print_route" value="Print" onclick="$('#route_stream').jqprint()"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">

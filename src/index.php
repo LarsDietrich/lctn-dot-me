@@ -24,32 +24,48 @@
 
 	<body onload="load()">
 
-		<div class="statistics-total" id="statistics-total"></div>
-		<div class="statistics-near" id="statistics-near"></div>
-		
+		<div id="map_canvas" class="map_background"></div>
+
+		<div style="z-index: 10000; display: inline;" id="message_container" class="message-box">
+			<div class="detail-message" id="message">
+			</div>
+		</div>
+
+		<div class="share-window" id="share-window"></div>
+
+<!-- 
+		<div id="statistics_window" class="statistics_window">
+			<div class="statistics-total" id="statistics-total"></div>
+			<div class="statistics-near" id="statistics-near"></div>
+		</div>
+-->
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
 			<!-- the external content is loaded inside this tag -->
 			<div class="contentWrap"></div>
 		</div>
 
-		<div id="displaybox" onclick="beta();" style="display: none;"></div>
+<!-- The BETA window that loads at startup -->
 
-		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none;"></div>
+<!-- Used to display a fullscreen image -->
+		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
 		
 		<?php 
-			include("menu.php");
+			include("loading.php");
 		?>
-			<div id="addthis" class="addthis">
-				<!-- AddThis Button BEGIN -->
-				<div class="addthis_toolbox addthis_pill_combo addthis_toolbox addthis_default_style ">
-				<a class="addthis_button_tweet"></a>
-				<a class="addthis_counter addthis_pill_style"></a>
-				</div>
-				<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
-				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
-				<!-- AddThis Button END -->
+
+
+<!-- 
+		<div id="addthis" class="addthis">
+			<div class="addthis_toolbox addthis_default_style ">
+			<a class="addthis_button_tweet"></a>
+			<a class="addthis_counter addthis_pill_style"></a>
 			</div>
+		</div>
+		<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
+-->
+
 <!-- 
 			<div id="facebook-login" class="facebook-login">
 		      <div id="fb-root"></div>
@@ -82,42 +98,111 @@
 				</div>
  			  <?php }?>
 	 -->	    
-
 		    <?php 
 		    
-		    
-			include("container/find.php");
-			include("container/share.php");
-			include("container/map.php");
 			include("container/twitter.php");
 			include("container/streetview.php");
 			include("container/wiki.php");
 			include("container/general.php");
 			include("container/webcam.php");
-			include("container/places.php");
-			include("container/message.php");
 			include("container/route.php");
 
-			// include("container/user.php");
-			//		include("container/ads.php");
+			
+//			include("container/places.php");
+//			include("container/user.php");
+//			include("container/ads.php");
+
+			include("startup.php");
+			
 			?>
 
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<!-- JQuery API -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<!-- JQuery Tools API -->
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
+
+		<script type="text/javascript">
+			loading();
+			
+			function loading() {
+				$("#loading").css("display","block");
+				$("#loading").overlay({
+					// custom top position
+					left:70,
+					top: 40,
+					// some mask tweaks suitable for facebox-looking dialogs
+					mask: {
+						// you might also consider a "transparent" color for the mask
+						color: '#fff',
+						// load mask a little faster
+						loadSpeed: 200,
+						// very transparent
+						opacity: 0.3
+					},
+		
+					// disable this for modal dialog-type of overlays
+					closeOnClick: false,
+		
+					// load it immediately after the construction
+					load: true
+
+				});
+			}
+
+			function loading_end() {
+				$("#loading").css("display", "none");
+			}
+			
+		</script>
+
+		<?php 
+			include("menu.php");
+		?>
+
+		<div id="find" class="find inline">
+			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
+			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
+			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
+			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
+			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
+			<div id="beta">Beta</div>
+		</div>
+
+
+<!-- Google Maps API -->
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
+
+<!--  Places API -->
 		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
+<!-- 	
+		Geolocation API	
 		<script type="text/javascript" src="http://j.maxmind.com/app/geoip.js"></script>
+ -->
 
-
+<!-- Gears API for geolocation -->
  		<script type="text/javascript" src="js/gears_init.js"></script> 
+<!-- Java Ajax API for Ajax calls -->
 		<script type="text/javascript" src="js/jxs.js"> </script>
+<!-- JQuery Cookie API -->
 		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
+<!-- JQuery Color API 
 		<script type="text/javascript" src="js/jquery.color.js"></script>
-
+-->
+<!-- Interface API for Drag and Drop -->
 		<script type="text/javascript" src="js/interface.js"></script>
+<!-- UserVoice API for connecting to UserVoice -->
+		<script type="text/javascript" src="js/uservoice.js"></script>
+<!-- Base 64 Conversion script -->
+		<script type="text/javascript" src="js/base64.js"></script>
+<!-- Flowplayer Javascript for playing movies -->
+		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
+<!-- Script for Printing -->
+		<script type="text/javascript" src="js/jqprint.js"></script>
 
+<!-- Custom Javascripts for each window -->
 		<script type="text/javascript" src="js/twitter.js"> </script>
 		<script type="text/javascript" src="js/weather.js"> </script>
 		<script type="text/javascript" src="js/webcam.js"> </script>
@@ -125,14 +210,12 @@
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/places.js"></script>
 		<script type="text/javascript" src="js/route.js"></script>
-		<script type="text/javascript" src="js/uservoice.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
 		<script type="text/javascript" src="js/user.js"></script>
-		<script type="text/javascript" src="js/base64.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>
-		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
+
 
 	</body>
 

@@ -18,7 +18,7 @@ function getTweets(selectedLocation, filter, range) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://search.twitter.com/search.json?rpp=200&q=" + filter + "&geocode=" + selectedLocation.lat() + "," + selectedLocation.lng() + ","
+		script.src = "http://search.twitter.com/search.json?lang=en&rpp=200&q=" + filter + "&geocode=" + selectedLocation.lat() + "," + selectedLocation.lng() + ","
 				+ range + "km&callback=processTheseTweets&_=" + new Date().getTime();
 		$("body").append(script);
 	});
@@ -43,19 +43,22 @@ function processTheseTweets(jsonData) {
 			var location = cleanTweetLocation(value.location);
 			var latitude = 999;
 			var longitude = 999;
+
 			if (isNumeric(location)) {
 				latitude = location.split(",")[0];
 				longitude = location.split(",")[1];
 			}
 
 			var cleanedLocation = cleanTweetLocation(value.location);
-
-			output = "<tr data-latitude=\"" + latitude + "\" data-longitude=\"" + longitude
-					+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
-			output += "<td><span>" + "<a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
-					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at) + "&nbsp;|&nbsp;";
-			output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>" + "&nbsp;|&nbsp;";
-			output += "<div title=\"Get directions to " + cleanedLocation + "location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+			
+			output = "<tr data-latitude=\"" + latitude + "\" data-longitude=\"" + longitude	+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
+			output += "<td><img class='twitter-pic' src='" + value.profile_image_url + "'/></td>";
+			output += "<td><span><a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
+					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at);
+			if (isNumeric(location) && (latitude && longitude)) {
+				output += "&nbsp;|&nbsp;<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
+				output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+			}
 			output += "</td><tr>";
 			listOfTweets[i] = output;
 			i++;
@@ -164,7 +167,7 @@ function isNumeric(text) {
 function updateTwitterLocationInformation() {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 		$("#tweet_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for tweets'/>");
-		getTweets(selectedLocation, $("#filter").val(), $("#tweet_range").val());
+		getTweets(selectedLocation, $("#tweet_filter").val(), $("#tweet_range").val());
 	}
 }
 
@@ -173,7 +176,7 @@ function updateTwitterLocationInformation() {
  * hashtag
  */
 function updateTwitterLocationInformationFromHashTag(value) {
-	$("#filter").val(value);
+	$("#tweet_filter").val(value);
 	updateTwitterLocationInformation();
 }
 

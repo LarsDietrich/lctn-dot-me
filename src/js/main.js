@@ -1,5 +1,7 @@
-var version = "0.0.8";
+// current version of web app
+var version = "0.0.9";
 
+// logged in user id
 var user;
 
 // reference to the main map in the map container.
@@ -13,7 +15,7 @@ var selectedLocation;
 // reference to the position marker on the map (of type google.maps.Marker).
 var positionMarker;
 
-// reference to the additional marker on the page, used to show twtter/wiki
+// reference to the additional marker on the page, used to show twtter/wiki/webcam etc
 // locations.
 var infoMarker;
 
@@ -27,8 +29,8 @@ var geocoder = new google.maps.Geocoder();
 var heading = 0;
 var pitch = 0;
 var zoom = 12;
-var latitude;
-var longitude;
+var latitude = 0;
+var longitude = 0;
 var maptype = "roadmap";
 
 // cache to store a history of previously selected locations.
@@ -36,11 +38,7 @@ var locationCache = new Array();
 // position in locationCache the user is currently at.
 var currentSearchPosition = 0;
 
-/**
- * Decodes and loads the parameters passed through on the URL into variables.
- * Used to preload a location.
- */
-function loadUrlParameters() {
+function load() {
 	$.extend( {
 		getUrlVars : function() {
 			var vars = {};
@@ -51,51 +49,14 @@ function loadUrlParameters() {
 		}
 	});
 
-	if ($.getUrlVars()['q']) {
-		var encodedString = $.getUrlVars()['q'];
-		var data = JSON.parse(Base64.decode(encodedString));
-		latitude = data.lat?parseFloat(data.lat):0;
-		longitude = data.lng?parseFloat(data.lng):0;
-		heading = data.heading?parseInt(data.heading):0;
-		zoom = data.zoom?parseInt(data.zoom):12;
-		pitch = data.pitch?parseInt(data.pitch):0;
-		maptype = data.maptype?data.maptype:"roadmap";
-		selectedLocation =  new google.maps.LatLng(latitude, longitude);
-	}	
-}
-
-/**
- * This is the entry point for the page. Loads the necessary data, parses the
- * URL for location information and shows loads the page containers.
- */
-function load() {
-
-	setConfigOptions();
-	
-  if (!hasCookieSupport()) {
-  	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
-  	return;
-  }
-
-	showContainers();
-	
-	loadUrlParameters();
-
-	// TODO: Remove when live
-	beta();
-
-	updateUrlWindow("");
-	
-	if (selectedLocation) {
-		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
-	} else {
-		if ($.cookie("lastLocation")) {
-			loadLastLocation();
-		} else {
-			loadMap();
-		}
+	if ($.getUrlVars()['url']) {
+		var url = $.getUrlVars()['url'];
+	}	else {
+		var url = "";
 	}
 	
+	jx.load("decode.php?url=" + url, function(data) { loadUrlParameters(data); });
+
 	// setup the popup overlay for later use
 	$(function() {
 		$("a[rel]").overlay( {
@@ -122,6 +83,7 @@ function load() {
 				zIndex : '1000',
 				opacity : 0.8,
 				autoSize : true,
+				
 				onChange : function() {
 					$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
 						expires : 365
@@ -135,8 +97,9 @@ function load() {
 				},
 				onStart : function() {
 				},
-				snapDistance : 5,
-				grid : 5
+				snapDistance : 10,
+				grid : 10,
+				containment : 'document'
 			})
 
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
@@ -144,7 +107,123 @@ function load() {
 
 			});
 		
+		$("#startup").overlay({
+			// custom top position
+			top: 200,
+			// some mask tweaks suitable for facebox-looking dialogs
+			mask: {
+				// you might also consider a "transparent" color for the mask
+				color: '#fff',
+				// load mask a little faster
+				loadSpeed: 200,
+				// very transparent
+				opacity: 0.8
+			},
+
+			// disable this for modal dialog-type of overlays
+			closeOnClick: false,
+
+			// load it immediately after the construction
+			load: true
+
+		});
+		
+		$(".config").each(function() {
+			var control = $(this);
+			$(control).tooltip({ position: "bottom center", opacity: 0.9});
+		});
+		
+		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
+
 	});
+
+}
+
+/**
+ * Decodes and loads the parameters passed through on the URL into variables.
+ * Used to preload a location.
+ */
+function loadUrlParameters(encodedString) {
+	
+	var data = JSON.parse(Base64.decode(encodedString));
+
+	// map
+	var map = data.map;
+	latitude = map.lat?parseFloat(map.lat):0;
+	longitude = map.lng?parseFloat(map.lng):0;
+	maptype = map.type?map.type:"roadmap";
+	zoom = map.zoom?parseInt(map.zoom):12;
+
+	if (!((latitude == 0.0) && (longitude == 0.0))) {
+		selectedLocation =  new google.maps.LatLng(latitude, longitude);
+	}
+
+	//streetview
+	if (data.sv) {
+		if (!isEnabled("streetview")) {
+			setConfigOption("streetview");
+		}
+		heading = data.sv.heading?parseInt(data.sv.heading):0;
+		pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
+	}
+
+	//twitter
+	if (data.tw) {
+		if (!isEnabled("twitter")) {
+			setConfigOption("twitter");
+			
+			
+		}
+		$("#tweet_range").val(data.tw.range);
+		$("#tweet_filter").val(data.tw.filter);
+	}
+
+	//webcam
+	if (data.wc) {
+		if (!isEnabled("webcam")) {
+			setConfigOption("webcam");
+		}
+		$("#webcam_range").val(data.wc.range);
+	}
+	
+	//directions
+	if (data.route) {
+		if (!isEnabled("route")) {
+			setConfigOption("route");
+		}
+		$("#route_from").val(data.route.from);
+		updateRouteInformation();
+	}
+
+	start();
+}
+
+/**
+ * This is the entry point for the page. Loads the necessary data, parses the
+ * URL for location information and shows loads the page containers.
+ */
+function start(data) {
+
+	setConfigOptions();
+
+  if (!hasCookieSupport()) {
+  	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
+  	return;
+  }
+
+	showContainers();
+
+	updateUrlWindow("");
+
+	if (selectedLocation) {
+		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
+	} else {
+		if ($.cookie("lastLocation")) {
+			loadLastLocation();
+		} else {
+			loadMap();
+		}
+	}
 }
 
 /**
@@ -152,17 +231,21 @@ function load() {
  * functionality. Reloads the containers after attempt.
  */
 function findMe() {
-
-	setMessage("Looking up your location may not always work or be accurate.");
+	
+	
+	setMessage("Accuracy not guaranteed.");
 // var location = geoip_latitude() + "," + geoip_longitude();
 // useAddressToReposition(location);
 //	
+
+	loading();
+	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			setMessage("There was a problem trying to determine your current location.", "error");
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
@@ -170,14 +253,12 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Tried to get your location, but there was a problem, sorry", "error");
+			setMessage("There was a problem trying to determine your current location.", "error");
 		});
 	} else {
 		var location = geoip_latitude() + "," + geoip_longitude();
 		useAddressToReposition(location);
 	}
-
-
 
 }
 
@@ -191,7 +272,16 @@ function loadMap() {
 
 	var myMapOptions = {
 		center : selectedLocation,
-		streetViewControl : false
+		streetViewControl : false,
+		mapTypeControlOptions : {
+			position : google.maps.ControlPosition.BOTTOM_LEFT,
+			style : google.maps.MapTypeControlStyle.DROPDOWN_MENU
+		},
+		navigationControlOptions : {
+			style : google.maps.NavigationControlStyle.DEFAULT,
+			position : google.maps.ControlPosition.BOTTOM_LEFT
+		},
+		scaleControl : true
 	}
 
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
@@ -473,8 +563,7 @@ function clearMarkers() {
  * Tracks click statistics by calling stats.php
  */
 function updateStats() {
-	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
-	});
+	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {});
 }
 
 /**
@@ -532,6 +621,7 @@ function setMessage(message) {
  *          whether this position should be added to the cache or not.
  */
 function locateAndRefresh(putInCache) {
+	loading();
 	var address = document.getElementById("address").value;
 	geocoder.geocode( {
 		'address' : address
@@ -545,6 +635,7 @@ function locateAndRefresh(putInCache) {
 		} else {
 			setMessage("Sorry, could not find it, try search for something else.", "info");
 		}
+		loading_end();
 	});
 }
 
@@ -588,7 +679,7 @@ function reverseCodeLatLng() {
 				setMessage("No addresses were found at this location.", "info");
 			}
 		} else {
-			setMessage("Unable to determine address from current location", "error");
+			setMessage("Unable to determine physical address from current location", "error");
 		}
 
 		if (isEnabled("general")) {
@@ -603,25 +694,66 @@ function reverseCodeLatLng() {
  * shrink.php to do the shortening and saving. Updates the "short Url" box.
  */
 function shortenUrl() {
+
 	root = "http://" + top.location.host + "/";
-	var longUrl = '{"lat":"' + selectedLocation.lat() + '",';
+	var longUrl = '{';
+	// map
+	longUrl += '"map":';
+	longUrl += '{"lat":"' + selectedLocation.lat() + '",';
 	longUrl += '"lng":"' + selectedLocation.lng() + '",';
-	longUrl += '"heading":"' + heading + '",';
-	longUrl += '"pitch":"' + pitch + '",';
 	longUrl += '"zoom":"' + zoom + '",';
-	longUrl += '"maptype":"' + maptype + '"}';
+	longUrl += '"type":"' + maptype + '"},';
 	
+	if (isEnabled("streetview")) {
+		longUrl += '"sv":{';
+		longUrl += '"heading":"' + heading + '",';
+		longUrl += '"pitch":"' + pitch + '"},';
+	}
+
+	if (isEnabled("twitter")) {
+		longUrl += '"tw":{';
+		longUrl += '"range":"' + $("#tweet_range").val() + '",';
+		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"},';
+	}
+
+	if (isEnabled("webcam")) {
+		longUrl += '"wc":{';
+		longUrl += '"range":"' + $("#webcam_range").val() + '"},';
+	}
+	
+	if (isEnabled("route")) {
+		longUrl += '"route":{';
+		longUrl += '"from":"' + $("#route_from").val() + '"},';
+	}
+	
+	longUrl += '}';
+
 	var shortUrl = "";
 	user = user?user:"Unknown";
 	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
 		$("#url").val(root + data);
 		updateUrlWindow(root + data);
+		$("#share-window").animate({
+		  top: "0px",
+		  left: "0px",
+		  opacity: 1
+		}, 500, 'swing', function() {});
 	});
 }
 
 /**
+ * Hides the share bar after a certain amount of time;
+ * 
+ * @param timeout -
+ *          how long to wait before hiding bar (ms)
+ */
+function hideShareBar(timeout) {
+	$("#share-window").animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
+}
+/**
  * Updates the link url values of the social icons to the supplied link so that
- * clicking on them will trigger the relevant social add function correctly.
+ * clicking on them will trigger the relevant social add function correctly with
+ * the shortened link.
  * 
  * @param link -
  *          the short url to pass to the social zone.
@@ -629,23 +761,27 @@ function shortenUrl() {
 function updateUrlWindow(link) {
 	var output = "";
 
-	output += "<a href=\"http://twitter.com/home/?status=";
+	output += "<img class=\"find-navigate\" src=\"/images/close.png\" onclick=\"hideShareBar()\"/>&nbsp;";
+	
+	output += "<div class=\"share-text\">Share this location (" + link + "): </div>";
+	
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://twitter.com/home/?status=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this link to the world.\" alt=\"Twitter\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this location to the world.\" alt=\"Twitter\"></img></a>";
 
-	output += "<a href=\"http://www.facebook.com/sharer.php?u=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://www.facebook.com/sharer.php?u=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the link with your Facebook friends.\" alt=\"Facebook\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the location with your Facebook friends.\" alt=\"Facebook\"></img></a>";
 
-	output += "<a href=\"http://del.icio.us/post?url=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://del.icio.us/post?url=";
 	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the link to your Del.icio.us account.\" alt=\"Del.icio.us\"></img></a>";
+	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the location to your Del.icio.us bookmarks.\" alt=\"Del.icio.us\"></img></a>";
 
-	output += "<a href=\"mailto:?subject=";
+	output += "<a onclick=\"hideShareBar(1000)\" href=\"mailto:?subject=Have a look at this location&body=";
 	output += link + "\"";
-	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the link to a friend.\" alt=\"Send by Email\"></img></a>";
+	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the location to a friend.\" alt=\"Send by Email\"></img></a>";
 
-	document.getElementById("url-window").innerHTML = output;
+	$("#share-window").html(output);
 }
 
 /**
@@ -662,21 +798,6 @@ function updateGeneralLocationInformation(address) {
 	}
 	output += ".";
 	document.getElementById("location_stream").innerHTML = output;
-}
-
-/**
- * Displays the BETA page
- */
-function beta() {
-	var thediv = document.getElementById('displaybox');
-	if (thediv.style.display == "none") {
-		thediv.style.display = "";
-		thediv.innerHTML = "<span class='displaybox-large'/>BETA</span><br/><span class='displaybox-normal'>Version " + version + "<br/><br/>This site is still under development, feel free to use it but expect some issues. I take no responsibility for the stability and accuracy of data being displayed.<br/><br/>Please report any issues using the Contact link at the top right of the page.<br/><br/>Thank you for trying out the site.</span><br/><br/><span class='displaybox-normal'/>(click anywhere to close)</span>";
-	} else {
-		thediv.style.display = "none";
-		thediv.innerHTML = '';
-	}
-	return false;
 }
 
 /**
@@ -718,54 +839,6 @@ function isEnabled(option) {
 	}
 	return result;
 }
-
-// /**
-// * Toggles the map size between large and normal
-// */
-// function toggleMapSize() {
-// var max_width = "955px";
-// var normal_width = "470px";
-// var max_height = "600px";
-// var normal_height = "465px";
-//
-// if ($("#map_container").css("width") == max_width) {
-// $("#map_container").css("width", normal_width);
-// $("#map_canvas").css("width", normal_width);
-// $("#map_container").css("height", normal_height);
-// $("#map_canvas").css("height", normal_height);
-// google.maps.event.trigger(map, "resize");
-// } else {
-// $("#map_container").css("width", max_width);
-// $("#map_canvas").css("width", max_width);
-// $("#map_container").css("height", max_height);
-// $("#map_canvas").css("height", max_height);
-// google.maps.event.trigger(map, "resize");
-// }
-// }
-//
-// /**
-// * Toggles the streetview size between large and normal
-// */
-// function toggleStreetViewSize() {
-// var max_width = "955px";
-// var normal_width = "470px";
-// var max_height = "600px";
-// var normal_height = "465px";
-//
-// if ($("#streetview_container").css("width") == max_width) {
-// $("#streetview_container").css("width", normal_width);
-// $("#streetview").css("width", normal_width);
-// $("#streetview_container").css("height", normal_height);
-// $("#streetview").css("height", normal_height);
-// google.maps.event.trigger(map, "resize");
-// } else {
-// $("#streetview_container").css("width", max_width);
-// $("#streetview").css("width", max_width);
-// $("#streetview_container").css("height", max_height);
-// $("#streetview").css("height", max_height);
-// google.maps.event.trigger(map, "resize");
-// }
-// }
 
 /**
  * "Hilites" a row in the active container and shows the point on the map.
@@ -888,9 +961,8 @@ function loadLastLocation() {
  * @param zoom -
  *          zoom leve
  */
-function zoomToPoint(lat, lng, zoom) {
+function zoomToPoint(lat, lng) {
 	var point = new google.maps.LatLng(lat, lng);
 	map.setCenter(point);
-	map.setZoom(zoom);
+	map.setZoom(17);
 }
-

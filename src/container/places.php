@@ -1,4 +1,4 @@
-<div onmouseover="$(this).css('z-index', '1000')" onmouseout="$(this).css('z-index', '100')" id="places_container" class="draggable panel">
+<div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="places_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Shows places of interest in the area.">
 			Places
@@ -21,7 +21,7 @@
 				<option value="Hotel">somewhere to stay</option>
 				<option value="Travel">travel related stuff</option>
 			</select>
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
+			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
 		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
