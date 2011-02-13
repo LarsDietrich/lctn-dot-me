@@ -435,8 +435,8 @@ input {
 	border-radius: 0px 10px 10px 0px; 
 	-moz-border-radius : 0px 10px 10px 0px;
 	top: 0px;
-	left: -600px;
-	width: 600px;
+	left: -550px;
+	width: 550px;
 	z-index: 10000;
 }
 
