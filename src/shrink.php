@@ -1,5 +1,6 @@
 <?php
 require("includes/sql.php");
+require("includes/functions.php");
 $result = getShortUrl($_GET["url"], $_GET["user"]);
 //$result = getShortUrl("http://test.test.test", "TEST");
 
@@ -26,9 +27,11 @@ function getShortUrl($longUrl, $user) {
 		}
 	}
 	
-	$id = rand(10000,99999);
-	$shortUrl = base_convert($id,20,36);
-
+	while (urlExists($shortUrl)) {
+		$id = rand(10000,99999);
+		$shortUrl = base_convert($id,20,36);
+	}
+	
 	$now = date("Y-m-d H:i:s");
 	$query = "insert into url (longurl, shorturl, openid, created) values ('" . $longUrl . "','" . $shortUrl . "','" . $user . "', '" . $now . "')";
 	$sql->execute($query);
