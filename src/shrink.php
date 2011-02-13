@@ -1,9 +1,8 @@
 <?php
-require("includes/sql.php");
 require("includes/functions.php");
+require ("includes/sql.php");
 $result = getShortUrl($_GET["url"], $_GET["user"]);
-//$result = getShortUrl("http://test.test.test", "TEST");
-
+//$result = getShortUrl("http://test.test.test2", "TEST");
 echo $result;
 
 /**
@@ -17,15 +16,14 @@ echo $result;
  */
 function getShortUrl($longUrl, $user) {
 	$sql = new Sql();
-	$exists = longUrlExists($longUrl);
+	$shortUrl = longUrlExists($longUrl);
 
-	if ((strlen($exists) > 0)) {
-		if (strlen($shortUrl) == 0) {
-			return $exists;
-		} else {
-			return $shortUrl;
-		}
+	if ((strlen($shortUrl) > 0)) {
+		return $shortUrl;
 	}
+
+	$id = rand(10000,99999);
+	$shortUrl = base_convert($id,20,36);
 	
 	while (urlExists($shortUrl)) {
 		$id = rand(10000,99999);

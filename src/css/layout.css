@@ -9,7 +9,7 @@ html {
 
 /* Overridden styles of Blueprint to customize layout */
 body {
-	font-family: sans-serif;
+	font-family: cursive;
 	background-color: #E5DFAE;
 	width: 100%;
 	height: 100%;
@@ -265,13 +265,13 @@ input {
 
 .general-subtitle {
 	font-size: small;
-	font-family: sans-serif;
+	font-family: inherit;
 	padding-bottom: 5px;
 }
 
 .general-text {
 	font-size: small;
-	font-family: sans-serif;
+	font-family: inherit;
 }
 
 .spinner {
@@ -291,7 +291,7 @@ input {
 .config-header {
 	font-size: medium;
 	color: #000;
-	font-family: sans-serif;
+	font-family: inherit;
 }
 
 .shorten {
@@ -387,7 +387,8 @@ input {
 .action-button {
 	height: 25px;
 	font-weight: bold;
-	border: 1px solid darkSkyBlue;
+	background-color: #B6D051;
+	border: 1px solid #B6D051;
 	border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
 	width: 55px;
@@ -497,7 +498,8 @@ input {
 		
 		font-size: 10pt;
 		
-		background: #6F8787; 
+		background: #70A99A;
+		z-index: 10000; 
 }
 
 

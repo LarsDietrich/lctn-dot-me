@@ -15,7 +15,7 @@ var selectedLocation;
 // reference to the position marker on the map (of type google.maps.Marker).
 var positionMarker;
 
-// reference to the additional marker on the page, used to show twtter/wiki
+// reference to the additional marker on the page, used to show twtter/wiki/webcam etc
 // locations.
 var infoMarker;
 
@@ -56,97 +56,6 @@ function load() {
 	}
 	
 	jx.load("decode.php?url=" + url, function(data) { loadUrlParameters(data); });
-
-}
-
-/**
- * Decodes and loads the parameters passed through on the URL into variables.
- * Used to preload a location.
- */
-function loadUrlParameters(encodedString) {
-	
-	var data = JSON.parse(Base64.decode(encodedString));
-
-	// map
-	var map = data.map;
-	latitude = map.lat?parseFloat(map.lat):0;
-	longitude = map.lng?parseFloat(map.lng):0;
-	maptype = map.type?map.type:"roadmap";
-	zoom = map.zoom?parseInt(map.zoom):12;
-
-	if (!((latitude == 0.0) && (longitude == 0.0))) {
-		selectedLocation =  new google.maps.LatLng(latitude, longitude);
-	}
-
-	//streetview
-	if (data.sv) {
-		if (!isEnabled("streetview")) {
-			setConfigOption("streetview");
-		}
-		heading = data.sv.heading?parseInt(data.sv.heading):0;
-		pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
-	}
-
-	//twitter
-	if (data.tw) {
-		if (!isEnabled("twitter")) {
-			setConfigOption("twitter");
-			
-			
-		}
-		$("#tweet_range").val(data.tw.range);
-		$("#tweet_filter").val(data.tw.filter);
-	}
-
-	//webcam
-	if (data.wc) {
-		if (!isEnabled("webcam")) {
-			setConfigOption("webcam");
-		}
-		$("#webcam_range").val(data.wc.range);
-	}
-	
-	//directions
-	if (data.route) {
-		if (!isEnabled("route")) {
-			setConfigOption("route");
-		}
-		$("#route_from").val(data.route.from);
-		updateRouteInformation();
-	}
-
-	start();
-}
-
-/**
- * This is the entry point for the page. Loads the necessary data, parses the
- * URL for location information and shows loads the page containers.
- */
-function start(data) {
-
-	setConfigOptions();
-
-  if (!hasCookieSupport()) {
-  	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
-  	return;
-  }
-
-	showContainers();
-	
-	// TODO: Remove when live
-	//beta();
-
-	updateUrlWindow("");
-
-	if (selectedLocation) {
-		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
-	} else {
-		if ($.cookie("lastLocation")) {
-			loadLastLocation();
-		} else {
-			loadMap();
-		}
-	}
 
 	// setup the popup overlay for later use
 	$(function() {
@@ -227,6 +136,94 @@ function start(data) {
 		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
 
 	});
+
+}
+
+/**
+ * Decodes and loads the parameters passed through on the URL into variables.
+ * Used to preload a location.
+ */
+function loadUrlParameters(encodedString) {
+	
+	var data = JSON.parse(Base64.decode(encodedString));
+
+	// map
+	var map = data.map;
+	latitude = map.lat?parseFloat(map.lat):0;
+	longitude = map.lng?parseFloat(map.lng):0;
+	maptype = map.type?map.type:"roadmap";
+	zoom = map.zoom?parseInt(map.zoom):12;
+
+	if (!((latitude == 0.0) && (longitude == 0.0))) {
+		selectedLocation =  new google.maps.LatLng(latitude, longitude);
+	}
+
+	//streetview
+	if (data.sv) {
+		if (!isEnabled("streetview")) {
+			setConfigOption("streetview");
+		}
+		heading = data.sv.heading?parseInt(data.sv.heading):0;
+		pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
+	}
+
+	//twitter
+	if (data.tw) {
+		if (!isEnabled("twitter")) {
+			setConfigOption("twitter");
+			
+			
+		}
+		$("#tweet_range").val(data.tw.range);
+		$("#tweet_filter").val(data.tw.filter);
+	}
+
+	//webcam
+	if (data.wc) {
+		if (!isEnabled("webcam")) {
+			setConfigOption("webcam");
+		}
+		$("#webcam_range").val(data.wc.range);
+	}
+	
+	//directions
+	if (data.route) {
+		if (!isEnabled("route")) {
+			setConfigOption("route");
+		}
+		$("#route_from").val(data.route.from);
+		updateRouteInformation();
+	}
+
+	start();
+}
+
+/**
+ * This is the entry point for the page. Loads the necessary data, parses the
+ * URL for location information and shows loads the page containers.
+ */
+function start(data) {
+
+	setConfigOptions();
+
+  if (!hasCookieSupport()) {
+  	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
+  	return;
+  }
+
+	showContainers();
+
+	updateUrlWindow("");
+
+	if (selectedLocation) {
+		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
+	} else {
+		if ($.cookie("lastLocation")) {
+			loadLastLocation();
+		} else {
+			loadMap();
+		}
+	}
 }
 
 /**

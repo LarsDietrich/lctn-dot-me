@@ -1,5 +1,6 @@
 <?php
 require("includes/functions.php");
+require("includes/sql.php");
 if (isset($_GET["decode"])) {
 	$input = $_GET["decode"];
 	$output = "";

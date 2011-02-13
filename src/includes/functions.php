@@ -6,7 +6,6 @@
  * @param $shortUrl - shortUrl to find longUrl for
  */
 function getLongURL($shortUrl) {
-	require ("sql.php");
 	$sql = new Sql();
 	$query = "select longurl from url where shorturl = '" . $shortUrl . "'";
 	$result = mysql_fetch_assoc($sql->execute($query));
@@ -26,11 +25,10 @@ function getLongURL($shortUrl) {
  * @return boolean
  */
 function urlExists($shortUrl) {
-	require ("sql.php");
 	$sql = new Sql();
 	$query = "select shorturl from url where shorturl = '" . $shortUrl . "'";
 	$result = mysql_fetch_assoc($sql->execute($query));
-	if (count($result) > 0) {
+	if (strlen($result["shorturl"]) > 0) {
 		return true;
 	} else {
 		return false;

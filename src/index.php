@@ -128,7 +128,8 @@
 				$("#loading").css("display","block");
 				$("#loading").overlay({
 					// custom top position
-					top: 200,
+					left:70,
+					top: 40,
 					// some mask tweaks suitable for facebox-looking dialogs
 					mask: {
 						// you might also consider a "transparent" color for the mask
