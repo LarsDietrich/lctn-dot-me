@@ -29,8 +29,8 @@ var geocoder = new google.maps.Geocoder();
 var heading = 0;
 var pitch = 0;
 var zoom = 12;
-var latitude;
-var longitude;
+var latitude = 0;
+var longitude = 0;
 var maptype = "roadmap";
 
 // cache to store a history of previously selected locations.
@@ -38,11 +38,7 @@ var locationCache = new Array();
 // position in locationCache the user is currently at.
 var currentSearchPosition = 0;
 
-/**
- * Decodes and loads the parameters passed through on the URL into variables.
- * Used to preload a location.
- */
-function loadUrlParameters() {
+function load() {
 	$.extend( {
 		getUrlVars : function() {
 			var vars = {};
@@ -53,52 +49,83 @@ function loadUrlParameters() {
 		}
 	});
 
-	if ($.getUrlVars()['q']) {
-		var encodedString = $.getUrlVars()['q'];
-		var data = JSON.parse(Base64.decode(encodedString));
-		// map
-		var map = data.map;
-		latitude = map.lat?parseFloat(map.lat):0;
-		longitude = map.lng?parseFloat(map.lng):0;
-		maptype = map.type?map.type:"roadmap";
-		zoom = map.zoom?parseInt(map.zoom):12;
+	if ($.getUrlVars()['url']) {
+		var url = $.getUrlVars()['url'];
+	}	else {
+		var url = "";
+	}
+	
+	jx.load("decode.php?url=" + url, function(data) { loadUrlParameters(data); });
 
-		// streetview
-		if (data.sv) {
-			if (!isEnabled("streetview")) {
-				setConfigOption("streetview");
-			}
-			heading = data.sv.heading?parseInt(data.sv.heading):0;
-			pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
-		}
+}
 
-		if (data.tw) {
-			if (!isEnabled("twitter")) {
-				setConfigOption("twitter");
-			}
-			$("#tweet_range").val(data.tw.range);
-			$("#tweet_filter").val(data.tw.filter);
-		}
+/**
+ * Decodes and loads the parameters passed through on the URL into variables.
+ * Used to preload a location.
+ */
+function loadUrlParameters(encodedString) {
+	
+	var data = JSON.parse(Base64.decode(encodedString));
 
-		if (data.wc) {
-			if (!isEnabled("webcam")) {
-				setConfigOption("webcam");
-			}
-			$("#webcam_range").val(data.wc.range);
-		}
-		
+	// map
+	var map = data.map;
+	latitude = map.lat?parseFloat(map.lat):0;
+	longitude = map.lng?parseFloat(map.lng):0;
+	maptype = map.type?map.type:"roadmap";
+	zoom = map.zoom?parseInt(map.zoom):12;
+
+	if (!((latitude == 0.0) && (longitude == 0.0))) {
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
-	}	
+	}
+
+	//streetview
+	if (data.sv) {
+		if (!isEnabled("streetview")) {
+			setConfigOption("streetview");
+		}
+		heading = data.sv.heading?parseInt(data.sv.heading):0;
+		pitch = data.sv.pitch?parseInt(data.sv.pitch):0;
+	}
+
+	//twitter
+	if (data.tw) {
+		if (!isEnabled("twitter")) {
+			setConfigOption("twitter");
+			
+			
+		}
+		$("#tweet_range").val(data.tw.range);
+		$("#tweet_filter").val(data.tw.filter);
+	}
+
+	//webcam
+	if (data.wc) {
+		if (!isEnabled("webcam")) {
+			setConfigOption("webcam");
+		}
+		$("#webcam_range").val(data.wc.range);
+	}
+	
+	//directions
+	if (data.route) {
+		if (!isEnabled("route")) {
+			setConfigOption("route");
+		}
+		$("#route_from").val(data.route.from);
+		updateRouteInformation();
+	}
+
+	start();
 }
 
 /**
  * This is the entry point for the page. Loads the necessary data, parses the
  * URL for location information and shows loads the page containers.
  */
-function load() {
+function start(data) {
 
 	setConfigOptions();
-	
+
   if (!hasCookieSupport()) {
   	alert("Cookies are used extensively by this website to function, please enable cookie support and reload the website.");
   	return;
@@ -106,13 +133,11 @@ function load() {
 
 	showContainers();
 	
-	loadUrlParameters();
-
 	// TODO: Remove when live
 	beta();
 
 	updateUrlWindow("");
-	
+
 	if (selectedLocation) {
 		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
 	} else {
@@ -122,7 +147,7 @@ function load() {
 			loadMap();
 		}
 	}
-	
+
 	// setup the popup overlay for later use
 	$(function() {
 		$("a[rel]").overlay( {
@@ -511,8 +536,7 @@ function clearMarkers() {
  * Tracks click statistics by calling stats.php
  */
 function updateStats() {
-	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {
-	});
+	jx.load("stats.php?do=stat&lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng(), function(data) {});
 }
 
 /**
@@ -641,9 +665,7 @@ function reverseCodeLatLng() {
  * shrink.php to do the shortening and saving. Updates the "short Url" box.
  */
 function shortenUrl() {
-	/**
-	 * {"map":{"lat":"0","lng":"0","maptype":":"roadmap","zoom":"0"},"streetview":{"heading":"0","pitch":"0"}}
-	 */
+
 	root = "http://" + top.location.host + "/";
 	var longUrl = '{';
 	// map
@@ -662,12 +684,17 @@ function shortenUrl() {
 	if (isEnabled("twitter")) {
 		longUrl += '"tw":{';
 		longUrl += '"range":"' + $("#tweet_range").val() + '",';
-		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"}';
+		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"},';
 	}
 
 	if (isEnabled("webcam")) {
 		longUrl += '"wc":{';
-		longUrl += '"range":"' + $("#webcam_range").val() + '"}';
+		longUrl += '"range":"' + $("#webcam_range").val() + '"},';
+	}
+	
+	if (isEnabled("route")) {
+		longUrl += '"route":{';
+		longUrl += '"from":"' + $("#route_from").val() + '"},';
 	}
 	
 	longUrl += '}';

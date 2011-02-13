@@ -10,29 +10,31 @@ function getLongURL($shortUrl) {
 	$sql = new Sql();
 	$query = "select longurl from url where shorturl = '" . $shortUrl . "'";
 	$result = mysql_fetch_assoc($sql->execute($query));
-	if (count($result) > 0) {
+	if (strlen($result["longurl"]) > 0) {
 		return $result["longurl"];
 	} else {
-		return("");
+		$stub = '{"map": {"lat":"","lng":"","zoom":"14","type":"roadmap"}}';
+		return base64_encode($stub);
 	}
 }
 
-function redirectTo($longUrl)
-{
-	// change this to your domain
-	header("Referer: http://lctn.me");
-	// use a 301 redirect to your destination
-//	echo $longUrl;
-	header("Location: $longUrl", TRUE, 301);
-	exit;
+/**
+ * Determine if a short url exists in the database
+ *
+ * @param $shortUrl - short url to check for
+ *
+ * @return boolean
+ */
+function urlExists($shortUrl) {
+	require ("sql.php");
+	$sql = new Sql();
+	$query = "select shorturl from url where shorturl = '" . $shortUrl . "'";
+	$result = mysql_fetch_assoc($sql->execute($query));
+	if (count($result) > 0) {
+		return true;
+	} else {
+		return false;
+	}
 }
-
-function show404()
-{
-	// display/include your standard 404 page here
-	echo "404 Page Not Found.";
-	exit;
-}
-
 
 ?>

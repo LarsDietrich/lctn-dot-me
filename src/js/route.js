@@ -34,7 +34,7 @@ function processRouteLookup(result, status, start, end) {
 		var myRoute = result.routes[0].legs[0];
 		totalDistance = myRoute.distance.value / 1000;
 		totalDuration = myRoute.duration.value;
-		
+
 		for ( var i = 0; i < myRoute.steps.length; i++) {
 			var location = myRoute.steps[i].start_point.lat() + "," + myRoute.steps[i].start_point.lng();
 			var output = "<tr data-latitude=\"" + myRoute.steps[i].start_point.lat() + "\" data-longitude=\"" + myRoute.steps[i].start_point.lng()
@@ -66,7 +66,7 @@ function processRouteLookup(result, status, start, end) {
 }
 
 /**
- * Updates the "route" information
+ * Updates the "route" information window
  */
 function updateRouteInformation(start, end) {
 	if (!start) {
@@ -96,7 +96,6 @@ function updateRouteDisplay(start, end) {
 			output += listOfRoute[i];
 		}
 	}
-	//	output += "<tr><td>Total travel time approximately<b>" + totalDuration + "</b></td</tr>";
 	output += "</table>";
 	$("#route_stream").html(output);
 	renderAddress("start");
@@ -104,8 +103,8 @@ function updateRouteDisplay(start, end) {
 }
 
 /**
- * Activates the Directions window and plots a route from the selected location
- * to the location specified.
+ * Activates the Directions window and plots a route from the location specified
+ * by "start" to the location specified.
  * 
  * @param location
  */
@@ -119,6 +118,13 @@ function getRouteToLocation(location) {
 	updateRouteInformation(start, end);
 }
 
+/**
+ * Renders the full address of selected location in the address box.
+ * 
+ * @param control -
+ *          the control containing the location, comma seperated latitude then
+ *          longitude
+ */
 function renderAddress(control) {
 	var split = $("#route_" + control).html().split(",");
 	var location = new google.maps.LatLng(split[0], split[1]);

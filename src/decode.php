@@ -1,17 +1,21 @@
 <?php
 require("includes/functions.php");
-$input = $_GET["decode"];
-$output = "";
-//$input = "rse1";
-$url= mysql_escape_string($input);
-$longUrl = getLongUrl($url);
-if ($longUrl == "") {
-	$output = "error/404.php";
-	die();
-} else {
-	$output = "index.php?q=" . $longUrl;
+if (isset($_GET["decode"])) {
+	$input = $_GET["decode"];
+	$output = "";
+	//$input = "rse1";
+	$url = mysql_escape_string($input);
+	$valid = urlExists($url);
+	if (!$valid) {
+		$output = "error/404.php";
+		die();
+	} else {
+		$output = "?url=" . $url;
+	}
+	header("Location: $output");
+} else if (isset($_GET["url"])) {
+	$output = getLongURL($_GET["url"]);	
+	echo $output;
 }
-
-header("Location: $output");
 
 ?>
