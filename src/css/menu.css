@@ -26,7 +26,7 @@ ul.topnav li {
 }
 
 ul.topnav li a {
-	padding: 10px 5px;
+	padding: 7px 5px;
 	color: #000;
 	display: block;
 	text-decoration: none;
@@ -89,4 +89,5 @@ html ul.topnav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
 
 .config {
 	cursor: pointer;
+	font-size: 10pt;
 }

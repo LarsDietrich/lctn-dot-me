@@ -4,6 +4,7 @@ html {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	overflow: hidden;
 }
 
 /* Overridden styles of Blueprint to customize layout */
@@ -475,4 +476,56 @@ input {
 	height: 40px;
 	width: 410px;
 	padding: 5px;
+}
+
+#startup {
+		/* overlay is hidden before loading */
+		display:none;
+
+		padding: 5px 5px 5px 5px;
+		
+		/* standard decorations */
+		width:500px;
+		border:3px solid #666;
+
+		/* for modern browsers use semi-transparent color on the border. nice! */
+		border:3px solid rgba(82, 82, 82, 0.698);
+
+		/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
+		-moz-border-radius:8px;
+		-webkit-border-radius:8px;
+		
+		font-size: 10pt;
+		
+		background: #6F8787; 
+}
+
+
+#loading {
+		/* overlay is hidden before loading */
+		display:none;
+		
+		/* standard decorations */
+		width:100px;
+		border: none
+
+		/* for modern browsers use semi-transparent color on the border. nice! */
+		border:none;
+
+}
+
+#beta {
+	position: absolute;
+	top: 45px;
+	left: 4px;
+	border: none;
+	background-color: red;
+	color: #fff;
+	border-radius: 10px 10px 10px 10px; 
+	-moz-border-radius : 10px 10px 10px 10px;
+	height: 20px;
+	width: 34px;
+	padding: 5px 5px 5px 5px;
+	font-size: 10pt;
+	font-weight: bold;
 }

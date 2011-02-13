@@ -31,14 +31,6 @@
 			</div>
 		</div>
 
-		<div id="find" class="find inline">
-			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
-			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
-			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
-			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
-			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
-		</div>
-
 		<div class="share-window" id="share-window"></div>
 
 <!-- 
@@ -54,14 +46,14 @@
 		</div>
 
 <!-- The BETA window that loads at startup -->
-		<div id="displaybox" onclick="beta();" style="display: none;"></div>
 
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
 		
 		<?php 
-			include("menu.php");
+			include("loading.php");
 		?>
+
 
 <!-- 
 		<div id="addthis" class="addthis">
@@ -114,17 +106,70 @@
 			include("container/general.php");
 			include("container/webcam.php");
 			include("container/route.php");
+
+			
 //			include("container/places.php");
 //			include("container/user.php");
 //			include("container/ads.php");
+
+			include("startup.php");
+			
 			?>
 
-<!-- Google Maps API -->
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <!-- JQuery API -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <!-- JQuery Tools API -->
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
+
+		<script type="text/javascript">
+			loading();
+			
+			function loading() {
+				$("#loading").css("display","block");
+				$("#loading").overlay({
+					// custom top position
+					top: 200,
+					// some mask tweaks suitable for facebox-looking dialogs
+					mask: {
+						// you might also consider a "transparent" color for the mask
+						color: '#fff',
+						// load mask a little faster
+						loadSpeed: 200,
+						// very transparent
+						opacity: 0.3
+					},
+		
+					// disable this for modal dialog-type of overlays
+					closeOnClick: false,
+		
+					// load it immediately after the construction
+					load: true
+
+				});
+			}
+
+			function loading_end() {
+				$("#loading").css("display", "none");
+			}
+			
+		</script>
+
+		<?php 
+			include("menu.php");
+		?>
+
+		<div id="find" class="find inline">
+			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
+			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
+			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
+			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
+			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
+			<div id="beta">Beta</div>
+		</div>
+
+
+<!-- Google Maps API -->
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
@@ -167,6 +212,7 @@
 		<script type="text/javascript" src="js/user.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>
+
 
 	</body>
 
