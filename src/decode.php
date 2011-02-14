@@ -8,7 +8,7 @@ if (isset($_GET["decode"])) {
 	$url = mysql_escape_string($input);
 	$valid = urlExists($url);
 	if (!$valid) {
-		$output = "error/404.php";
+		$output = "404.php";
 	} else {
 		$output = "index.php?url=" . $url;
 	}

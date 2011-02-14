@@ -6,11 +6,11 @@
 	    <title>lctn.me | A Location Portal - Find it, Share it</title>
 
 		<noscript>
-			<meta http-equiv="Refresh" content="0; URL=error/noscript.php" />
+			<meta http-equiv="Refresh" content="0; URL=noscript.php" />
 		</noscript> 
 
 		<!-- [if IE 6]> 
-			<meta http-equiv="Refresh" content="0; URL=error/ie6.php" />  
+			<meta http-equiv="Refresh" content="0; URL=ie6.php" />  
 		<![endif] -->
 
 
