@@ -621,6 +621,9 @@ function locateAndRefresh(putInCache) {
 		'address' : address
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
+			if (!selectedLocation) {
+				selectedLocation = results[0].geometry.location;
+			}
 			if (putInCache) {
 				addToCache($("#address").val());
 			}
