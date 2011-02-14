@@ -15,8 +15,6 @@
 <br/>
 <br/>
 Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and change to <b>fullscreen</b> (normally F11).
-<p>
-<div style="text-align: right; padding-bottom: 5px"><button class="close action-button action-button-wide">Let me try!</button></div>
-</p>
+<div style="text-align: right; padding-bottom: 5px; padding-right: 10px; padding-top: 10px"><button class="close action-button action-button-wide">Let me try!</button></div>
 
 </div>

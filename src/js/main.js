@@ -154,6 +154,8 @@ function loadUrlParameters(encodedString) {
 	maptype = map.type?map.type:"roadmap";
 	zoom = map.zoom?parseInt(map.zoom):12;
 
+	alert(longitude);
+	alert(latitude);
 	if (!((latitude == 0.0) && (longitude == 0.0))) {
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
 	}
@@ -214,7 +216,7 @@ function start(data) {
 	updateUrlWindow("");
 
 	if (selectedLocation) {
-		useAddressToReposition(selectedLocation.lat() + "," + selectedLocation.lng());
+		useAddressToRepositionLngLat(selectedLocation.lng() + "," + selectedLocation.lat());
 	} else {
 		if ($.cookie("lastLocation")) {
 			loadLastLocation();
@@ -621,7 +623,6 @@ function locateAndRefresh(putInCache) {
 		'address' : address
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			selectedLocation = results[0].geometry.location;
 			if (putInCache) {
 				addToCache($("#address").val());
 			}
@@ -697,6 +698,10 @@ function shortenUrl() {
 	longUrl += '"lng":"' + selectedLocation.lng() + '",';
 	longUrl += '"zoom":"' + zoom + '",';
 	longUrl += '"type":"' + maptype + '"},';
+	
+	alert(selectedLocation.lng());
+	alert(selectedLocation.lat());
+
 	
 	if (isEnabled("streetview")) {
 		longUrl += '"sv":{';
