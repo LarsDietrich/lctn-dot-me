@@ -401,6 +401,7 @@ function loadAllContainers() {
 	if (isEnabled("user")) {
 		loadContainer("user");
 	}
+
 }
 
 /**
@@ -444,6 +445,12 @@ function loadContainer(name) {
 			$("#user-name").html("You");
 			updateUserInformation();
 		}
+
+		if (name == "route") {
+			$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+		}
+
+	
 	}
 }
 
@@ -616,7 +623,10 @@ function setMessage(message) {
  */
 function locateAndRefresh(putInCache) {
 	loading();
-	var address = document.getElementById("address").value;
+	var address = $("#address").val();
+	if (isEnabled("route")) {
+		$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+	}
 	geocoder.geocode( {
 		'address' : address
 	}, function(results, status) {
@@ -668,6 +678,9 @@ function reverseCodeLatLng() {
 			if (results.length > 0) {
 				address = results[0].formatted_address;
 				$("#address").val(address);
+				if (isEnabled("route")) {
+					$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+				}
 				if (isEnabled("general")) {
 					updateTimezoneLocationInformation();
 				}
