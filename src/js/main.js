@@ -154,8 +154,6 @@ function loadUrlParameters(encodedString) {
 	maptype = map.type?map.type:"roadmap";
 	zoom = map.zoom?parseInt(map.zoom):12;
 
-	alert(longitude);
-	alert(latitude);
 	if (!((latitude == 0.0) && (longitude == 0.0))) {
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
 	}
@@ -698,10 +696,6 @@ function shortenUrl() {
 	longUrl += '"lng":"' + selectedLocation.lng() + '",';
 	longUrl += '"zoom":"' + zoom + '",';
 	longUrl += '"type":"' + maptype + '"},';
-	
-	alert(selectedLocation.lng());
-	alert(selectedLocation.lat());
-
 	
 	if (isEnabled("streetview")) {
 		longUrl += '"sv":{';
