@@ -231,19 +231,15 @@ function start(data) {
  * functionality. Reloads the containers after attempt.
  */
 function findMe() {
-	
-	
+
 	setMessage("Accuracy not guaranteed.");
 
-	loading();
-	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
 			setMessage("There was a problem trying to determine your current location.", "error");
-			loading_end();
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
@@ -252,7 +248,6 @@ function findMe() {
 			useAddressToReposition(location);
 		}, function(error) {
 			setMessage("There was a problem trying to determine your current location.", "error");
-			loading_end();
 		});
 	} else {
 		var location = geoip_latitude() + "," + geoip_longitude();

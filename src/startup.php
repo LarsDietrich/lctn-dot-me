@@ -1,14 +1,15 @@
 <div id="startup">
-<b>LCTN.ME</b> lets you easily <b>find</b> any point on earth using Google Maps then...
+<b>LCTN.ME</b> lets you easily
 <br/>
 <br/>
 <ul>
-<li>Get <b>directions</b> to the place or...</li>
-<li>Shows all the <b>tweets</b> in the area or...</li>
-<li>See what the place looks like with Google <b>streetview</b> or...</li>
-<li>Find <b>wikipedia</b> articles for the area or... </li>
-<li>Look at <b>webcams</b> in the area or...</li>
-<li>Just get some general information about the area, like <b>weather</b>, your current coordinates and local time.</li>
+<li><b>find</b> any point on earth using Google Maps</li>
+<li>get basic <b>directions</b> to and from a location</li>
+<li>see what people are <b>tweeting</b> about in the area</li>
+<li>see what the place looks like with Google <b>streetview</b></li>
+<li>find <b>wikipedia</b> articles for the area</li>
+<li>look at <b>webcams</b> in the area</li>
+<li>get some general information about the area, like <b>weather</b>, current coordinates and local time</li>
 </ul>
 ... and then easily <b>share</b> it with friends.
 <br/>
