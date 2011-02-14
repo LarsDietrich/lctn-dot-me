@@ -387,12 +387,15 @@ input {
 .action-button {
 	height: 25px;
 	font-weight: bold;
+	font-family: inherit;
+	font-size: 10pt;
 	background-color: #B6D051;
 	border: 1px solid #B6D051;
 	border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
 	width: 55px;
 	text-align: center;
+	padding-bottom: 1px;
 }
 
 .action-button-semi-wide {
