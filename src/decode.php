@@ -12,7 +12,6 @@ if (isset($_GET["decode"])) {
 	} else {
 		$output = "index.php?url=" . $url;
 	}
-	echo($output);
 	header("Location: $output");
 } else if (isset($_GET["url"])) {
 
