@@ -211,8 +211,6 @@ function start(data) {
   	return;
   }
 
-	showContainers();
-
 	updateUrlWindow("");
 
 	if (selectedLocation) {
@@ -224,6 +222,8 @@ function start(data) {
 			loadMap();
 		}
 	}
+
+	showContainers();
 }
 
 /**
@@ -239,7 +239,7 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Unable to find current location. " + error, "error");
+			setMessage("Unable to find current location. " + error);
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
@@ -247,7 +247,7 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Unable to find current location. " + error, "error");
+			setMessage("Unable to find current location. " + error);
 		});
 	} else {
 		var location = geoip_latitude() + "," + geoip_longitude();
@@ -581,7 +581,7 @@ function processStreetViewData(data, status) {
 		// positionMarker.setMap(map);
 		panorama.setVisible(true);
 	} else {
-		setMessage("Streetview not available at this location.", "notice");
+		setMessage("Streetview not available at this location.");
 		panorama.setVisible(false);
 	}
 }
@@ -627,7 +627,7 @@ function locateAndRefresh(putInCache) {
 			}
 			reloadContainers();
 		} else {
-			setMessage("Sorry, could not find it, try search for something else.", "info");
+			setMessage("Sorry, could not find it, try search for something else.");
 		}
 		loading_end();
 	});
@@ -670,10 +670,10 @@ function reverseCodeLatLng() {
 					updateTimezoneLocationInformation();
 				}
 			} else {
-				setMessage("No addresses were found at this location.", "info");
+				setMessage("No addresses were found at this location.");
 			}
 		} else {
-			setMessage("Unable to determine physical address from current location", "error");
+			setMessage("Unable to determine physical address from current location");
 		}
 
 		if (isEnabled("general")) {
