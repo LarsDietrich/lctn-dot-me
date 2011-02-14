@@ -239,7 +239,7 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("There was a problem trying to determine your current location.", "error");
+			setMessage("Unable to find current location. " + error, "error");
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
@@ -247,7 +247,7 @@ function findMe() {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("There was a problem trying to determine your current location.", "error");
+			setMessage("Unable to find current location. " + error, "error");
 		});
 	} else {
 		var location = geoip_latitude() + "," + geoip_longitude();
