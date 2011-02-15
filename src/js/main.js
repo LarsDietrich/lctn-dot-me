@@ -38,6 +38,8 @@ var locationCache = new Array();
 // position in locationCache the user is currently at.
 var currentSearchPosition = 0;
 
+var shortUrlLoad = false;
+
 function load() {
 	$.extend( {
 		getUrlVars : function() {
@@ -156,8 +158,9 @@ function loadUrlParameters(encodedString) {
 
 	if (!((latitude == 0.0) && (longitude == 0.0))) {
 		selectedLocation =  new google.maps.LatLng(latitude, longitude);
+		shortUrlLoad = true;
 	}
-
+	
 	//streetview
 	if (data.sv) {
 		if (!isEnabled("streetview")) {
@@ -631,7 +634,9 @@ function locateAndRefresh(putInCache) {
 		'address' : address
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-			if (!selectedLocation) {
+			if (shortUrlLoad) {
+				shortUrlLoad = false; 
+			} else {
 				selectedLocation = results[0].geometry.location;
 			}
 			if (putInCache) {
