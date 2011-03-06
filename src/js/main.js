@@ -264,8 +264,6 @@ function findMe() {
  */
 function loadMap() {
 
-	alert('loadmap');
-
 	var myMapOptions = {
 		center : selectedLocation,
 		streetViewControl : false,
@@ -313,9 +311,9 @@ function loadMap() {
 
 	alert(JSON.stringify(map));
 
-	if (isEnabled("route")) {
-		updateRouteInformation();
-	}
+//	if (isEnabled("route")) {
+//		updateRouteInformation();
+//	}
 
 
 }
