@@ -499,6 +499,9 @@ input {
 	display: none;
 	width: 100px;
 	border: none border : none;
+	position: fixed;
+	left: 60px;
+	top: 45px;
 }
 
 #beta {

@@ -1,4 +1,3 @@
-<?php if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {?>
 <div id="startup">
 <b>LCTN.ME</b> lets you easily
 <br/>
@@ -22,4 +21,3 @@ Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and
 	<div style="padding-left: 260px; width: 50%; display: inline"><input type="checkbox" name="show_startup" id="show_startup" checked="checked" onclick="$.cookie('show_startup', $('#show_startup').is(':checked'));">Show on startup</div>
 </div>
 </div>
-<?php }?>

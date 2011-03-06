@@ -108,27 +108,31 @@ function load() {
 			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
 
 			});
+
+		if ($.cookie("show_startup") == "true") {
+			$("#startup").overlay({
+				// custom top position
+				top: 200,
+				// some mask tweaks suitable for facebox-looking dialogs
+				mask: {
+					// you might also consider a "transparent" color for the mask
+					color: '#fff',
+					// load mask a little faster
+					loadSpeed: 200,
+					// very transparent
+					opacity: 0.8
+				},
+	
+				// disable this for modal dialog-type of overlays
+				closeOnClick: false,
+	
+				// load it immediately after the construction
+				load: true
+	
+			});
+		}
 		
-		$("#startup").overlay({
-			// custom top position
-			top: 200,
-			// some mask tweaks suitable for facebox-looking dialogs
-			mask: {
-				// you might also consider a "transparent" color for the mask
-				color: '#fff',
-				// load mask a little faster
-				loadSpeed: 200,
-				// very transparent
-				opacity: 0.8
-			},
 
-			// disable this for modal dialog-type of overlays
-			closeOnClick: false,
-
-			// load it immediately after the construction
-			load: true
-
-		});
 		
 		$(".config").each(function() {
 			var control = $(this);
@@ -138,7 +142,7 @@ function load() {
 		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
 
 	});
-
+	
 }
 
 /**
@@ -513,7 +517,6 @@ function showContainers() {
 	} else {
 		$("#user_container").css("display", "none");
 	}
-
 }
 
 /**

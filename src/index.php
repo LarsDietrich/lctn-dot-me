@@ -112,7 +112,9 @@
 //			include("container/user.php");
 //			include("container/ads.php");
 
-			include("startup.php");
+			if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {
+				include("startup.php");
+			}
 			
 			?>
 
@@ -126,27 +128,6 @@
 			
 			function loading() {
 				$("#loading").css("display","block");
-				$("#loading").overlay({
-					// custom top position
-					left:70,
-					top: 40,
-					// some mask tweaks suitable for facebox-looking dialogs
-					mask: {
-						// you might also consider a "transparent" color for the mask
-						color: '#fff',
-						// load mask a little faster
-						loadSpeed: 200,
-						// very transparent
-						opacity: 0.3
-					},
-		
-					// disable this for modal dialog-type of overlays
-					closeOnClick: false,
-		
-					// load it immediately after the construction
-					load: true
-
-				});
 			}
 
 			function loading_end() {
