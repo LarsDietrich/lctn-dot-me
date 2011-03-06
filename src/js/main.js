@@ -41,6 +41,7 @@ var currentSearchPosition = 0;
 var shortUrlLoad = false;
 
 function load() {
+	alert('1');
 	$.extend( {
 		getUrlVars : function() {
 			var vars = {};
@@ -128,6 +129,7 @@ function load() {
 		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
 
 	});
+	alert('2');
 	
 }
 
@@ -137,6 +139,8 @@ function load() {
  */
 function loadUrlParameters(encodedString) {
 	
+	alert('3');
+
 	var data = JSON.parse(Base64.decode(encodedString));
 
 	// map
@@ -204,6 +208,8 @@ function loadUrlParameters(encodedString) {
  */
 function start(data) {
 
+	alert('4');
+
 	setConfigOptions();
 
   if (!hasCookieSupport()) {
@@ -224,6 +230,8 @@ function start(data) {
 	}
 
 	showContainers();
+	alert('5');
+
 }
 
 /**
