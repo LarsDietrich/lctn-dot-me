@@ -309,8 +309,6 @@ function loadMap() {
 		maptype = map.getMapTypeId();
 	});
 
-	alert(JSON.stringify(map));
-
 //	if (isEnabled("route")) {
 //		updateRouteInformation();
 //	}
