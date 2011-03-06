@@ -282,6 +282,8 @@ function loadMap() {
 
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
+	alert(map);
+	
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
 // var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34,
