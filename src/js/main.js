@@ -280,51 +280,43 @@ function loadMap() {
 		scaleControl : true
 	}
 
-	alert("0");	
-
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
-alert("1");	
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
 // var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34,
 // primaryColor: '#0000FF', cornercolor:'#0000EE'});
-	alert("2");	
 
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map
 // icon : icon
 	});
-	alert("3");	
 
   google.maps.event.addListener(positionMarker, 'click', function() {
   	infowindow.setContent($("#address").val());
   	infowindow.open(map, positionMarker);
   });
-  alert("4");	
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		selectedLocation = event.latLng;
 		reloadContainers();
 	});
-	alert("5");	
 
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 		zoom = map.getZoom();
 	});
-	alert("6");	
 
 	google.maps.event.addListener(map, 'maptypeid_changed', function() {
 		maptype = map.getMapTypeId();
 	});
-	alert("7");	
+
+	alert(JSON.stringify(map));
 
 	if (isEnabled("route")) {
 		updateRouteInformation();
 	}
 
-	alert(JSON.stringify(map));
 
 }
 
