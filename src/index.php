@@ -97,7 +97,7 @@
 		<?php 
 			include("menu.php");
 		?>
-
+<!-- 
 		<div id="facebook-login" class="facebook-login">
 			<div id="fb-root"></div>
 			<script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -127,7 +127,7 @@
 		        	 });
 		         }
 			</script>
-		
+ -->		
 			<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
 <!-- 
 				<fb:profile-pic uid='loggedinuser' width='50px' height='50px'></fb:profile-pic>
@@ -137,12 +137,14 @@
 				<fb:login-button>Login with Facebook</fb:login-button>
 			<?php }?>
 		</div>
-
+<!-- 
 		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
 			<div class="facebook-like">
 				<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
 			</div>
 		<?php }?>
+
+-->
 		<div id="find" class="find inline">
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
