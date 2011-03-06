@@ -109,7 +109,6 @@ function load() {
 
 			});
 
-		if ($.cookie("show_startup") == "true") {
 			$("#startup").overlay({
 				top: 200,
 				mask: {
@@ -120,7 +119,6 @@ function load() {
 				closeOnClick: false,
 				load: true
 			});
-		}
 	
 		$(".config").each(function() {
 			var control = $(this);
