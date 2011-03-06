@@ -313,9 +313,9 @@ function loadMap() {
 		maptype = map.getMapTypeId();
 	});
 
-	if (isEnabled("route")) {
-		updateRouteInformation();
-	}
+//	if (isEnabled("route")) {
+//		updateRouteInformation();
+//	}
 }
 
 /**
