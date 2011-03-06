@@ -1,3 +1,4 @@
+<?php if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {?>
 <div id="startup">
 <b>LCTN.ME</b> lets you easily
 <br/>
@@ -15,6 +16,10 @@
 <br/>
 <br/>
 Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and change to <b>fullscreen</b> (normally F11).
-<div style="text-align: right; padding-bottom: 5px; padding-right: 10px; padding-top: 10px"><button class="close action-button action-button-wide">Let me try!</button></div>
-
+<br/>
+<div style="padding-top: 10px; padding-bottom: 5px">
+	<div style="width: 50%; display: inline"><button class="close action-button action-button-wide">Let me try!</button></div>
+	<div style="padding-left: 260px; width: 50%; display: inline"><input type="checkbox" name="show_startup" id="show_startup" checked="checked" onclick="$.cookie('show_startup', $('#show_startup').is(':checked'));">Show on startup</div>
 </div>
+</div>
+<?php }?>
