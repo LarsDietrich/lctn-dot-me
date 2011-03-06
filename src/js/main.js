@@ -195,10 +195,8 @@ function loadUrlParameters(encodedString) {
 			setConfigOption("route");
 		}
 		$("#route_from").val(data.route.from);
-		updateRouteInformation();
 	}
 
-	
 	start();
 }
 
@@ -313,6 +311,9 @@ function loadMap() {
 		maptype = map.getMapTypeId();
 	});
 
+	if (isEnabled("route")) {
+		updateRouteInformation();
+	}
 }
 
 /**
