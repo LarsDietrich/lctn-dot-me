@@ -67,7 +67,7 @@
 
 			
 //			include("container/places.php");
-			include("container/user.php");
+//			include("container/user.php");
 //			include("container/ads.php");
 
 			if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {
