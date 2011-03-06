@@ -280,6 +280,8 @@ function loadMap() {
 		scaleControl : true
 	}
 
+	alert("0");	
+
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
 alert("1");	
