@@ -111,29 +111,17 @@ function load() {
 
 		if ($.cookie("show_startup") == "true") {
 			$("#startup").overlay({
-				// custom top position
 				top: 200,
-				// some mask tweaks suitable for facebox-looking dialogs
 				mask: {
-					// you might also consider a "transparent" color for the mask
 					color: '#fff',
-					// load mask a little faster
 					loadSpeed: 200,
-					// very transparent
 					opacity: 0.8
 				},
-	
-				// disable this for modal dialog-type of overlays
 				closeOnClick: false,
-	
-				// load it immediately after the construction
 				load: true
-	
 			});
 		}
-		
-
-		
+	
 		$(".config").each(function() {
 			var control = $(this);
 			$(control).tooltip({ position: "bottom center", opacity: 0.9});
@@ -192,7 +180,15 @@ function loadUrlParameters(encodedString) {
 		}
 		$("#webcam_range").val(data.wc.range);
 	}
-	
+
+	//wiki
+	if (data.wiki) {
+		if (!isEnabled("wiki")) {
+			setConfigOption("wiki");
+		}
+		$("#wiki_range").val(data.wiki.range);
+	}
+
 	//directions
 	if (data.route) {
 		if (!isEnabled("route")) {
@@ -202,6 +198,7 @@ function loadUrlParameters(encodedString) {
 		updateRouteInformation();
 	}
 
+	
 	start();
 }
 
@@ -742,7 +739,12 @@ function shortenUrl() {
 		longUrl += '"route":{';
 		longUrl += '"from":"' + $("#route_from").val() + '"},';
 	}
-	
+
+	if (isEnabled("wiki")) {
+		longUrl += '"wiki":{';
+		longUrl += '"range":"' + $("#wiki_range").val() + '"},';
+	}
+
 	longUrl += '}';
 
 	var shortUrl = "";
