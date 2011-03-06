@@ -345,7 +345,7 @@ input {
 
 .facebook-login {
 	position: absolute;
-	top: 5px;
+	top: 40px;
 	left: 7px;
 	font-size: small;
 	font-weight: bold;
@@ -355,21 +355,9 @@ input {
 .facebook-like {
 	position: absolute;
 	top: 40px;
-	left: 228px;
+	left: 60px;
 	font-size: small;
 	font-weight: bold;
-}
-
-.statistics-total {
-	font-size: small;
-	font-weight: bold;
-	color: #113355;
-}
-
-.statistics-near {
-	font-size: small;
-	font-weight: bold;
-	color: #113355;
 }
 
 .image-fullscreen {
@@ -468,20 +456,6 @@ input {
 	position: absolute;
 }
 
-.statistics_window {
-	display: none;
-	position: absolute;
-	top: 65px;
-	left: 7px;
-	border: 1px solid black;
-	background-color: LightGoldenRodYellow;
-	border-radius: 10px 10px 10px 10px;
-	-moz-border-radius: 10px 10px 10px 10px;
-	height: 40px;
-	width: 410px;
-	padding: 5px;
-}
-
 #startup {
 	display: none;
 	padding: 5px 5px 5px 5px;
@@ -500,22 +474,22 @@ input {
 	width: 100px;
 	border: none border : none;
 	position: fixed;
-	left: 60px;
-	top: 45px;
+	left: 5px;
+	top: 100px;
 }
 
 #beta {
 	position: absolute;
-	top: 45px;
-	left: 4px;
+	top: 3px;
+	left: 380px;
 	border: none;
 	background-color: red;
 	color: #fff;
-	border-radius: 10px 10px 10px 10px;
-	-moz-border-radius: 10px 10px 10px 10px;
-	height: 20px;
-	width: 34px;
-	padding: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	height: 23px;
+	width: 40px;
+	padding: 3px 0px 0px 6px;
 	font-size: 10pt;
 	font-weight: bold;
 }

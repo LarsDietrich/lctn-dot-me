@@ -16,7 +16,7 @@
 		<li><a><label title="Open to see wikipedia articles in the area with short description, click to link through to actual article. Can filter by range." id="wiki" class="config" onclick="setConfigOption(this);">Wikipedia</label></a></li>
 		<li><a><label title="Open to get directions between two points, updates the map to show the route and gives you a friendly route description." id="route" class="config" onclick="setConfigOption(this);">Directions</label></a></li>
 		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
-			<li><a><label title="Stuff you've done" id="user" class="config" onclick="setConfigOption(this);">User</label></a></li>
+			<li><a><label title="You" id="user" class="config" onclick="setConfigOption(this);">You</label></a></li>
 		<?php }?>
 	</ul>
 </div>

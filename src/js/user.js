@@ -25,8 +25,9 @@ function processUserData(data) {
 	root = "http://" + top.location.host + "/";
 	userData = "";
 	$.each(data.result, function(index, value) {
+		url = root + value.url;
 		userData += "<tr><td>";
-		userData += root + value.url + "</td><td>";
+		userData += "<a href='" + url + "' target='_blank'>" + url + "</a></td><td>";
 		userData += getUrlTimeCreated(value.created) + "</td></tr>";
 	});
 	updateUserDisplay();

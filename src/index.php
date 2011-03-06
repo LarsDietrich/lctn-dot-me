@@ -33,19 +33,11 @@
 
 		<div class="share-window" id="share-window"></div>
 
-<!-- 
-		<div id="statistics_window" class="statistics_window">
-			<div class="statistics-total" id="statistics-total"></div>
-			<div class="statistics-near" id="statistics-near"></div>
-		</div>
--->
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
 			<!-- the external content is loaded inside this tag -->
 			<div class="contentWrap"></div>
 		</div>
-
-<!-- The BETA window that loads at startup -->
 
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
@@ -53,7 +45,6 @@
 		<?php 
 			include("loading.php");
 		?>
-
 
 <!-- 
 		<div id="addthis" class="addthis">
@@ -65,39 +56,6 @@
 		<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
 		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
 -->
-
-<!-- 
-			<div id="facebook-login" class="facebook-login">
-		      <div id="fb-root"></div>
-		      <script src="http://connect.facebook.net/en_US/all.js"></script>
-		      <script>
-		         FB.init({ 
-		            appId:'179640572057712', cookie:true, status: true, xfbml:true 
-		         });
-
-		         FB.Event.subscribe('auth.login', function(response) {
-		           window.location.reload();
-		         });
-
-		         if (FB.getSession()) {
-					user = FB.getSession().uid;
-		         }
-		      </script>
-
-		      <?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
- 				  <fb:profile-pic uid='loggedinuser' width='25px' height='25px'></fb:profile-pic>
- 				  &nbsp;You are logged in as <fb:name uid='loggedinuser' useyou='false'></fb:name> 
-			  <?php } else {?>
-	  		      <fb:login-button>Login with Facebook</fb:login-button>
-			  <?php }?>
-			</div>
-
-		      <?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
-				<div class="facebook-like">
-					<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
-				</div>
- 			  <?php }?>
-	 -->	    
 		    <?php 
 		    
 			include("container/twitter.php");
@@ -109,7 +67,7 @@
 
 			
 //			include("container/places.php");
-//			include("container/user.php");
+			include("container/user.php");
 //			include("container/ads.php");
 
 			if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {
@@ -140,13 +98,58 @@
 			include("menu.php");
 		?>
 
+		<div id="facebook-login" class="facebook-login">
+			<div id="fb-root"></div>
+			<script src="http://connect.facebook.net/en_US/all.js"></script>
+			<script>
+
+				FB.init({ 
+		            appId:'179640572057712', 
+		            cookie:true, 
+		            status: true, 
+		            xfbml:true 
+		         });
+			
+		         FB.Event.subscribe('auth.login', function(response) {
+		        	 window.location.reload();
+		         });
+
+		         FB.Event.subscribe('auth.logout', function(response) {
+		        	 window.location.reload();
+		         });
+		         
+		         if (FB.getSession()) {
+		        	 user = FB.getSession().uid;
+
+		        	 FB.api('/me', function(response) {
+		        		 $("#facebook-login").html("<img src='http://graph.facebook.com/" + response.id + "/picture'/>");
+		        		 $("#user").html(response.first_name);
+		        	 });
+		         }
+			</script>
+		
+			<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+<!-- 
+				<fb:profile-pic uid='loggedinuser' width='50px' height='50px'></fb:profile-pic>
+				&nbsp;You are logged in as <fb:name uid='loggedinuser' useyou='false'></fb:name> 
+ -->
+			<?php } else {?>
+				<fb:login-button>Login with Facebook</fb:login-button>
+			<?php }?>
+		</div>
+
+		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+			<div class="facebook-like">
+				<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
+			</div>
+		<?php }?>
 		<div id="find" class="find inline">
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
 			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
 			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
 			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
-			<div id="beta">Beta</div>
+			<div id="beta">BETA</div>
 		</div>
 
 
