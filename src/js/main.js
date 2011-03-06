@@ -282,7 +282,6 @@ function loadMap() {
 
 	map = new google.maps.Map(document.getElementById("map_canvas"), myMapOptions);
 
-	alert(map);
 	
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
@@ -313,9 +312,12 @@ function loadMap() {
 		maptype = map.getMapTypeId();
 	});
 
-//	if (isEnabled("route")) {
-//		updateRouteInformation();
-//	}
+	if (isEnabled("route")) {
+		updateRouteInformation();
+	}
+
+	alert(JSON.stringify(map));
+
 }
 
 /**
