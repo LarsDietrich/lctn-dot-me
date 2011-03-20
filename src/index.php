@@ -82,8 +82,7 @@
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 
 		<script type="text/javascript">
-			loading();
-			
+
 			function loading() {
 				$("#loading").css("display","block");
 			}
@@ -100,6 +99,7 @@
 
 		<div id="facebook-login" class="facebook-login">
 			<div id="fb-root"></div>
+			<!-- Facebook API -->
 			<script src="http://connect.facebook.net/en_US/all.js"></script>
 			<script>
 
@@ -157,10 +157,10 @@
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAANICyL01ax9PqYKeJwtOXfxTh05SPp9XRgWyeCyc0ee48nkavlxTTkteFyCb29mhFOfEeXVaj-F6hAw"></script>
 
 <!--  Places API -->
-		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
+<!-- 		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
+-->
 <!-- 	
 		Geolocation API	
 		<script type="text/javascript" src="http://j.maxmind.com/app/geoip.js"></script>
@@ -168,21 +168,25 @@
 
 <!-- Gears API for geolocation -->
  		<script type="text/javascript" src="js/gears_init.js"></script> 
+
 <!-- Java Ajax API for Ajax calls -->
 		<script type="text/javascript" src="js/jxs.js"> </script>
+
 <!-- JQuery Cookie API -->
 		<script type="text/javascript" src="js/jquery-cookie.js"> </script>
-<!-- JQuery Color API 
-		<script type="text/javascript" src="js/jquery.color.js"></script>
--->
+
 <!-- Interface API for Drag and Drop -->
 		<script type="text/javascript" src="js/interface.js"></script>
+
 <!-- UserVoice API for connecting to UserVoice -->
 		<script type="text/javascript" src="js/uservoice.js"></script>
+
 <!-- Base 64 Conversion script -->
 		<script type="text/javascript" src="js/base64.js"></script>
+
 <!-- Flowplayer Javascript for playing movies -->
 		<script type="text/javascript" src="js/flowplayer-3.2.4.min.js"></script>
+
 <!-- Script for Printing -->
 		<script type="text/javascript" src="js/jqprint.js"></script>
 
@@ -197,9 +201,8 @@
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
 		<script type="text/javascript" src="js/user.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>
-
+		<script type="text/javascript" src="js/main.js"></script>
 
 	</body>
 

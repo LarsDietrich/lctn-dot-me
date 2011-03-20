@@ -10,7 +10,7 @@ var map;
 var panorama;
 
 // stores current location (of type google.maps.LatLng).
-var selectedLocation;
+var selectedLocation ;
 
 // reference to the position marker on the map (of type google.maps.Marker).
 var positionMarker;
@@ -264,6 +264,10 @@ function findMe() {
  */
 function loadMap() {
 
+	if (!selectedLocation) {
+		selectedLocation = new google.maps.LatLng(-26.0854, 27.9398);
+	}
+	
 	var myMapOptions = {
 		center : selectedLocation,
 		streetViewControl : false,
@@ -282,16 +286,13 @@ function loadMap() {
 
 	map.setZoom(zoom);
 	map.setMapTypeId(maptype);
-// var icon = MapIconMaker.createMarkerIcon({width: 20, height: 34,
-// primaryColor: '#0000FF', cornercolor:'#0000EE'});
 
 	positionMarker = new google.maps.Marker( {
 		position : selectedLocation,
 		map : map
-// icon : icon
 	});
 
-  google.maps.event.addListener(positionMarker, 'click', function() {
+	google.maps.event.addListener(positionMarker, 'click', function() {
   	infowindow.setContent($("#address").val());
   	infowindow.open(map, positionMarker);
   });
@@ -308,11 +309,6 @@ function loadMap() {
 	google.maps.event.addListener(map, 'maptypeid_changed', function() {
 		maptype = map.getMapTypeId();
 	});
-
-//	if (isEnabled("route")) {
-//		updateRouteInformation();
-//	}
-
 
 }
 
@@ -463,7 +459,7 @@ function loadContainer(name) {
  * Displays containers on the page if enabled, hides if disabled.
  */
 function showContainers() {
-
+	
 	$("#find_container").css("display", "inline");
 	$("#share_container").css("display", "inline");
 	$("#map_container").css("display", "inline");
@@ -515,6 +511,7 @@ function showContainers() {
 	} else {
 		$("#user_container").css("display", "none");
 	}
+
 }
 
 /**
