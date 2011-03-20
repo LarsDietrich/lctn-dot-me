@@ -64,7 +64,8 @@
 			include("container/general.php");
 			include("container/webcam.php");
 			include("container/route.php");
-
+			include("container/flickr.php");
+			
 			
 //			include("container/places.php");
 			include("container/user.php");
@@ -80,18 +81,6 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <!-- JQuery Tools API -->
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
-
-		<script type="text/javascript">
-
-			function loading() {
-				$("#loading").css("display","block");
-			}
-
-			function loading_end() {
-				$("#loading").css("display", "none");
-			}
-			
-		</script>
 
 		<?php 
 			include("menu.php");
@@ -196,12 +185,17 @@
 		<script type="text/javascript" src="js/webcam.js"> </script>
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
+<!-- 
 		<script type="text/javascript" src="js/places.js"></script>
+-->
 		<script type="text/javascript" src="js/route.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
 		<script type="text/javascript" src="js/user.js"></script>
-		<script type="text/javascript" src="js/stats.js"></script>
+<!-- 		
+		<script type="text/javascript" src="js/stats.js"></script>  
+-->
+		<script type="text/javascript" src="js/flickr.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
 	</body>

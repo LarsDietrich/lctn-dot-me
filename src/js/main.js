@@ -6,6 +6,7 @@ var user;
 
 // reference to the main map in the map container.
 var map;
+
 // reference to the panorama of the streetview.
 var panorama;
 
@@ -178,6 +179,14 @@ function loadUrlParameters(encodedString) {
 		$("#webcam_range").val(data.wc.range);
 	}
 
+	//flickr
+	if (data.flickr) {
+		if (!isEnabled("flickr")) {
+			setConfigOption("flickr");
+		}
+		$("#flickr_range").val(data.flickr.range);
+	}
+
 	//wiki
 	if (data.wiki) {
 		if (!isEnabled("wiki")) {
@@ -310,6 +319,14 @@ function loadMap() {
 		maptype = map.getMapTypeId();
 	});
 
+	google.maps.event.addListener(map, 'tilesloaded', function() {
+		loading_end();
+	});
+
+	google.maps.event.addListener(map, 'center_changed', function() {
+		loading();
+	});
+
 }
 
 /**
@@ -368,7 +385,7 @@ function reloadContainers() {
 	map.setCenter(selectedLocation);
 	$("#url").value = "";
 	updateStats();
-	getStatistics();
+//	getStatistics();
 }
 
 /**
@@ -403,6 +420,10 @@ function loadAllContainers() {
 		loadContainer("user");
 	}
 
+	if (isEnabled("flickr")) {
+		loadContainer("flickr");
+	}
+
 }
 
 /**
@@ -435,6 +456,10 @@ function loadContainer(name) {
 
 		if (name == "places") {
 			updatePlacesLocationInformation();
+		}
+
+		if (name == "flickr") {
+			updateFlickrLocationInformation();
 		}
 
 		if (name == "webcam") {
@@ -498,6 +523,12 @@ function showContainers() {
 		$("#webcam_container").css("display", "inline");
 	} else {
 		$("#webcam_container").css("display", "none");
+	}
+
+	if (isEnabled("flickr")) {
+		$("#flickr_container").css("display", "inline");
+	} else {
+		$("#flickr_container").css("display", "none");
 	}
 
 	if (isEnabled("route")) {
@@ -583,10 +614,6 @@ function processStreetViewData(data, status) {
 			pitch : pitch,
 			zoom : 1
 		});
-		// positionMarker.setMap(null);
-		// selectedLocation = data.location.latLng;
-		// positionMarker.setPosition(selectedLocation);
-		// positionMarker.setMap(map);
 		panorama.setVisible(true);
 	} else {
 		setMessage("Streetview not available at this location.");
@@ -623,7 +650,6 @@ function setMessage(message) {
  *          whether this position should be added to the cache or not.
  */
 function locateAndRefresh(putInCache) {
-	loading();
 	var address = $("#address").val();
 	if (isEnabled("route")) {
 		$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
@@ -644,7 +670,6 @@ function locateAndRefresh(putInCache) {
 		} else {
 			setMessage("Sorry, could not find it, try search for something else.");
 		}
-		loading_end();
 	});
 }
 
@@ -733,6 +758,11 @@ function shortenUrl() {
 		longUrl += '"range":"' + $("#webcam_range").val() + '"},';
 	}
 	
+	if (isEnabled("flickr")) {
+		longUrl += '"flickr":{';
+		longUrl += '"range":"' + $("#flickr_range").val() + '"},';
+	}
+
 	if (isEnabled("route")) {
 		longUrl += '"route":{';
 		longUrl += '"from":"' + $("#route_from").val() + '"},';
@@ -982,4 +1012,12 @@ function zoomToPoint(lat, lng) {
 	var point = new google.maps.LatLng(lat, lng);
 	map.setCenter(point);
 	map.setZoom(17);
+}
+
+function loading() {
+	$("#loading").css("display","block");
+}
+
+function loading_end() {
+	$("#loading").css("display", "none");
 }
