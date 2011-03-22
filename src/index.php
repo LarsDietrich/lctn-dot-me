@@ -19,6 +19,7 @@
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
 		<link rel="stylesheet" href="css/menu.css" type="text/css"/>
+		<link rel="stylesheet" href="css/overlay.css" type="text/css"/>
 
 	</head>
 

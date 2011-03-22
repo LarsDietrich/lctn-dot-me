@@ -328,10 +328,6 @@ input {
 	height: 23px;
 }
 
-.webcam-full-image {
-	width: 445px;
-	height: 322px;
-}
 
 .pointer {
 	cursor: pointer;
@@ -358,11 +354,6 @@ input {
 	left: 60px;
 	font-size: small;
 	font-weight: bold;
-}
-
-.image-fullscreen {
-	height: 100%;
-	width: 100%;
 }
 
 .find {
@@ -492,4 +483,17 @@ input {
 	padding: 3px 0px 0px 6px;
 	font-size: 10pt;
 	font-weight: bold;
+}
+
+
+--obsolete
+
+.image-fullscreen {
+	height: 100%;
+	width: 100%;
+}
+
+.webcam-full-image {
+	width: 445px;
+	height: 322px;
 }

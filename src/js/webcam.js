@@ -4,6 +4,8 @@
  * 
  * Developer ID: 05a232850706aea3b0b03db356358f24
  * 
+ * http://www.webcams.travel/developers/
+ * 
  * Request Sample:
  * http://api.webcams.travel/rest?method=wct.webcams.list_nearby&devid=05a232850706aea3b0b03db356358f24&lat=45.983&lng=7.783&radius=5&unit=km&per_page=10&page=1&format=json&callback=processResults()
  * 
@@ -50,19 +52,12 @@ function getWebcams(selectedLocation, range) {
 /**
  * Updates the "Webcam" information, if id is supplied, will call method to load
  * individual webcam in window.
- * 
- * @param id -
- *          the position in listOfWebcams array of the webcam being displayed.
  */
-function updateWebcamLocationInformation(id) {
+function updateWebcamLocationInformation() {
 	listOfWebcams = new Array();
-	if (id == null) {
-		if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-			$("#webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Loading webcam information'/>";
-			getWebcams(selectedLocation, $("#webcam_range").val());
-		}
-	} else {
-		processWebcamResults(id);
+	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
+		$("#webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Loading webcam information'/>";
+		getWebcams(selectedLocation, $("#webcam_range").val());
 	}
 }
 
@@ -83,54 +78,40 @@ function processWebcamResults(data) {
 		if (webcams) {
 			totalWebcams = data.webcams.count;
 			$.each(webcams, function(index, webcam) {
-				var camera_image = "/images/webcam.png";
 				var isTimelapse = webcam.timelapse && (webcam.timelapse.available == 1);
-					var output = "<tr data-latitude=\"" + webcam.latitude + "\" data-longitude=\"" + webcam.longitude + "\" data-image=\"" + camera_image
-							+ "\" data-shadow-image=\"/images/webcam-shadow.png\">";
-					output += "<td><img class=\"pointer\" onclick=\"updateWebcamLocationInformation('" + parseInt(index) + "')\" ";
-					output += isTimelapse ? "title=\"Click to view video\"" : "title=\"Click to enlarge\"";
-					output += "src=\"" + webcam.thumbnail_url + "\"/>";
-					output += "</td><td>This webcam, named <b>";
+					var output = "<tr data-latitude='" + webcam.latitude + "' data-longitude='" + webcam.longitude + "' data-image='/images/webcam.png' data-shadow-image='/images/webcam-shadow.png'>";
+					output += "<td>";
+					output += "<div id='triggers'><img src='" + webcam.thumbnail_url + "' rel='#mies" + index + "'/></div>";
+					output += "<div class='simple_overlay' id='mies" + index + "'>"; 
+					
+					if (webcam.timelapse && (webcam.timelapse.available == 1)) {
+						//video
+						output += "<a href='" + webcam.timelapse.format_flv + "' style='display:block;width:445px;height:320px;z-index:9000' id='player'></a>";
+					} else {
+						//still image
+						output += "<img src='http://images.webcams.travel/webcam/" + webcam.webcamid + ".jpg'/><br/>";
+					}
+
+					output += "</div>";
+					output += "</td>";
+					output += "<td>This webcam, named <b>";
 					output += webcam.title;
 					output += isTimelapse ? "</b>, is a timelapse <b>video</b>" : "</b>, is a fixed <b>image</b>";
 					output += " located in " + webcam.city + ".";
 					output += " It is owned and maintained by ";
-					output += "<a href=\"" + webcam.user_url + "\" target=\"_blank\">" + webcam.user + "</a><br/>";
-					output += "<div class=\"item-subtext inline\">" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
-
-					output += "<div title=\"Reposition map to location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('"
-							+ webcam.latitude + "," + webcam.longitude + "')\">Center There!</div>" + "</div>&nbsp;|&nbsp;";
-					output += "<div title=\"Get directions to location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('"
-							+ webcam.latitude + "," + webcam.longitude + "')\">Go There!</div>";
+					output += "<a href='" + webcam.user_url + "' target='_blank'>" + webcam.user + "</a><br/>";
+					output += "<div class='item-subtext inline'>" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
+					output += "<div title='Reposition map to location' class='item-subtext inline' style='cursor: pointer;' onclick='useAddressToReposition('"
+							+ webcam.latitude + "," + webcam.longitude + "')'>Center There!</div>" + "</div>&nbsp;|&nbsp;";
+					output += "<div title='Get directions to location' class='item-subtext inline' style='cursor: pointer;' onclick='getRouteToLocation('"
+							+ webcam.latitude + "," + webcam.longitude + "')'>Go There!</div>";
 					output += "</td></tr>";
 					listOfWebcams[index] = output;
 				});
 			if (listOfWebcams.length == 0) {
 				listOfWebcams[0] = "<tr><td>No webcams found, try a bigger search area or a different location.</td></tr>";
 			}
-
 		}
-	} else {
-		webcamsFound = false;
-		var output = "<tr><td>";
-		output += "<b>" + currentWebcams[data].title + "</b>";
-
-		if (currentWebcams[data].timelapse && (currentWebcams[data].timelapse.available == 1)) {
-			output += "<a href=\"" + currentWebcams[data].timelapse.format_flv + "\" style=\"display:block;width:445px;height:320px;z-index:"
-					+ $("#webcam_container").css("z-index") + "\" id=\"player\"></a>";
-		} else {
-			output += "<img id=\"webcam-full\" title=\"Click for fullscreen\" onclick=\"fullscreenImage('http://images.webcams.travel/webcam/"
-					+ currentWebcams[data].webcamid + ".jpg\')\" class=\"webcam-full-image pointer\" src=\"http://images.webcams.travel/webcam/"
-					+ currentWebcams[data].webcamid + ".jpg\"/><br/>";
-		}
-
-		output += "<div class=\"item-subtext inline\">" + getWebcamTimeCreated(currentWebcams[data].last_update) + "</div>&nbsp;|&nbsp;";
-		output += "<div onclick= \"updateWebcamLocationInformation()\" class=\"item-subtext inline pointer\">Close</div>&nbsp;|&nbsp;";
-		output += "<div onclick=\"updateWebcamLocationInformation(" + data + ")\" class=\"item-subtext inline pointer\">Refresh</div>";
-		output += "</td></tr>";
-		infoMarker.setMap(null);
-		infoMarker == null;
-		listOfWebcams[0] = output;
 	}
 	updateWebcamDisplay();
 }
@@ -166,10 +147,10 @@ function updateWebcamDisplay() {
 		output += listOfWebcams[i];
 	}
 	output += "</tr><tr><td colspan='2'>";
-	output += "Powered by <a href=\"http://www.webcams.travel/\" title=\"Webcams Worldwide\" target=\"_blank\">Webcams.Travel</a>";
+	output += "Powered by <a href='http://www.webcams.travel/' title='Webcams Worldwide' target='_blank'>Webcams.Travel</a>";
 	output += "</td></tr></table>";
 	$("#webcam_stream").html(output);
-
+	$("img[rel]").overlay();
 	$("table tr", "#webcam_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {

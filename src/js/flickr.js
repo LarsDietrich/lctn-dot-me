@@ -21,7 +21,7 @@ function getFlickrs(selectedLocation, range) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://api.flickr.com/services/rest?method=flickr.photos.search&api_key=" + flickrApiKey + "&lat=" + selectedLocation.lat() + "&lon=" + selectedLocation.lng() + "&radius=" + range + "&extras=geo&format=json&jsoncallback=jsonFlickrApi()";
+		script.src = "http://api.flickr.com/services/rest?method=flickr.photos.search&api_key=" + flickrApiKey + "&lat=" + selectedLocation.lat() + "&lon=" + selectedLocation.lng() + "&radius=" + range + "&extras=geo,description&format=json&jsoncallback=jsonFlickrApi()";
 		$("body").append(script);
 	});
 }
@@ -38,19 +38,25 @@ function jsonFlickrApi(data) {
 	var photos = data.photos;
 	
 	var output = "";
-	var i = 0;
 	
 	if (photos) {
 		$.each(photos.photo, function(index, value) {
 
-			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude	+ "\" data-image=\"/images/twitter-icon.png\" data-shadow-image=\"/images/twitter-icon-shadow.png\">";
-			output += "<td><img class='twitter-pic' src='";
-			output += "http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg";
-			output += "'/></td>";
-			output += "<tr>";
+		  var cleanedLocation = Math.round(value.latitude * 10000) / 10000 + "," + Math.round(value.longitude * 10000) / 10000;
+
+			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude	+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
+			output += "<td width='20%'>";
+			output += "<div id='triggers'><img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg' rel='#mies" + index + "'/></div>";
+			output += "<div class='simple_overlay' id='mies" + index + "'>"; 
+			output += "<img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_b.jpg'/>";
+			output += "</div>";
+			output += "</td>";
+			output += "<td><b>" + value.title + "</b><br/>" + value.description._content + "<br/>";
+			output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
+			output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+			output += "</td></tr>";
 			
-			listOfFlickr[i] = output;
-			i++;
+			listOfFlickr[index] = output;
 		});
 
 		if (listOfFlickr.length == 0) {
@@ -83,6 +89,7 @@ function updateFlickrDisplay() {
 	}
 	output += "</table>";
 	$("#flickr_stream").html(output);
+	$("img[rel]").overlay();
 	$("table tr", "#flickr_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {

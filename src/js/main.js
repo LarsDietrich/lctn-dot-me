@@ -1,5 +1,5 @@
 // current version of web app
-var version = "0.0.9";
+var version = "0.0.10";
 
 // logged in user id
 var user;
@@ -75,7 +75,7 @@ function load() {
 	});
 
 	$(document).ready(function() {
-
+		
 		$("#message_container").css("top", "0px" );
 		$("#message_container").css("left", '-500px');
 
@@ -108,24 +108,25 @@ function load() {
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
 			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
 
-			});
+		});
 
-			$("#startup").overlay({
-				top: 200,
-				mask: {
-					color: '#fff',
-					loadSpeed: 200,
-					opacity: 0.8
-				},
-				closeOnClick: false,
-				load: true
-			});
-	
+		
+//		$("#startup").overlay({
+//			top: 200,
+//			mask: {
+//				color: '#fff',
+//				loadSpeed: 200,
+//				opacity: 0.8
+//			},
+//			closeOnClick: false,
+//			load: true
+//		});
+
+		// position the tooltip popups
 		$(".config").each(function() {
 			var control = $(this);
 			$(control).tooltip({ position: "bottom center", opacity: 0.9});
 		});
-		
 		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
 
 	});
@@ -307,6 +308,7 @@ function loadMap() {
   });
 
 	google.maps.event.addListener(map, 'click', function(event) {
+		loading();
 		selectedLocation = event.latLng;
 		reloadContainers();
 	});
@@ -320,6 +322,10 @@ function loadMap() {
 	});
 
 	google.maps.event.addListener(map, 'tilesloaded', function() {
+		loading_end();
+	});
+
+	google.maps.event.addListener(map, 'idle', function() {
 		loading_end();
 	});
 
@@ -847,24 +853,24 @@ function updateGeneralLocationInformation(address) {
 	document.getElementById("location_stream").innerHTML = output;
 }
 
-/**
- * Display an image fullscreen as an overlay.
- * 
- * @param imageUrl -
- *          url of image to display
- */
-function fullscreenImage(imageUrl) {
-	var popup = $('#displaybox-no-opacity');
-	if (popup.css("display") == "none") {
-		popup.css("display", "");
-		popup.html("<img src=\"" + imageUrl+ "\" class=\"image-fullscreen\"/>");
-		setMessage("Click to close");
-	} else {
-		popup.css("display", "none");
-		popup.html("");
-	}
-	return false;
-}
+///**
+// * Display an image fullscreen as an overlay.
+// * 
+// * @param imageUrl -
+// *          url of image to display
+// */
+//function fullscreenImage(imageUrl) {
+//	var popup = $('#displaybox-no-opacity');
+//	if (popup.css("display") == "none") {
+//		popup.css("display", "");
+//		popup.html("<img src=\"" + imageUrl+ "\" class=\"image-fullscreen\"/>");
+//		setMessage("Click to close");
+//	} else {
+//		popup.css("display", "none");
+//		popup.html("");
+//	}
+//	return false;
+//}
 
 /**
  * Tries to load an "option" from the sites cookie. If the option is found,

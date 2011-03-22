@@ -59,7 +59,7 @@ function processTheseTweets(jsonData) {
 				output += "&nbsp;|&nbsp;<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
 				output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
 			}
-			output += "</td><tr>";
+			output += "</td></tr>";
 			listOfTweets[i] = output;
 			i++;
 		});
