@@ -17,6 +17,7 @@ We support the following location based information
 <li>Webcams - Shows webcams available in the area. </li>
 <li>General - Some general information about the area, like weather, you current coordinates and local time.</li>
 <li>Directions - Displays a route from point A to point B.</li>
+<li>Flickr - Shows pictures from Flickr in the area, maximum of 32km.</li>
 </ul>
 
 <p>
