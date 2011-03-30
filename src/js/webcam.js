@@ -56,7 +56,7 @@ function getWebcams(selectedLocation, range) {
 function updateWebcamLocationInformation() {
 	listOfWebcams = new Array();
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		$("#webcam_stream").innerHTML = "<img class='spinner' src='images/spinner.gif' alt='...' title='Loading webcam information'/>";
+		$("#webcam_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Loading webcam information'/>");
 		getWebcams(selectedLocation, $("#webcam_range").val());
 	}
 }

@@ -469,7 +469,6 @@ function loadContainer(name) {
 		}
 
 		if (name == "webcam") {
-			currentWebcamPage = 1;
 			updateWebcamLocationInformation();
 		}
 
