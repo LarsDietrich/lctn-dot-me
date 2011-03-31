@@ -81,8 +81,8 @@ function processWebcamResults(data) {
 				var isTimelapse = webcam.timelapse && (webcam.timelapse.available == 1);
 					var output = "<tr data-latitude='" + webcam.latitude + "' data-longitude='" + webcam.longitude + "' data-image='/images/webcam.png' data-shadow-image='/images/webcam-shadow.png'>";
 					output += "<td>";
-					output += "<div id='triggers'><img src='" + webcam.thumbnail_url + "' rel='#mies" + index + "'/></div>";
-					output += "<div class='simple_overlay' id='mies" + index + "'>"; 
+					output += "<div id='triggers'><img src='" + webcam.thumbnail_url + "' rel='#webcampic" + index + "'/></div>";
+					output += "<div class='simple_overlay' id='webcampic" + index + "'>"; 
 					
 					if (webcam.timelapse && (webcam.timelapse.available == 1)) {
 						//video

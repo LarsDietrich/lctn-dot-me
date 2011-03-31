@@ -46,8 +46,8 @@ function jsonFlickrApi(data) {
 
 			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude	+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
 			output += "<td width='20%'>";
-			output += "<div id='triggers'><img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg' rel='#mies" + index + "'/></div>";
-			output += "<div class='simple_overlay' id='mies" + index + "'>"; 
+			output += "<div id='triggers'><img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg' rel='#flickrpic" + index + "'/></div>";
+			output += "<div class='simple_overlay' id='flickrpic" + index + "'>"; 
 			output += "<img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_b.jpg'/>";
 			output += "</div>";
 			output += "</td>";
