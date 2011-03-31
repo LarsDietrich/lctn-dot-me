@@ -485,6 +485,10 @@ input {
 	font-weight: bold;
 }
 
+.thumbnail {
+	height: 60px;
+	width: 60px;
+}
 --obsolete
 
 .image-fullscreen {
