@@ -43,6 +43,12 @@
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
 		
+				
+		<?php 
+			$last_modified = filemtime("index.php");
+			setcookie("deploy_date", date("l, dS F, Y @ h:ia", $last_modified));
+		?>
+		
 		<?php 
 			include("loading.php");
 		?>
