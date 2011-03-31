@@ -744,38 +744,38 @@ function shortenUrl() {
 	longUrl += '{"lat":"' + selectedLocation.lat() + '",';
 	longUrl += '"lng":"' + selectedLocation.lng() + '",';
 	longUrl += '"zoom":"' + zoom + '",';
-	longUrl += '"type":"' + maptype + '"},';
+	longUrl += '"type":"' + maptype + '"}';
 	
 	if (isEnabled("streetview")) {
-		longUrl += '"sv":{';
+		longUrl += '",sv":{';
 		longUrl += '"heading":"' + heading + '",';
-		longUrl += '"pitch":"' + pitch + '"},';
+		longUrl += '"pitch":"' + pitch + '"}';
 	}
 
 	if (isEnabled("twitter")) {
-		longUrl += '"tw":{';
+		longUrl += '",tw":{';
 		longUrl += '"range":"' + $("#tweet_range").val() + '",';
-		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"},';
+		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"}';
 	}
 
 	if (isEnabled("webcam")) {
-		longUrl += '"wc":{';
-		longUrl += '"range":"' + $("#webcam_range").val() + '"},';
+		longUrl += '",wc":{';
+		longUrl += '"range":"' + $("#webcam_range").val() + '"}';
 	}
 	
 	if (isEnabled("flickr")) {
-		longUrl += '"flickr":{';
-		longUrl += '"range":"' + $("#flickr_range").val() + '"},';
+		longUrl += '",flickr":{';
+		longUrl += '"range":"' + $("#flickr_range").val() + '"}';
 	}
 
 	if (isEnabled("route")) {
-		longUrl += '"route":{';
-		longUrl += '"from":"' + $("#route_from").val() + '"},';
+		longUrl += '",route":{';
+		longUrl += '"from":"' + $("#route_from").val() + '"}';
 	}
 
 	if (isEnabled("wiki")) {
-		longUrl += '"wiki":{';
-		longUrl += '"range":"' + $("#wiki_range").val() + '"},';
+		longUrl += '",wiki":{';
+		longUrl += '"range":"' + $("#wiki_range").val() + '"}';
 	}
 
 	longUrl += '}';
