@@ -138,8 +138,6 @@ function load() {
  */
 function loadUrlParameters(encodedString) {
 
-	
-	alert (Base64.decode(encodedString));
 	var data = JSON.parse(Base64.decode(encodedString));
 
 	// map
