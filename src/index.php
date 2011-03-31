@@ -65,7 +65,7 @@
 			include("container/general.php");
 			include("container/webcam.php");
 			include("container/route.php");
-			include("container/flickr.php");
+			include("container/picture.php");
 			
 			
 //			include("container/places.php");
@@ -196,7 +196,7 @@
 <!-- 		
 		<script type="text/javascript" src="js/stats.js"></script>  
 -->
-		<script type="text/javascript" src="js/flickr.js"></script>
+		<script type="text/javascript" src="js/picture.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
 	</body>

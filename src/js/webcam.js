@@ -81,8 +81,8 @@ function processWebcamResults(data) {
 				var isTimelapse = webcam.timelapse && (webcam.timelapse.available == 1);
 					var output = "<tr data-latitude='" + webcam.latitude + "' data-longitude='" + webcam.longitude + "' data-image='/images/webcam.png' data-shadow-image='/images/webcam-shadow.png'>";
 					output += "<td>";
-					output += "<div id='triggers'><img src='" + webcam.thumbnail_url + "' rel='#webcampic" + index + "'/></div>";
-					output += "<div class='simple_overlay' id='webcampic" + index + "'>"; 
+					output += "<div id='triggers'><img src='" + webcam.thumbnail_url + "' rel='#webcam_tag" + index + "'/></div>";
+					output += "<div class='simple_overlay' id='webcam_tag" + index + "'>"; 
 					
 					if (webcam.timelapse && (webcam.timelapse.available == 1)) {
 						//video
@@ -150,7 +150,7 @@ function updateWebcamDisplay() {
 	output += "Powered by <a href='http://www.webcams.travel/' title='Webcams Worldwide' target='_blank'>Webcams.Travel</a>";
 	output += "</td></tr></table>";
 	$("#webcam_stream").html(output);
-	$("img[rel*='webcampic']").overlay();
+	$("img[rel*='webcam_tag']").overlay();
 	$("table tr", "#webcam_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {

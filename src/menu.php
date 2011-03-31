@@ -12,7 +12,7 @@
 		<li><a><label title="Open this window to show you a street view of the chosen location. Not available everywhere." id="streetview" class="config" onclick="setConfigOption(this);">Streetview</label></a></li>
 		<li><a><label title="Open to see wikipedia articles in the area with short description, click to link through to actual article. Can filter by range." id="wiki" class="config" onclick="setConfigOption(this);">Wikipedia</label></a></li>
 		<li><a><label title="Based on your location, will show you tweets posted for people that have enabled location based tweets. Filter on range and text." id="twitter" class="config" onclick="setConfigOption(this);">Twitter</label></a></li>
-		<li><a><label title="Show pictures from the Flickr image service in the area." id="flickr" class="config" onclick="setConfigOption(this);">Flickr</label></a></li>
+		<li><a><label title="Show photos in the area based on the Flickr service." id="picture" class="config" onclick="setConfigOption(this);">Photos</label></a></li>
 		<li><a><label title="Open to see available webcams in the area, mostly still image but some time capture video is available. Filter by range." id="webcam" class="config" onclick="setConfigOption(this);">Webcams</label></a></li>
 	    <li><img src="/images/topnav_bg_divider.png"/></li>
 		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>

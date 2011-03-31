@@ -180,12 +180,12 @@ function loadUrlParameters(encodedString) {
 		$("#webcam_range").val(data.wc.range);
 	}
 
-	//flickr
-	if (data.flickr) {
-		if (!isEnabled("flickr")) {
-			setConfigOption("flickr");
+	//pictures
+	if (data.picture) {
+		if (!isEnabled("picture")) {
+			setConfigOption("picture");
 		}
-		$("#flickr_range").val(data.flickr.range);
+		$("#picture_range").val(data.picture.range);
 	}
 
 	//wiki
@@ -426,8 +426,8 @@ function loadAllContainers() {
 		loadContainer("user");
 	}
 
-	if (isEnabled("flickr")) {
-		loadContainer("flickr");
+	if (isEnabled("picture")) {
+		loadContainer("picture");
 	}
 
 }
@@ -464,8 +464,8 @@ function loadContainer(name) {
 			updatePlacesLocationInformation();
 		}
 
-		if (name == "flickr") {
-			updateFlickrLocationInformation();
+		if (name == "picture") {
+			updatePictureLocationInformation();
 		}
 
 		if (name == "webcam") {
@@ -530,10 +530,10 @@ function showContainers() {
 		$("#webcam_container").css("display", "none");
 	}
 
-	if (isEnabled("flickr")) {
-		$("#flickr_container").css("display", "inline");
+	if (isEnabled("picture")) {
+		$("#picture_container").css("display", "inline");
 	} else {
-		$("#flickr_container").css("display", "none");
+		$("#picture_container").css("display", "none");
 	}
 
 	if (isEnabled("route")) {
@@ -763,9 +763,9 @@ function shortenUrl() {
 		longUrl += '"range":"' + $("#webcam_range").val() + '"}';
 	}
 	
-	if (isEnabled("flickr")) {
-		longUrl += ',"flickr":{';
-		longUrl += '"range":"' + $("#flickr_range").val() + '"}';
+	if (isEnabled("picture")) {
+		longUrl += ',"picture":{';
+		longUrl += '"range":"' + $("#picture_range").val() + '"}';
 	}
 
 	if (isEnabled("route")) {

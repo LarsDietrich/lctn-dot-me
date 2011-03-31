@@ -1,5 +1,5 @@
-var listOfFlickr = [];
-var flickrFound = false;
+var listOfPicture = [];
+var pictureFound = false;
 var flickrApiKey = "ae3b1fba3889813580d536b3ed159fa6";
 
 /**
@@ -16,8 +16,8 @@ var flickrApiKey = "ae3b1fba3889813580d536b3ed159fa6";
  * @param range -
  *          the range of pictures to find, in km
  */
-function getFlickrs(selectedLocation, range) {
-	listOfFlickr = [];
+function getPictures(selectedLocation, range) {
+	listOfPicture = [];
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
@@ -27,8 +27,8 @@ function getFlickrs(selectedLocation, range) {
 }
 
 /**
- * Called after data retrieves from flickr service. Loads the JSON results of
- * the flickr search into an array.
+ * Called after data retrieved from flickr service. Loads the JSON results of
+ * the flickrsearch into an array.
  * 
  * @param data -
  *          flickr data.
@@ -46,8 +46,8 @@ function jsonFlickrApi(data) {
 
 			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude	+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
 			output += "<td width='20%'>";
-			output += "<div id='triggers'><img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg' rel='#flickrpic" + index + "'/></div>";
-			output += "<div class='simple_overlay' id='flickrpic" + index + "'>"; 
+			output += "<div id='triggers'><img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_s.jpg' rel='#picture_tag" + index + "'/></div>";
+			output += "<div class='simple_overlay' id='picture_tag" + index + "'>"; 
 			output += "<img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_b.jpg'/>";
 			output += "</div>";
 			output += "</td>";
@@ -56,51 +56,51 @@ function jsonFlickrApi(data) {
 			output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
 			output += "</td></tr>";
 			
-			listOfFlickr[index] = output;
+			listOfPicture[index] = output;
 		});
 
-		if (listOfFlickr.length == 0) {
-			listOfFlickr[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Flickr Search Service may be experiencing problems, try again later.</li></ul>";
+		if (listOfPicture.length == 0) {
+			listOfPicture[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Picture Search Service may be experiencing problems, try again later.</li></ul>";
 		} else {
-			flickrFound = true;
+			pictureFound = true;
 		}
 
-		updateFlickrDisplay();
+		updatePictureDisplay();
 	}
 }
 
 /**
- * Triggers the retrieval of flickr pictures based on selectedLocation
+ * Triggers the retrieval of pictures based on selectedLocation
  */
-function updateFlickrLocationInformation() {
+function updatePictureLocationInformation() {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
-		$("#flickr_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for pictures'/>");
-		getFlickrs(selectedLocation, $("#flickr_range").val());
+		$("#picture_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for pictures'/>");
+		getPictures(selectedLocation, $("#picture_range").val());
 	}
 }
 
 /**
- * Loads the flickr container with data from the listOfFlickr array.
+ * Loads the picture container with data from the listOfPicture array.
  */
-function updateFlickrDisplay() {
+function updatePictureDisplay() {
 	var output = "<table>";
-	for (i = 0; i < listOfFlickr.length; i++) {
-		output += listOfFlickr[i];
+	for (i = 0; i < listOfPicture.length; i++) {
+		output += listOfPicture[i];
 	}
 	output += "</table>";
-	$("#flickr_stream").html(output);
-	$("img[rel*='flickrpic']").overlay();
-	$("table tr", "#flickr_stream").hover(function() {
+	$("#picture_stream").html(output);
+	$("img[rel*='picture_tag']").overlay();
+	$("table tr", "#picture_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {
 		normalRow($(this));
 	});
-	updateFlickrFooter();
+	updatePictureFooter();
 }
 
 /**
- * Updates the footer information at the bottom of the flickr container
+ * Updates the footer information at the bottom of the picture container
  */
-function updateFlickrFooter() {
-	$("#flickr_footer").html(flickrFound ? "<center>" + listOfFlickr.length + " pictures</center>" : "<center>No Pictures</center>");
+function updatePictureFooter() {
+	$("#picture_footer").html(pictureFound ? "<center>" + listOfPicture.length + " pictures</center>" : "<center>No Pictures</center>");
 }
