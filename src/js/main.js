@@ -138,6 +138,8 @@ function load() {
  */
 function loadUrlParameters(encodedString) {
 
+	
+	alert (Base64.decode(encodedString));
 	var data = JSON.parse(Base64.decode(encodedString));
 
 	// map
@@ -747,34 +749,34 @@ function shortenUrl() {
 	longUrl += '"type":"' + maptype + '"}';
 	
 	if (isEnabled("streetview")) {
-		longUrl += '",sv":{';
+		longUrl += ',"sv":{';
 		longUrl += '"heading":"' + heading + '",';
 		longUrl += '"pitch":"' + pitch + '"}';
 	}
 
 	if (isEnabled("twitter")) {
-		longUrl += '",tw":{';
+		longUrl += ',"tw":{';
 		longUrl += '"range":"' + $("#tweet_range").val() + '",';
 		longUrl += '"filter":"' + $("#tweet_filter").val() +  '"}';
 	}
 
 	if (isEnabled("webcam")) {
-		longUrl += '",wc":{';
+		longUrl += ',"wc":{';
 		longUrl += '"range":"' + $("#webcam_range").val() + '"}';
 	}
 	
 	if (isEnabled("flickr")) {
-		longUrl += '",flickr":{';
+		longUrl += ',"flickr":{';
 		longUrl += '"range":"' + $("#flickr_range").val() + '"}';
 	}
 
 	if (isEnabled("route")) {
-		longUrl += '",route":{';
+		longUrl += ',"route":{';
 		longUrl += '"from":"' + $("#route_from").val() + '"}';
 	}
 
 	if (isEnabled("wiki")) {
-		longUrl += '",wiki":{';
+		longUrl += ',"wiki":{';
 		longUrl += '"range":"' + $("#wiki_range").val() + '"}';
 	}
 
