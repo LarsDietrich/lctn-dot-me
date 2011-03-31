@@ -89,7 +89,7 @@ function updateFlickrDisplay() {
 	}
 	output += "</table>";
 	$("#flickr_stream").html(output);
-	$("img[rel]").overlay();
+	$("img[rel*='flickrpic']").overlay();
 	$("table tr", "#flickr_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {

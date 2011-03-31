@@ -150,7 +150,7 @@ function updateWebcamDisplay() {
 	output += "Powered by <a href='http://www.webcams.travel/' title='Webcams Worldwide' target='_blank'>Webcams.Travel</a>";
 	output += "</td></tr></table>";
 	$("#webcam_stream").html(output);
-	$("img[rel]").overlay();
+	$("img[rel*='webcampic']").overlay();
 	$("table tr", "#webcam_stream").hover(function() {
 		highlightRow($(this));
 	}, function() {
