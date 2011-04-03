@@ -48,9 +48,8 @@ function processPlacesData(data) {
 			output += "<b>" + value.name + "</b><br/>";
 
 			if (value.categories[0]) {
-				output += "<span class=\"hashtag\" onclick=\"updatePlacesLocationInformationFromCategory('" + value.categories[0].id + "')\">" + value.categories[0].name + "</span><br/>";
+				output += "<span title=\"Click to search for all " + value.categories[0].name + " in the area \" class=\"hashtag\" onclick=\"updatePlacesLocationInformationFromCategory('" + value.categories[0].id + "', '" + value.categories[0].name + "')\">" + value.categories[0].name + "</span><br/>";
 			}
-
 			
 			if (value.location.address) {			
 				output += value.location.address;
@@ -88,13 +87,18 @@ function processPlacesData(data) {
  * Updates the "Places" information
  */
 function updatePlacesLocationInformation() {
-	updatePlacesLocationInformationFromCategory($("#places_category").val());
+	updatePlacesLocationInformationFromCategory("", "All Places");
 }
 
 /**
  * Updates the "Places" information
  */
-function updatePlacesLocationInformationFromCategory(categoryId) {
+function updatePlacesLocationInformationFromCategory(categoryId, categoryName) {
+	if (categoryName == "All Places") {
+		$("#places_category").html("<b>" + categoryName + "</b>.  Click on a category in the list refine search.");
+	} else {
+		$("#places_category").html("<b>" + categoryName + "</b>. Click reset to show all places. <input type=\"button\" value=\"Reset\" onclick=\"updatePlacesLocationInformation('');\"/>");
+	}
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 		$("#places_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for places of interest in the area.'/>");
 		getPlaces(selectedLocation, categoryId, "");

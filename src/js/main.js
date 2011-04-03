@@ -84,7 +84,7 @@ function load() {
 			$(control).Draggable( {
 				handle : 'span',
 				zIndex : '1000',
-				opacity : 0.8,
+				opacity : 1.0,
 				autoSize : true,
 				
 				onChange : function() {

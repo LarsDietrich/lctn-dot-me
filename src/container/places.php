@@ -8,25 +8,19 @@
 		</div>
 	</span>
  	<div class="detail-padded">
-		<center>
 <!-- 
 			Search for
 			<input title="Name of place to search for (or part of the name)"  type="text" name="places_query" id="places_query" value="" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> 
 			in 
 			<input title="How big an area would you like to search for places?" class="short-text" type="text" name="places_range" id="places_range" value="5" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> km, 
 -->
-			I'm looking for  
-			
+			Showing <div class="inline" id="places_category">All Places. Click on a category in the list refine search.</div>
+<!-- 
 			<select name="places_category" id="places_category" onchange="updatePlacesLocationInformation();" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }">
 				<option value="">All Places</option>
-<!-- 
-				<option value="4bf58dd8d48988d1e0931735">Coffee Shops</option>
--->
 			</select>
+-->
 
-
-			<input type="button" id="filter_now" name="filter_now" value="Go" onclick="updatePlacesLocationInformation();"/>
-		</center>
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
 		<div id="places_stream">No places found</div>
