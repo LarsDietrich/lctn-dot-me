@@ -430,6 +430,10 @@ function loadAllContainers() {
 		loadContainer("picture");
 	}
 
+	if (isEnabled("places")) {
+		loadContainer("places");
+	}
+
 }
 
 /**
@@ -1025,4 +1029,15 @@ function loading() {
 
 function loading_end() {
 	$("#loading").css("display", "none");
+}
+
+function popup(myLink, windowName) {
+	var href;
+	if (typeof(myLink) == "string") {
+		href = myLink;
+	} else {
+		href = myLink.href;
+	}
+	window.open(href, windowName, "width=400,height=200,scrollbars=no,toolbar=no,location=no,menubar=no,diretories=no,status=no,resizeable=no,dependant=yes");
+	return false;
 }

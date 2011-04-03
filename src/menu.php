@@ -8,6 +8,7 @@
 	    <li><img src="/images/topnav_bg_divider.png"/></li>
 
 		<li><a><label onclick="setConfigOption(this);" id="general" title="Open to see some general information about the location. Currently shows weather, coordinates and time related information." class="config" >General</label></a></li>
+ 		<li><a><label title="Toggle the window showing places around the current location" id="places" class="config" onclick="setConfigOption(this);">Places</label></a></li>
 		<li><a><label title="Open to get directions between two points, updates the map to show the route and gives you a friendly route description." id="route" class="config" onclick="setConfigOption(this);">Directions</label></a></li>
 		<li><a><label title="Open this window to show you a street view of the chosen location. Not available everywhere." id="streetview" class="config" onclick="setConfigOption(this);">Streetview</label></a></li>
 		<li><a><label title="Open to see wikipedia articles in the area with short description, click to link through to actual article. Can filter by range." id="wiki" class="config" onclick="setConfigOption(this);">Wikipedia</label></a></li>
@@ -19,7 +20,5 @@
 			<li><a><label title="Personalized information about what you've done" id="user" class="config" onclick="setConfigOption(this);">You</label></a></li>
 		<?php }?>
 
-<!-- 		<li><a><label title="Toggle the window showing places around the current location" id="places" class="config" onclick="setConfigOption(this);">Places</label></a></li>
--->	
 	</ul>
 </div>

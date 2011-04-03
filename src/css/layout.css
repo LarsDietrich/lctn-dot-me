@@ -7,7 +7,6 @@ html {
 	overflow: hidden;
 }
 
-/* Overridden styles of Blueprint to customize layout */
 body {
 	font-family: cursive;
 	background-color: #E5DFAE;
@@ -298,8 +297,18 @@ input {
 	vertical-align: middle;
 }
 
+.item-subtext-button {
+	color: #000000;
+	font-size: xx-small;
+	border-radius: 2px 2px 2px 2px;
+	-moz-border-radius: 2px 2px 2px 2px;
+	border: 1px solid #B0B57B;
+	padding: 0px 2px 0px 2px;
+	background-color: #B0B57B
+}
+
 .item-subtext {
-	color: gray;
+	color: grey;
 	font-size: xx-small;
 }
 
@@ -368,14 +377,14 @@ input {
 	font-weight: bold;
 	font-family: inherit;
 	font-size: 10pt;
-	background-color: #B6D051;
-	border: 1px solid #B6D051;
+	background-color: #B0B57B;
+	border: 1px solid #B0B57B;
 	border-radius: 5px 5px 5px 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
 	width: 55px;
 	text-align: center;
 	padding-bottom: 1px;
-}
+}s
 
 .action-button-semi-wide {
 	width: 75px;
@@ -488,15 +497,4 @@ input {
 .thumbnail {
 	height: 60px;
 	width: 60px;
-}
---obsolete
-
-.image-fullscreen {
-	height: 100%;
-	width: 100%;
-}
-
-.webcam-full-image {
-	width: 445px;
-	height: 322px;
 }

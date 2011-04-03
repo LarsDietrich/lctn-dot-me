@@ -77,9 +77,9 @@ function processInstagramData(data) {
 //			output += "Taken by: " + value.user.username + "<br/>";
 			
 			output += "<div title=\"Reposition map to " + cleanedLocation
-					+ "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
-			output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation
-					+ "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
 			output += "</td></tr>";
 
 			listOfPicture[index + startPosition] = output;

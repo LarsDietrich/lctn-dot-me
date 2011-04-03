@@ -9,7 +9,7 @@
 	</span>
  	<div class="detail-padded">
 		<center>
-			Show me all the public photos for <input title="How big of an area would you like to search for photos?" class="short-text" type="text" name="picture_range" id="picture_range" value="5" onkeypress="if (parseFloat($('#picture_range').val()) > 32) {$('#picture_range').val('32')}; if (event.keyCode == 13) { updatePictureLocationInformation(); }"/> km(s)
+			Show me all the public photos for <input title="How big of an area would you like to search for photos. There is a service dependant max (32km for Flickr, 5km for Instagram)?" class="short-text" type="text" name="picture_range" id="picture_range" value="5" onkeypress="if (parseFloat($('#picture_range').val()) > 32) {$('#picture_range').val('32')}; if (event.keyCode == 13) { updatePictureLocationInformation(); }"/> km(s)
 			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="updatePictureLocationInformation();"/>
 		</center>
 	</div>

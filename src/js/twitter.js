@@ -56,8 +56,8 @@ function processTheseTweets(jsonData) {
 			output += "<td><span><a target= '_blank' href='http://twitter.com/" + value.from_user.substring(0, value.from_user.length) + "'>" + value.from_user
 					+ "</a>" + ": " + formatTwitterText(value.text) + "</span><br/>" + getTwitterTimeCreated(value.created_at);
 			if (isNumeric(location) && (latitude && longitude)) {
-				output += "&nbsp;|&nbsp;<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
-				output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+				output += "&nbsp;&nbsp;<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+				output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
 			}
 			output += "</td></tr>";
 			listOfTweets[i] = output;

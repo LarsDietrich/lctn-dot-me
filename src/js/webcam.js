@@ -86,10 +86,10 @@ function processWebcamResults(data) {
 					
 					if (webcam.timelapse && (webcam.timelapse.available == 1)) {
 						//video
-						output += "<a href='" + webcam.timelapse.format_flv + "' style='display:block;width:445px;height:320px;z-index:9000' id='player'></a>";
+						output += "<a href='" + webcam.timelapse.format_flv + "' style='display:block;width:445px;height:320px;z-index:11001' id='player'></a>";
 					} else {
 						//still image
-						output += "<img src='http://images.webcams.travel/webcam/" + webcam.webcamid + ".jpg'/><br/>";
+						output += "<img style='z-index:11001' src='http://images.webcams.travel/webcam/" + webcam.webcamid + ".jpg'/><br/>";
 					}
 
 					output += "</div>";
@@ -101,10 +101,10 @@ function processWebcamResults(data) {
 					output += " It is owned and maintained by ";
 					output += "<a href='" + webcam.user_url + "' target='_blank'>" + webcam.user + "</a><br/>";
 					output += "<div class='item-subtext inline'>" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
-					output += "<div title='Reposition map to location' class='item-subtext inline' style='cursor: pointer;' onclick='useAddressToReposition('"
-							+ webcam.latitude + "," + webcam.longitude + "')'>Center There!</div>" + "</div>&nbsp;|&nbsp;";
-					output += "<div title='Get directions to location' class='item-subtext inline' style='cursor: pointer;' onclick='getRouteToLocation('"
-							+ webcam.latitude + "," + webcam.longitude + "')'>Go There!</div>";
+					output += "<div title='Reposition map to location' class='item-subtext-button inline' style='cursor: pointer;' onclick='useAddressToReposition('"
+							+ webcam.latitude + "," + webcam.longitude + "')'>Center</div>" + "</div>&nbsp;&nbsp;";
+					output += "<div title='Get directions to location' class='item-subtext-button inline' style='cursor: pointer;' onclick='getRouteToLocation('"
+							+ webcam.latitude + "," + webcam.longitude + "')'>Go</div>";
 					output += "</td></tr>";
 					listOfWebcams[index] = output;
 				});

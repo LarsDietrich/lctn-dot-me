@@ -48,8 +48,8 @@ function processWikiData(data) {
 				output += "<td><a target= '_blank' href='http://" + value.wikipediaUrl + "'>" + value.title + "</a>&nbsp;";
 				output += value.summary + "<br/>";
 				
-				output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
-				output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+				output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+				output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
 				
 				output += "</td></tr>";
 				listOfWikis[j] = output;

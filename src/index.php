@@ -70,9 +70,7 @@
 			include("container/webcam.php");
 			include("container/route.php");
 			include("container/picture.php");
-			
-			
-//			include("container/places.php");
+			include("container/places.php");
 			include("container/user.php");
 //			include("container/ads.php");
 
@@ -185,14 +183,12 @@
 		<script type="text/javascript" src="js/jqprint.js"></script>
 
 <!-- Custom Javascripts for each window -->
+		<script type="text/javascript" src="js/places.js"></script>
 		<script type="text/javascript" src="js/twitter.js"> </script>
 		<script type="text/javascript" src="js/weather.js"> </script>
 		<script type="text/javascript" src="js/webcam.js"> </script>
 		<script type="text/javascript" src="js/wikipedia.js"> </script>
 		<script type="text/javascript" src="js/timezone.js"> </script>
-<!-- 
-		<script type="text/javascript" src="js/places.js"></script>
--->
 		<script type="text/javascript" src="js/route.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
