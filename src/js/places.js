@@ -40,11 +40,14 @@ function processPlacesData(data) {
 			var iconPath = "images/foursquare-icon.png";
 			var checkins = 0;
 
+			if (value.categories[0]) {
+				iconPath = value.categories[0].icon;
+			}
+			
 			output = "<tr data-latitude='" + latitude + "' data-longitude='" + longitude	+ "' data-image='" + 	iconPath + "' data-shadow-image=''><td>";
 			output += "<b>" + value.name + "</b><br/>";
 
 			if (value.categories[0]) {
-				iconPath = value.categories[0].icon;
 				output += "<span class=\"hashtag\" onclick=\"updatePlacesLocationInformationFromCategory('" + value.categories[0].id + "')\">" + value.categories[0].name + "</span><br/>";
 			}
 
