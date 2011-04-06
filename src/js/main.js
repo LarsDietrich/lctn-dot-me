@@ -105,7 +105,7 @@ function load() {
 			var control = $(this);
 
 			$(control).draggable();
-			$(control).dialog().addTouch();
+			$(control).addTouch();
 			
 //			$(control).Draggable( {
 //				handle : 'span',
