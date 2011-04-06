@@ -79,6 +79,27 @@ function load() {
 		$("#message_container").css("top", "0px" );
 		$("#message_container").css("left", '-500px');
 
+		
+		$.extend($.support, {
+      touch: "ontouchend" in document
+		});
+
+		//
+		// Hook up touch events
+		//
+		$.fn.addTouch = function() {
+		        if ($.support.touch) {
+		                this.each(function(i,el){
+		                        el.addEventListener("touchstart", iPadTouchHandler, false);
+		                        el.addEventListener("touchmove", iPadTouchHandler, false);
+		                        el.addEventListener("touchend", iPadTouchHandler, false);
+		                        el.addEventListener("touchcancel", iPadTouchHandler, false);
+		                });
+		        }
+		};
+
+		
+		
 		$("div.panel").each(function() {
 			var control = $(this);
 			$(control).Draggable( {
@@ -108,6 +129,9 @@ function load() {
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
 			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
 
+			$(control).addTouch();
+			
+			
 		});
 
 		

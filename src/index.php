@@ -201,6 +201,7 @@
 		<script type="text/javascript" src="js/picture.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
+		<script type="text/javascript" src="js/jquery.ui.touch.js"></script>
 	</body>
 
 </html>
