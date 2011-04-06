@@ -1,7 +1,7 @@
 <div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="general_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Shows general information about the location.">
-			General
+			Local
 		</div>
 		<div class="header-right">
 			<img class="window-close" onclick="closeWindow($(this).parent().parent().parent().attr('id'))" src="/images/close.png"/>
