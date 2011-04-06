@@ -8,8 +8,7 @@
 		</div>
 	</span>
 	<div class="detail-padded fixed-height-block-with-title">
-<!-- 		<a href="link/link.php" onclick="return popup(this, 'Link Accounts')">Link Accounts</a>
--->
+ 		<a href="link/link.php" onclick="return popup(this, 'Link Accounts')">Link Accounts</a>
 		<div id="user_stream">User Information</div>
 	</div>
 	<span>

@@ -422,9 +422,9 @@ function loadAllContainers() {
 		loadContainer("places");
 	}
 
-	if (isEnabled("user")) {
-		loadContainer("user");
-	}
+//	if (isEnabled("user")) {
+//		loadContainer("user");
+//	}
 
 	if (isEnabled("picture")) {
 		loadContainer("picture");
@@ -476,10 +476,10 @@ function loadContainer(name) {
 			updateWebcamLocationInformation();
 		}
 
-		if (name == "user") {
-			$("#user-name").html("You");
-			updateUserInformation();
-		}
+//		if (name == "user") {
+//			$("#user-name").html("You");
+//			updateUserInformation();
+//		}
 
 		if (name == "route") {
 			$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");

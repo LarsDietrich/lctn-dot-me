@@ -42,59 +42,6 @@ function getInstagram() {
 }
 
 /**
- * Called after retrieval of the instagram pictures, loads results into the
- * picture array
- * 
- * @param data - instagram JSON data
- */
-function processInstagramData(data) {
-	var shtml = '';
-	var photos = data.data;
-	var startPosition = listOfPicture.length;
-	var output = "";
-
-	if (photos) {
-		$.each(photos, function(index, value) {
-			
-			var cleanedLocation = Math.round(value.location.latitude * 10000) / 10000 + "," + Math.round(value.location.longitude * 10000) / 10000;
-
-			output = "<tr data-latitude=\"" + value.location.latitude + "\" data-longitude=\"" + value.location.longitude
-					+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
-			output += "<td width='20%'>";
-
-			output += "<div id='triggers'><img class='thumbnail' src='" + value.images.thumbnail.url + "' rel='#picture_tag" + (index + startPosition) + "'/></div>";
-			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
-			output += "<img src='" + value.images.standard_resolution.url + "'/>";
-			output += "</div>";
-			
-			output += "</td>";
-			output += "<td><b>" + value.location.name + "</b><br/>";
-			
-			if (value.caption && value.caption.text) {
-				output += value.caption.text + "<br/>";
-			}
-			
-//			output += "Taken by: " + value.user.username + "<br/>";
-			
-			output += "<div title=\"Reposition map to " + cleanedLocation
-					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
-			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
-					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
-			output += "</td></tr>";
-
-			listOfPicture[index + startPosition] = output;
-		});
-
-		if (listOfPicture.length == 0) {
-			listOfPicture[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Picture Search Service may be experiencing problems, try again later.</li></ul>";
-		} else {
-			pictureFound = true;
-		}
-	}
-	updatePictureDisplay();
-}
-
-/**
  * Called after data retrieved from flickr service. Loads the JSON results of
  * the flickr search into an array.
  * 
@@ -123,9 +70,10 @@ function jsonFlickrApi(data) {
 			output += "</td>";
 			output += "<td><b>" + value.title + "</b><br/>" + value.description._content + "<br/>";
 			output += "<div title=\"Reposition map to " + cleanedLocation
-					+ "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center There!</div>";
-			output += "&nbsp;|&nbsp;<div title=\"Get directions to " + cleanedLocation
-					+ "\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go There!</div>";
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
+//			output += "<a title='Picture supplied by Flickr service' href='http://flickr.com' style='padding-left: 5px; color: red' target='_blank'><span style='color: blue'>Flick</span><span style='color: red'>r</span></a>";
 			output += "</td></tr>";
 
 			listOfPicture[index] = output;
@@ -138,6 +86,57 @@ function jsonFlickrApi(data) {
 		}
 	}
 	getInstagram();
+}
+
+/**
+ * Called after retrieval of the instagram pictures, loads results into the
+ * picture array
+ * 
+ * @param data - instagram JSON data
+ */
+function processInstagramData(data) {
+	var shtml = '';
+	var photos = data.data;
+	var startPosition = listOfPicture.length;
+	var output = "";
+
+	if (photos) {
+		$.each(photos, function(index, value) {
+			
+			var cleanedLocation = Math.round(value.location.latitude * 10000) / 10000 + "," + Math.round(value.location.longitude * 10000) / 10000;
+
+			output = "<tr data-latitude=\"" + value.location.latitude + "\" data-longitude=\"" + value.location.longitude
+					+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
+			output += "<td width='20%'>";
+			output += "<div id='triggers'><img class='thumbnail' src='" + value.images.thumbnail.url + "' rel='#picture_tag" + (index + startPosition) + "'/></div>";
+			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
+			output += "<img src='" + value.images.standard_resolution.url + "'/>";
+			output += "</div>";
+			
+			output += "</td>";
+			output += "<td><b>" + value.location.name + "</b><br/>";
+			
+			if (value.caption && value.caption.text) {
+				output += value.caption.text + "<br/>";
+			}
+			
+			output += "<div title=\"Reposition map to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
+//			output += "<a title='Picture supplied by Instagram service' href='http://instagr.am' style='padding-left: 5px; color: red' target='_blank'>Instagram</a>";
+			output += "</td></tr>";
+			
+			listOfPicture[index + startPosition] = output;
+		});
+
+		if (listOfPicture.length == 0) {
+			listOfPicture[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Picture Search Service may be experiencing problems, try again later.</li></ul>";
+		} else {
+			pictureFound = true;
+		}
+	}
+	updatePictureDisplay();
 }
 
 /**

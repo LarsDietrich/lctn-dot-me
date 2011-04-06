@@ -26,3 +26,6 @@ function toggleImage(control) {
 	var id = $(control).attr("id");
 	alert($("img[" + id + "]").attr("id"));
 }
+
+
+

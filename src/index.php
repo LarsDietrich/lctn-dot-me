@@ -71,7 +71,7 @@
 			include("container/route.php");
 			include("container/picture.php");
 			include("container/places.php");
-			include("container/user.php");
+//			include("container/user.php");
 //			include("container/ads.php");
 
 			if (!(isset($_COOKIE["show_startup"]) && ($_COOKIE["show_startup"] == "false"))) {
@@ -89,10 +89,10 @@
 			include("menu.php");
 		?>
 
+<!-- 
+		<script src="http://connect.facebook.net/en_US/all.js"></script>
 		<div id="facebook-login" class="facebook-login">
 			<div id="fb-root"></div>
-			<!-- Facebook API -->
-			<script src="http://connect.facebook.net/en_US/all.js"></script>
 			<script>
 
 				FB.init({ 
@@ -112,29 +112,31 @@
 		         
 		         if (FB.getSession()) {
 		        	 user = FB.getSession().uid;
-
 		        	 FB.api('/me', function(response) {
 		        		 $("#facebook-login").html("<img src='http://graph.facebook.com/" + response.id + "/picture'/>");
 		        		 $("#user").html(response.first_name);
 		        	 });
 		         }
 			</script>
-		
-			<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+-->
+			<?php //if (isset($_COOKIE["fbs_179640572057712"])) {?>
+			
 <!-- 
 				<fb:profile-pic uid='loggedinuser' width='50px' height='50px'></fb:profile-pic>
 				&nbsp;You are logged in as <fb:name uid='loggedinuser' useyou='false'></fb:name> 
  -->
-			<?php } else {?>
-				<fb:login-button>Login with Facebook</fb:login-button>
-			<?php }?>
+			<?php //} else {?>
+<!--  				<fb:login-button>Login with Facebook</fb:login-button>  --> 
+			<?php // }?>
 		</div>
 
-		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
+		<?php //if (isset($_COOKIE["fbs_179640572057712"])) {?>
+<!-- 
 			<div class="facebook-like">
 				<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
 			</div>
-		<?php }?>
+ -->
+ 		<?php // }?>
 		<div id="find" class="find inline">
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
@@ -192,8 +194,8 @@
 		<script type="text/javascript" src="js/route.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/menu.js"></script>
-		<script type="text/javascript" src="js/user.js"></script>
 <!-- 		
+		<script type="text/javascript" src="js/user.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>  
 -->
 		<script type="text/javascript" src="js/picture.js"></script>
