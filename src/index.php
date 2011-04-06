@@ -84,6 +84,8 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <!-- JQuery Tools API -->
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
+<!-- JQuery UI -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.js"></script>
 
 		<?php 
 			include("menu.php");
@@ -152,13 +154,7 @@
 
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
-<!--  Places API -->
-<!-- 		<script type="text/javascript" src="http://cdn.simplegeo.com/js/1.2/simplegeo.places.min.js"></script>
--->
-<!-- 	
-		Geolocation API	
-		<script type="text/javascript" src="http://j.maxmind.com/app/geoip.js"></script>
- -->
+
 
 <!-- Gears API for geolocation -->
  		<script type="text/javascript" src="js/gears_init.js"></script> 
