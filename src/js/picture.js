@@ -3,6 +3,7 @@ var pictureFound = false;
 var flickrApiKey = "ae3b1fba3889813580d536b3ed159fa6";
 var pictureRange;
 var pictureLocation;
+var kmToMinuteRatio = 0.54;
 
 /**
  * Flickr:
@@ -12,6 +13,11 @@ var pictureLocation;
  * Instagram:
  * Site: http://instagr.am/developer
  * Call: https://api.instagram.com/v1/media/search?lat=48.858844&lng=2.294351&distance=5000&client_id=7d1d783e68dd4dd5b7dbad1ad5316b6d
+ * 
+ * Panoramio:
+ * 
+ * Site: http://www.panoramio.com/api/data/api.html
+ * Call: http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=20&minx=-180&miny=-90&maxx=180&maxy=90&size=medium&mapfilter=true&callback=dostuff()
  * 
  * Entry method for generating pictures, calls the flickr service using selected
  * parameters. Once complete, calls a method to process the results.
@@ -34,6 +40,9 @@ function getPictures(selectedLocation, range) {
 	});
 }
 
+/**
+ * Retrieve Instagram data from service.
+ */
 function getInstagram() {
 	query = "feed/instagram.php?lat=" + pictureLocation.lat() + "&lng=" + pictureLocation.lng() + "&range=" + pictureRange;
 	jx.load(query, function(data) {
@@ -42,6 +51,19 @@ function getInstagram() {
 }
 
 /**
+ * Retrieve Panoramio data from service
+ */
+function getPanoramio() {
+	var range = (pictureRange * kmToMinuteRatio) / 60;
+	jQuery(function() {
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = "http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=50&minx=" + (pictureLocation.lng() - range) + "&miny=" + (pictureLocation.lat() - range) + "&maxx=" + (pictureLocation.lng() + range) + "&maxy=" + (pictureLocation.lat() + range) + "&size=thumbnail&callback=processPanoramioData()";
+		$("body").append(script);
+	});	
+}
+	
+/**
  * Called after data retrieved from flickr service. Loads the JSON results of
  * the flickr search into an array.
  * 
@@ -49,7 +71,6 @@ function getInstagram() {
  *          flickr data.
  */
 function jsonFlickrApi(data) {
-	var shtml = '';
 	var photos = data.photos;
 
 	var output = "";
@@ -62,28 +83,25 @@ function jsonFlickrApi(data) {
 			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude
 					+ "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
 			output += "<td width='20%'>";
+			
 			output += "<div id='triggers'><img class='thumbnail' src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret
 					+ "_s.jpg' rel='#picture_tag" + index + "'/></div>";
+
 			output += "<div class='simple_overlay' id='picture_tag" + index + "'>";
-			output += "<img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_b.jpg'/>";
+			output += "<img src='http://farm" + value.farm + ".static.flickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_b.jpg'/><br/>";
+			output += "<span class='photo-footer'>Photo provided by Flickr.</span>";
 			output += "</div>";
+			
 			output += "</td>";
 			output += "<td><b>" + value.title + "</b><br/>" + value.description._content + "<br/>";
 			output += "<div title=\"Reposition map to " + cleanedLocation
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
 			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
-//			output += "<a title='Picture supplied by Flickr service' href='http://flickr.com' style='padding-left: 5px; color: red' target='_blank'><span style='color: blue'>Flick</span><span style='color: red'>r</span></a>";
 			output += "</td></tr>";
 
 			listOfPicture[index] = output;
 		});
-
-		if (listOfPicture.length == 0) {
-			listOfPicture[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Picture Search Service may be experiencing problems, try again later.</li></ul>";
-		} else {
-			pictureFound = true;
-		}
 	}
 	getInstagram();
 }
@@ -95,7 +113,6 @@ function jsonFlickrApi(data) {
  * @param data - instagram JSON data
  */
 function processInstagramData(data) {
-	var shtml = '';
 	var photos = data.data;
 	var startPosition = listOfPicture.length;
 	var output = "";
@@ -110,7 +127,8 @@ function processInstagramData(data) {
 			output += "<td width='20%'>";
 			output += "<div id='triggers'><img class='thumbnail' src='" + value.images.thumbnail.url + "' rel='#picture_tag" + (index + startPosition) + "'/></div>";
 			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
-			output += "<img src='" + value.images.standard_resolution.url + "'/>";
+			output += "<img src='" + value.images.standard_resolution.url + "'/><br/>";
+			output += "<span class='photo-footer'>Photo provided by Instagram.</span>";
 			output += "</div>";
 			
 			output += "</td>";
@@ -124,9 +142,50 @@ function processInstagramData(data) {
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
 			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
-//			output += "<a title='Picture supplied by Instagram service' href='http://instagr.am' style='padding-left: 5px; color: red' target='_blank'>Instagram</a>";
 			output += "</td></tr>";
 			
+			listOfPicture[index + startPosition] = output;
+		});
+	}
+	getPanoramio();
+}
+
+/**
+ * Called after retrieval of the panoramio pictures, loads results into the
+ * picture array
+ * 
+ * @param data - panoramio JSON data
+ */
+function processPanoramioData(data) {
+
+	var photos = data.photos;
+	var startPosition = listOfPicture.length;
+	var output = "";
+
+	if (photos) {
+		$.each(photos, function(index, value) {
+
+			var cleanedLocation = Math.round(value.latitude * 10000) / 10000 + "," + Math.round(value.longitude * 10000) / 10000;
+			
+			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude + "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
+			output += "<td width='20%'>";
+			output += "<div id='triggers'><img class='thumbnail' src='" + value.photo_file_url + "' rel='#picture_tag" + (index + startPosition) + "'/></div>";
+
+			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
+			output += "<img src='" + value.photo_file_url.replace("thumbnail", "medium") + "'/><br/>";
+			output += "<span class='photo-footer'>Photo provided by Panoramio. Photos are under the copyright of their owners.</span>";
+			output += "</div>";
+			
+			output += "</td>";
+			output += "<td><b><a href='" + value.photo_url + "' target='_blank'>" + value.photo_title + "</a></b><br/>";
+			output += "Added by <a href='" + value.owner_url + "' target='_blank'>" + value.owner_name + "</a> on " + value.upload_date + "<br/>";
+			
+			output += "<div title=\"Reposition map to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
+					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
+			output += "</td></tr>";
+
 			listOfPicture[index + startPosition] = output;
 		});
 
