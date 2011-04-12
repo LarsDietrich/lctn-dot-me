@@ -24,9 +24,11 @@
 	
 	/* styling */
 	background-color:#fff;
+
+	background: center url("/images/loading.gif") no-repeat white;
 	
-	min-width:10px;	
-	min-height:10px;
+	min-width:200px;	
+	min-height:200px;
 	border:1px solid #666;
 	
 	padding: 10px;

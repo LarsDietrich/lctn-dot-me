@@ -1,4 +1,4 @@
-<div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '1')" id="webcam_container" class="draggable panel">
+<div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="webcam_container" class="draggable panel">
 	<span>
 		<div class="header-left" title="Shows webcams available in the area. Maximum 50 results">
 			Webcams

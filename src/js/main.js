@@ -138,16 +138,16 @@ function load() {
 		});
 
 		
-//		$("#startup").overlay({
-//			top: 200,
-//			mask: {
-//				color: '#fff',
-//				loadSpeed: 200,
-//				opacity: 0.8
-//			},
-//			closeOnClick: false,
-//			load: true
-//		});
+		$("#startup").overlay({
+			top: 200,
+			mask: {
+				color: '#fff',
+				loadSpeed: 200,
+				opacity: 0.8
+			},
+			closeOnClick: false,
+			load: true
+		});
 
 		// position the tooltip popups
 		$(".config").each(function() {

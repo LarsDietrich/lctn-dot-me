@@ -3,6 +3,8 @@ var pictureFound = false;
 var flickrApiKey = "ae3b1fba3889813580d536b3ed159fa6";
 var pictureRange;
 var pictureLocation;
+var panoramioStart = 0;
+var maxPanoramioPics = 50;
 var kmToMinuteRatio = 0.54;
 
 /**
@@ -53,12 +55,16 @@ function getInstagram() {
 /**
  * Retrieve Panoramio data from service
  */
-function getPanoramio() {
+function getPanoramio(start) {
+	if (!(start)) {
+		start = 0;
+	}
+	panoramioStart = start;
 	var range = (pictureRange * kmToMinuteRatio) / 60;
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=50&minx=" + (pictureLocation.lng() - range) + "&miny=" + (pictureLocation.lat() - range) + "&maxx=" + (pictureLocation.lng() + range) + "&maxy=" + (pictureLocation.lat() + range) + "&size=thumbnail&callback=processPanoramioData()";
+		script.src = "http://www.panoramio.com/map/get_panoramas.php?set=full&mapfilter=true&from=" + start + "&to=" + (start + 50) + "&minx=" + (pictureLocation.lng() - range) + "&miny=" + (pictureLocation.lat() - range) + "&maxx=" + (pictureLocation.lng() + range) + "&maxy=" + (pictureLocation.lat() + range) + "&size=thumbnail&callback=processPanoramioData()";
 		$("body").append(script);
 	});	
 }
@@ -162,7 +168,9 @@ function processPanoramioData(data) {
 	var startPosition = listOfPicture.length;
 	var output = "";
 
-	if (photos) {
+	var count = data.count;
+
+	if (photos && (panoramioStart < maxPanoramioPics)) {
 		$.each(photos, function(index, value) {
 
 			var cleanedLocation = Math.round(value.latitude * 10000) / 10000 + "," + Math.round(value.longitude * 10000) / 10000;
@@ -188,6 +196,8 @@ function processPanoramioData(data) {
 
 			listOfPicture[index + startPosition] = output;
 		});
+		
+		getPanoramio(panoramioStart + 50);
 
 		if (listOfPicture.length == 0) {
 			listOfPicture[0] = "No pictures found, reasons for this include:<ul><li>Search area being too small, try a bigger search area.</li><li>The Picture Search Service may be experiencing problems, try again later.</li></ul>";
