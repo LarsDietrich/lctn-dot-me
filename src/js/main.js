@@ -229,8 +229,17 @@ function loadUrlParameters(encodedString) {
 			setConfigOption("route");
 		}
 		$("#route_from").val(data.route.from);
+		$("#route_to").val(data.route.to);
 	}
 
+	//places
+	if (data.places) {
+		if (!isEnabled("places")) {
+			setConfigOption("places");
+		}
+		$("#places_query").val(data.places.query);
+	}
+	
 	start();
 }
 
@@ -416,8 +425,10 @@ function reloadContainers() {
 	loadAllContainers();
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
-	$("#url").value = "";
+//	$("#url").value = "";
 	updateStats();
+	clearDirectonsFromMap();
+	
 //	getStatistics();
 }
 
@@ -459,6 +470,10 @@ function loadAllContainers() {
 
 	if (isEnabled("places")) {
 		loadContainer("places");
+	}
+
+	if (isEnabled("route")) {
+		loadContainer("route");
 	}
 
 }
@@ -509,7 +524,7 @@ function loadContainer(name) {
 //		}
 
 		if (name == "route") {
-			$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+			$("#route_from").val() == ""?$("#route_from").val($("#address").val()):$("#route_from").val();
 		}
 
 	
@@ -687,8 +702,9 @@ function setMessage(message) {
  */
 function locateAndRefresh(putInCache) {
 	var address = $("#address").val();
+
 	if (isEnabled("route")) {
-		$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+		$("#route_stream").html("");
 	}
 	geocoder.geocode( {
 		'address' : address
@@ -743,7 +759,8 @@ function reverseCodeLatLng() {
 				address = results[0].formatted_address;
 				$("#address").val(address);
 				if (isEnabled("route")) {
-					$("#route_stream").html("Type in an address and click <b>Go</b> to get directions to <b>" + $("#address").val() + "</b>");
+					$("#route_stream").html("");
+					$("#route_from").val($("#address").val());
 				}
 				if (isEnabled("general")) {
 					updateTimezoneLocationInformation();
@@ -801,12 +818,18 @@ function shortenUrl() {
 
 	if (isEnabled("route")) {
 		longUrl += ',"route":{';
-		longUrl += '"from":"' + $("#route_from").val() + '"}';
+		longUrl += '"from":"' + $("#route_from").val() + '",';
+		longUrl += '"to":"' + $("#route_to").val() + '"}';
 	}
 
 	if (isEnabled("wiki")) {
 		longUrl += ',"wiki":{';
 		longUrl += '"range":"' + $("#wiki_range").val() + '"}';
+	}
+
+	if (isEnabled("places")) {
+		longUrl += ',"places":{';
+		longUrl += '"query":"' + $("#places_query").val() + '"}';
 	}
 
 	longUrl += '}';

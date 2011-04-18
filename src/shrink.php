@@ -31,7 +31,7 @@ function getShortUrl($longUrl, $user) {
 	}
 	
 	$now = date("Y-m-d H:i:s");
-	$query = "insert into url (longurl, shorturl, openid, created) values ('" . $longUrl . "','" . $shortUrl . "','" . $user . "', '" . $now . "')";
+	$query = "insert into url (longurl, shorturl, userid, created) values ('" . $longUrl . "','" . $shortUrl . "','" . $user . "', '" . $now . "')";
 	$sql->execute($query);
 
 	return $shortUrl;

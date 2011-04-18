@@ -11,7 +11,7 @@ var placesFound = false;
  */
 function getPlaces(selectedLocation, category, query) {
 	listOfPlaces = [];
-	query = "feed/places.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&category=" + category;
+	query = "feed/places.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&category=" + category + "&query=" + query;
 	jx.load(query, function(data) {
 		processPlacesData(data);
 	}, "json");
@@ -24,12 +24,10 @@ function getPlaces(selectedLocation, category, query) {
  *          data returned
  */
 function processPlacesData(data) {
-	
-	var nearbyPlaces = data.response.groups[0].items;
-
 	var output = "";
 
-	if (nearbyPlaces) {
+	if (data.response.groups[0] && data.response.groups[0].items) {
+		var nearbyPlaces = data.response.groups[0].items;
 		$.each(nearbyPlaces, function(index, value) {
 
 			latitude = value.location.lat;
@@ -48,7 +46,7 @@ function processPlacesData(data) {
 			output += "<b>" + value.name + "</b><br/>";
 
 			if (value.categories[0]) {
-				output += "<span title=\"Click to search for all " + value.categories[0].name + " in the area \" class=\"hashtag\" onclick=\"updatePlacesLocationInformationFromCategory('" + value.categories[0].id + "', '" + value.categories[0].name + "')\">" + value.categories[0].name + "</span><br/>";
+				output += "<span>" + value.categories[0].name + "</span><br/>";
 			}
 			
 			if (value.location.address) {			
@@ -63,7 +61,6 @@ function processPlacesData(data) {
 				checkins = value.stats.checkinsCount; 
 			}
 
-			
 			output += "<div class='item-subtext inline'>" + checkins + " visits</div>";
 			output += "&nbsp;&nbsp;<div title='Reposition map to " + cleanedLocation	+ "' class='item-subtext-button inline' style='cursor: pointer;' onclick='useAddressToReposition(\"" + cleanedLocation + "\")'>Center</div>";
 			output += "&nbsp;&nbsp;<div title='Get directions to " + cleanedLocation + "' class='item-subtext-button inline' style='cursor: pointer;' onclick='getRouteToLocation(\"" + cleanedLocation + "\")'>Go</div>";
@@ -73,9 +70,9 @@ function processPlacesData(data) {
 			listOfPlaces[index] = output;
 		});
 	}
-	
+
 	if (listOfPlaces.length == 0) {
-		listOfPlaces[0] = "No places found.";
+		listOfPlaces[0] = "No places found, try using a different word or phrase.";
 	} else {
 		placesFound = true;
 	}
@@ -87,21 +84,16 @@ function processPlacesData(data) {
  * Updates the "Places" information
  */
 function updatePlacesLocationInformation() {
-	updatePlacesLocationInformationFromCategory("", "All Places");
+	updatePlacesLocationInformationFromCategory("", "All Categories");
 }
 
 /**
  * Updates the "Places" information
  */
 function updatePlacesLocationInformationFromCategory(categoryId, categoryName) {
-	if (categoryName == "All Places") {
-		$("#places_category").html("<b>" + categoryName + "</b>.  Click on a category in the list refine search.");
-	} else {
-		$("#places_category").html("<b>" + categoryName + "</b>. Click reset to show all places. <input type=\"button\" value=\"Reset\" onclick=\"updatePlacesLocationInformation('');\"/>");
-	}
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 		$("#places_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for places of interest in the area.'/>");
-		getPlaces(selectedLocation, categoryId, "");
+		getPlaces(selectedLocation, categoryId, $("#places_query").val());
 	}
 }
 
