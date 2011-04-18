@@ -9,17 +9,11 @@
 	</span>
  	<div class="detail-padded">
 <!-- 
-			Search for
+			Showing <div class="inline" id="places_category"><b>All Categories</b>. Click on a category in the list to use that category.</div>
+-->
+			Show me places that contain word or phrase
 			<input title="Name of place to search for (or part of the name)"  type="text" name="places_query" id="places_query" value="" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> 
-			in 
-			<input title="How big an area would you like to search for places?" class="short-text" type="text" name="places_range" id="places_range" value="5" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> km, 
--->
-			Showing <div class="inline" id="places_category">All Places. Click on a category in the list refine search.</div>
-<!-- 
-			<select name="places_category" id="places_category" onchange="updatePlacesLocationInformation();" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }">
-				<option value="">All Places</option>
-			</select>
--->
+			<input class="action-button" type="button" id="filter_places_now" name="filter_places_now" value="Go" onclick="updatePlacesLocationInformation();"/>
 
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">

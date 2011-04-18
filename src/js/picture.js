@@ -181,7 +181,7 @@ function processPanoramioData(data) {
 
 			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
 			output += "<img src='" + value.photo_file_url.replace("thumbnail", "medium") + "'/><br/>";
-			output += "<span class='photo-footer'>Photo provided by Panoramio. Photos are under the copyright of their owners.</span>";
+			output += "<span class='photo-footer'>Photo provided by <img style='height: 15px;padding-top: 5px;vertical-align: bottom; width: 95px;' src='/images/panoramio-logo.png'/>. Photos are under the copyright of their owners.</span>";
 			output += "</div>";
 			
 			output += "</td>";
