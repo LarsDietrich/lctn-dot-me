@@ -46,7 +46,7 @@
 
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
-		
+
 		<?php 
 			include("loading.php");
 		?>

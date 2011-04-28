@@ -20,6 +20,6 @@ Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and
 <br/>
 <div style="padding-top: 10px; padding-bottom: 5px">
 	<div style="width: 50%; display: inline"><button class="close action-button action-button-wide">Let me try!</button></div>
-	<div style="padding-left: 260px; width: 50%; display: inline"><input type="checkbox" name="show_startup" id="show_startup" checked="checked" onclick="$.cookie('show_startup', $('#show_startup').is(':checked'));">Show on startup</div>
+	<div style="padding-left: 260px; width: 50%; display: inline"><input type="checkbox" name="show_startup" id="show_startup" checked="checked" onclick="$.cookie('show_startup', $('#show_startup').is(':checked'), { expires: 3650 });">Show on startup</div>
 </div>
 </div>

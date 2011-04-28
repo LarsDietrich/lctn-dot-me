@@ -3,3 +3,6 @@ RewriteEngine on
 #
 # Internally rewrite shortened URL requests to de-shortened URL lookup script filepath plus query string
 RewriteRule ^([\w\d]{4})$ decode.php?decode=$1 [L]
+<FilesMatch "\.(gif|jpg|png|js)$">
+  ExpiresDefault "access plus 10 years"
+</FilesMatch>
