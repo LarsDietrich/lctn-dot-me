@@ -6,6 +6,7 @@
 <li><b>find</b> any point on earth using Google Maps</li>
 <li>get basic <b>directions</b> to and from a location</li>
 <li>see <b>photos</b> people have taken of the area</li>
+<li>find <b>places</b> of interest in the area, thanks to Foursquare</li>
 <li>see what people are <b>tweeting</b> about in the area</li>
 <li>see what the place looks like with Google <b>streetview</b></li>
 <li>find <b>wikipedia</b> articles for the area</li>
