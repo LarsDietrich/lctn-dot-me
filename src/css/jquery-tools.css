@@ -1,3 +1,4 @@
+/*
 .tooltip {
 	display: none;
 	background: transparent url(/images/tooltip.png);
@@ -7,6 +8,7 @@
 	padding: 20px;
 	color: #000;
 }
+*/
 
 /* use a semi-transparent image for the overlay */
 #overlay {
