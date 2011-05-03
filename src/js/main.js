@@ -78,38 +78,38 @@ function load() {
 		
 		$("#message_container").css("top", "0px" );
 		$("#message_container").css("left", '-500px');
-
-
-//		$.extend($.support, {
-//      touch: "ontouchend" in document
-//		});
-//		
-//		//
-//		//Hook up touch events
-//		//
-//		$.fn.addTouch = function() {
-//		      if ($.support.touch) {
-//		              this.each(function(i,el){
-//		                      el.addEventListener("touchstart", iPadTouchHandler, false);
-//		                      el.addEventListener("touchmove", iPadTouchHandler, false);
-//		                      el.addEventListener("touchend", iPadTouchHandler, false);
-//		                      el.addEventListener("touchcancel", iPadTouchHandler, false);
-//		              });
-//		      }
-//		};
-//		
-//		var lastTap = null;   
-		
 		
 		$("div.panel").each(function() {
 			var control = $(this);
 
-//			$(control).draggable();
-//			$(control).addTouch();
+//			http://interface.eyecon.ro/docs/resizable
+			
+//			$(control).Resizable(
+//					{
+//						minHeight: 200,
+//						dragHandle: true,
+//						handlers: {
+//							n: '#resizeN',
+//							s: '#resizeS'
+//						},
+//						onDragStop : function() {
+//							$(control).css("z-index", "9");
+//							$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
+//								expires : 365
+//							});
+//							$.cookie($(control).attr("id") + "_left", $(control).css("left"), {
+//								expires : 365
+//							});
+//						},
+//						onDragStart : function() {
+//						}
+//					});
+//			
+			//http://interface.eyecon.ro/docs/drag
 			
 			$(control).Draggable( {
-				handle : 'span',
 				zIndex : '1000',
+				handle : 'span',
 				opacity : 1.0,
 				autoSize : true,
 				
@@ -127,8 +127,8 @@ function load() {
 				onStart : function() {
 				},
 				snapDistance : 10,
-				grid : 10,
-				containment : 'document'
+				grid : 10
+//				containment : 'document'
 			})
 
 			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
@@ -256,9 +256,7 @@ function start(data) {
   	return;
   }
 
-	updateUrlWindow("");
-
-	if (selectedLocation) {
+  if (selectedLocation) {
 		useAddressToRepositionLngLat(selectedLocation.lng() + "," + selectedLocation.lat());
 	} else {
 		if ($.cookie("lastLocation")) {
@@ -688,7 +686,7 @@ function setMessage(message) {
 		  left: "0px",
 		  opacity: 1
 		}, 500, 'swing', function() {
-			$("#message_container").delay(3000).animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
+			$("#message_container").delay(2000).animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
 		});
 	}		
 }
@@ -783,7 +781,7 @@ function reverseCodeLatLng() {
  * Builds the long URL to be shortened and saved to the database. Calls
  * shrink.php to do the shortening and saving. Updates the "short Url" box.
  */
-function shortenUrl() {
+function shortenUrl(control) {
 
 	root = "http://" + top.location.host + "/";
 	var longUrl = '{';
@@ -837,57 +835,10 @@ function shortenUrl() {
 	var shortUrl = "";
 	user = user?user:"Unknown";
 	jx.load("shrink.php?url=" + Base64.encode(longUrl) + "&user=" + user, function(data) {
-		$("#url").val(root + data);
-		updateUrlWindow(root + data);
-		$("#share-window").animate({
-		  top: "0px",
-		  left: "0px",
-		  opacity: 1
-		}, 500, 'swing', function() {});
+		var url = $(control).attr("data-baseurl") + root + data;
+		window.open(url);
+		return false;
 	});
-}
-
-/**
- * Hides the share bar after a certain amount of time;
- * 
- * @param timeout -
- *          how long to wait before hiding bar (ms)
- */
-function hideShareBar(timeout) {
-	$("#share-window").animate({left: "-500px", top: "0px", opacity: '.0'}, 500, 'swing', function() {});
-}
-/**
- * Updates the link url values of the social icons to the supplied link so that
- * clicking on them will trigger the relevant social add function correctly with
- * the shortened link.
- * 
- * @param link -
- *          the short url to pass to the social zone.
- */
-function updateUrlWindow(link) {
-	var output = "";
-
-	output += "<img class=\"find-navigate\" src=\"/images/close.png\" onclick=\"hideShareBar()\"/>&nbsp;";
-	
-	output += "<div class=\"share-text\">Share this location (" + link + "): </div>";
-	
-	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://twitter.com/home/?status=";
-	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/twitter.png\" title=\"Tweet this location to the world.\" alt=\"Twitter\"></img></a>";
-
-	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://www.facebook.com/sharer.php?u=";
-	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/facebook.png\" title=\"Share the location with your Facebook friends.\" alt=\"Facebook\"></img></a>";
-
-	output += "<a onclick=\"hideShareBar(1000)\" href=\"http://del.icio.us/post?url=";
-	output += link + "\"";
-	output += " target=\"_blank\"><img class='social-button' src=\"images/delicious.png\" title=\"\Add the location to your Del.icio.us bookmarks.\" alt=\"Del.icio.us\"></img></a>";
-
-	output += "<a onclick=\"hideShareBar(1000)\" href=\"mailto:?subject=Have a look at this location&body=";
-	output += link + "\"";
-	output += "><img class='social-button' src=\"images/email.png\" title=\"Email the location to a friend.\" alt=\"Send by Email\"></img></a>";
-
-	$("#share-window").html(output);
 }
 
 /**

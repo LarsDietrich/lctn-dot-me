@@ -2,13 +2,16 @@
  * Checks / unchecks window options as per current cookie values.
  */
 function setConfigOptions() {
-	$("label[class=config]").each(function() {
+	$("span[class=config2]").each(function() {
 		var value = $.cookie("option_" + $(this).attr("id"));
 		if (value == "true") {
-			$(this).css("color", "#B6D051");
+			$(this).css("color", "#B0D730");
 		} else {
-			$(this).css("color", "black");
+			$(this).css("color", "#FFF");
 		}
+		
+		$(this).hover(function() {$(this).css("color", "#B0D730")}, function() {$(this).css("color", "#FFF")})
+		
 	});
 }
 
@@ -35,11 +38,11 @@ function setConfigOption(control) {
 	});
 	
 	if (current == "true") {
-		$("#" + container).css("color", "#B6D051");
+		$("#" + container).css("color", "#B0D730");
 		showElement(container + "_container");
 		loadContainer(container);
 	} else {
-		$("#" + container).css("color", "black");
+		$("#" + container).css("color", "#FFF");
 		hideElement(container + "_container");
 	}
 }

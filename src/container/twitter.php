@@ -1,4 +1,5 @@
 <div onmouseover="$(this).css('z-index', '100')" onmouseout="$(this).css('z-index', '10')" id="twitter_container" class="draggable panel">
+
 	<span>
 		<div class="header-left" title="Shows latest tweets in the surrounding area for people that have chosen to share their location (100 tweets maximum, English only).">
 			Twitter
@@ -22,4 +23,5 @@
               <div id="twitter_footer" class="footer"></div>
 	</div>
 	</span>
+
 </div>

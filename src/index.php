@@ -18,8 +18,8 @@
 		<link rel="stylesheet" href="css/layout.css" type="text/css"/>
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
-		<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 		<link rel="stylesheet" href="css/overlay.css" type="text/css"/>
+		<link rel="stylesheet" href="css/menu2.css" type="text/css"/>
 
 	</head>
 
@@ -32,11 +32,8 @@
 		<div id="map_canvas" class="map_background"></div>
 
 		<div style="z-index: 10000; display: inline;" id="message_container" class="message-box">
-			<div class="detail-message" id="message">
-			</div>
+			<div id="message"></div>
 		</div>
-
-		<div class="share-window" id="share-window"></div>
 
 		<!-- overlay element -->
 		<div class="apple_overlay" id="overlay">
@@ -46,7 +43,10 @@
 
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
-
+		<?php 
+			include("menu2.php");
+		?>
+ 	
 		<?php 
 			include("loading.php");
 		?>
@@ -87,9 +87,6 @@
 <!-- JQuery UI -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.js"></script>
 
-		<?php 
-			include("menu.php");
-		?>
 
 <!-- 
 		<script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -139,15 +136,13 @@
 			</div>
  -->
  		<?php // }?>
+<!-- 
 		<div id="find" class="find inline">
 			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
 			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
-			<input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
-			<input class="action-button" type="button" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
-			<input class="action-button" type="button" title="Share the current location with friends" name="generate" value="Share" onclick="shortenUrl();"/>
 			<div title="Built <?php echo date("l, dS F, Y @ h:ia", filemtime("index.php")); ?> GMT+2" id="beta">BETA</div>
 		</div>
-
+ -->
 
 <!-- Google Maps API -->
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -196,8 +191,9 @@
 -->
 		<script type="text/javascript" src="js/picture.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-
+<!-- 
 		<script type="text/javascript" src="js/jquery.ui.touch.js"></script>
+ -->
 	</body>
 
 </html>
