@@ -5,7 +5,7 @@ function setConfigOptions() {
 	$("span[class=config2]").each(function() {
 		var value = $.cookie("option_" + $(this).attr("id"));
 		if (value == "true") {
-			$(this).css("color", "#B0D730");
+			$(this).css("color", "#FFF");
 		} else {
 			$(this).css("color", "#FFF");
 		}
@@ -36,7 +36,7 @@ function setConfigOption(control) {
 	});
 	
 	if (current == "true") {
-		$("#" + container).css("color", "#B0D730");
+		$("#" + container).css("color", "#FFF");
 		showElement(container + "_container");
 		loadContainer(container);
 	} else {

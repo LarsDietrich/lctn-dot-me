@@ -34,10 +34,12 @@
 
 #menu>li span:hover {
 	color: #B0D730;
+	text-shadow: 0.1em 0.1em 0.2em green; 
 }
 
 #menu>li a:hover {
 	color: #B0D730;
+	text-shadow: 0.1em 0.1em 0.2em green; 
 }
 
 #menu .logo {
@@ -68,7 +70,7 @@
 
 #menu li:hover ul {
 	display: block;
-}
+ }
 
 #menu li ul li {
 	display: block;
@@ -89,6 +91,7 @@
 
 #menu li ul li span:hover {
 	color: #B0D730;
+	text-shadow: 0.1em 0.1em 0.2em green; 
 }
 
 #menu li ul li a {
