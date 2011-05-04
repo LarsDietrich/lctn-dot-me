@@ -1,5 +1,5 @@
 // current version of web app
-var version = "0.0.10";
+var version = "0.1.0";
 
 // logged in user id
 var user;
