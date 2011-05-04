@@ -19,7 +19,7 @@
 		<link rel="stylesheet" href="css/displaybox.css" type="text/css"/>
 		<link rel="stylesheet" href="css/jquery-tools.css" type="text/css"/>
 		<link rel="stylesheet" href="css/overlay.css" type="text/css"/>
-		<link rel="stylesheet" href="css/menu2.css" type="text/css"/>
+		<link rel="stylesheet" href="css/menu.css" type="text/css"/>
 
 	</head>
 
@@ -44,23 +44,23 @@
 <!-- Used to display a fullscreen image -->
 		<div id="displaybox-no-opacity" onclick="fullscreenImage();" style="display: none; z-index: 9000"></div>
 		<?php 
-			include("menu2.php");
+			include("menu.php");
 		?>
  	
 		<?php 
 			include("loading.php");
 		?>
-
 <!-- 
 		<div id="addthis" class="addthis">
 			<div class="addthis_toolbox addthis_default_style ">
+			<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
 			<a class="addthis_button_tweet"></a>
 			<a class="addthis_counter addthis_pill_style"></a>
 			</div>
 		</div>
 		<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
 		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=ricktonoli"></script>
--->
+ -->
 		    <?php 
 		    
 			include("container/twitter.php");
@@ -71,8 +71,6 @@
 			include("container/route.php");
 			include("container/picture.php");
 			include("container/places.php");
-//			include("container/user.php");
-//			include("container/ads.php");
 
 			if (!(isset($_COOKIE["show_startup"]) || ($_COOKIE["show_startup"] == "false"))) {
 				include("startup.php");
@@ -86,63 +84,6 @@
 		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
 <!-- JQuery UI -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.js"></script>
-
-
-<!-- 
-		<script src="http://connect.facebook.net/en_US/all.js"></script>
-		<div id="facebook-login" class="facebook-login">
-			<div id="fb-root"></div>
-			<script>
-
-				FB.init({ 
-		            appId:'179640572057712', 
-		            cookie:true, 
-		            status: true, 
-		            xfbml:true 
-		         });
-			
-		         FB.Event.subscribe('auth.login', function(response) {
-		        	 window.location.reload();
-		         });
-
-		         FB.Event.subscribe('auth.logout', function(response) {
-		        	 window.location.reload();
-		         });
-		         
-		         if (FB.getSession()) {
-		        	 user = FB.getSession().uid;
-		        	 FB.api('/me', function(response) {
-		        		 $("#facebook-login").html("<img src='http://graph.facebook.com/" + response.id + "/picture'/>");
-		        		 $("#user").html(response.first_name);
-		        	 });
-		         }
-			</script>
--->
-			<?php //if (isset($_COOKIE["fbs_179640572057712"])) {?>
-			
-<!-- 
-				<fb:profile-pic uid='loggedinuser' width='50px' height='50px'></fb:profile-pic>
-				&nbsp;You are logged in as <fb:name uid='loggedinuser' useyou='false'></fb:name> 
- -->
-			<?php //} else {?>
-<!--  				<fb:login-button>Login with Facebook</fb:login-button>  --> 
-			<?php // }?>
-		</div>
-
-		<?php //if (isset($_COOKIE["fbs_179640572057712"])) {?>
-<!-- 
-			<div class="facebook-like">
-				<fb:like href="http://lctn.me" show_faces="true" width="450" layout="button_count"></fb:like>				
-			</div>
- -->
- 		<?php // }?>
-<!-- 
-		<div id="find" class="find inline">
-			<img class="find-navigate" src="images/previous.png" title="Previous find request" onclick="previousSearch()"/>
-			<img class="find-navigate" src="images/next.png" title="Next find request" onclick="nextSearch()"/>
-			<div title="Built <?php echo date("l, dS F, Y @ h:ia", filemtime("index.php")); ?> GMT+2" id="beta">BETA</div>
-		</div>
- -->
 
 <!-- Google Maps API -->
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -191,9 +132,7 @@
 -->
 		<script type="text/javascript" src="js/picture.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-<!-- 
-		<script type="text/javascript" src="js/jquery.ui.touch.js"></script>
- -->
+		<script type="text/javascript" src="js/jquery-random.js"></script>
 	</body>
 
 </html>

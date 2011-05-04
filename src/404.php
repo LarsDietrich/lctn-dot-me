@@ -11,8 +11,9 @@
 <body>
 	</br>
 	<center>
-		<label>That saved location either does not exist or existed at some point and has expired.</label><br/><br/>
-		<a class="action-button" style="padding: 2px 3px 2px 3px" href="/">Take me to the website</a>
+		<div style="font-size:12pt;">Sorry! That saved location either does not exist or existed at some point and has expired.</div>
+		<br/>
+		<a class="action-button" style="padding: 2px 8px 2px 8px" href="/">Take me to the website</a>
 	</center>
 </body>
 

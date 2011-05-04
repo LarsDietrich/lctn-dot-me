@@ -101,10 +101,10 @@ function processWebcamResults(data) {
 					output += " It is owned and maintained by ";
 					output += "<a href='" + webcam.user_url + "' target='_blank'>" + webcam.user + "</a><br/>";
 					output += "<div class='item-subtext inline'>" + getWebcamTimeCreated(webcam.last_update) + "</div>&nbsp;|&nbsp;";
-					output += "<div title='Reposition map to location' class='item-subtext-button inline' style='cursor: pointer;' onclick='useAddressToReposition('"
-							+ webcam.latitude + "," + webcam.longitude + "')'>Center</div>" + "</div>&nbsp;&nbsp;";
-					output += "<div title='Get directions to location' class='item-subtext-button inline' style='cursor: pointer;' onclick='getRouteToLocation('"
-							+ webcam.latitude + "," + webcam.longitude + "')'>Go</div>";
+					output += "<div title='Reposition map to "	+ webcam.latitude + "," + webcam.longitude + "' class='item-subtext-button inline' style='cursor: pointer;' onclick=\"useAddressToReposition('"
+							+ webcam.latitude + "," + webcam.longitude + "')\">Center</div>" + "</div>&nbsp;&nbsp;";
+					output += "<div title='Get directions to "	+ webcam.latitude + "," + webcam.longitude + "' class='item-subtext-button inline' style='cursor: pointer;' onclick=\"getRouteToLocation('"
+							+ webcam.latitude + "," + webcam.longitude + "')\">Go</div>";
 					output += "</td></tr>";
 					listOfWebcams[index] = output;
 				});

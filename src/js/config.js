@@ -9,9 +9,7 @@ function setConfigOptions() {
 		} else {
 			$(this).css("color", "#FFF");
 		}
-		
-		$(this).hover(function() {$(this).css("color", "#B0D730")}, function() {$(this).css("color", "#FFF")})
-		
+		$(this).hover(function() {$(this).css("color", "#B0D730")}, function() {$(this).css("color", "#FFF");});
 	});
 }
 

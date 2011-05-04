@@ -1,5 +1,5 @@
 <div id="startup">
-<b>LCTN.ME</b> lets you easily
+<b>LCTN.ME</b> lets you...
 <br/>
 <br/>
 <ul>
@@ -13,10 +13,10 @@
 <li>look at <b>webcams</b> in the area</li>
 <li>get some localized information about the area, like <b>weather</b>, current coordinates and local time</li>
 </ul>
-... and then easily <b>share</b> it with friends.
+... and then easily <b>share</b> what you've found with friends.
 <br/>
 <br/>
-Hint: For a better experience, <b>zoom your browser out</b> (normally CTRL-) and change to <b>fullscreen</b> (normally F11).
+Hint: For a better experience, <b>zoom your browser out slightly</b> (normally CTRL-) and change to <b>fullscreen</b> (normally F11). Windows can be dragged and repositioned.
 <br/>
 <div style="padding-top: 10px; padding-bottom: 5px">
 	<div style="width: 50%; display: inline"><button class="close action-button action-button-wide">Let me try!</button></div>

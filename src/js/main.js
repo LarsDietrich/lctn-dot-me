@@ -82,31 +82,7 @@ function load() {
 		$("div.panel").each(function() {
 			var control = $(this);
 
-//			http://interface.eyecon.ro/docs/resizable
-			
-//			$(control).Resizable(
-//					{
-//						minHeight: 200,
-//						dragHandle: true,
-//						handlers: {
-//							n: '#resizeN',
-//							s: '#resizeS'
-//						},
-//						onDragStop : function() {
-//							$(control).css("z-index", "9");
-//							$.cookie($(control).attr("id") + "_top", $(control).css("top"), {
-//								expires : 365
-//							});
-//							$.cookie($(control).attr("id") + "_left", $(control).css("left"), {
-//								expires : 365
-//							});
-//						},
-//						onDragStart : function() {
-//						}
-//					});
-//			
 			//http://interface.eyecon.ro/docs/drag
-			
 			$(control).Draggable( {
 				zIndex : '1000',
 				handle : 'span',
@@ -128,13 +104,12 @@ function load() {
 				},
 				snapDistance : 10,
 				grid : 10
-//				containment : 'document'
-			})
+			});
 
-			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : 40));
-			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : 20);
-
-			
+			var randomTop = $.random(50, 100) * 5;
+			var randomLeft = $.random(50, 100) * 20;
+			$(control).css("top", ($.cookie($(control).attr("id") + "_top") ? $.cookie($(control).attr("id") + "_top") : randomTop));
+			$(control).css("left", ($.cookie($(control).attr("id") + "_left")) ? $.cookie($(control).attr("id") + "_left") : randomLeft);
 		});
 
 		
@@ -149,12 +124,12 @@ function load() {
 			load: true
 		});
 
-		// position the tooltip popups
-		$(".config").each(function() {
-			var control = $(this);
-			$(control).tooltip({ position: "bottom center", opacity: 0.9});
-		});
-		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
+//		// position the tooltip popups
+//		$(".config").each(function() {
+//			var control = $(this);
+//			$(control).tooltip({ position: "bottom center", opacity: 0.9});
+//		});
+//		$("#address").tooltip({ position: "bottom center", opacity: 0.9});
 
 	});
 }
@@ -192,8 +167,6 @@ function loadUrlParameters(encodedString) {
 	if (data.tw) {
 		if (!isEnabled("twitter")) {
 			setConfigOption("twitter");
-			
-			
 		}
 		$("#tweet_range").val(data.tw.range);
 		$("#tweet_filter").val(data.tw.filter);
@@ -423,11 +396,8 @@ function reloadContainers() {
 	loadAllContainers();
 	reverseCodeLatLng();
 	map.setCenter(selectedLocation);
-//	$("#url").value = "";
 	updateStats();
 	clearDirectonsFromMap();
-	
-//	getStatistics();
 }
 
 /**
