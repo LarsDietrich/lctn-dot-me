@@ -1,47 +1,20 @@
 var listOfPlaces = [];
 var placesFound = false;
-var placesCategory;
 
 /**
- * Generate Places based on location
+ * Generate Places based on location using Foursquare Venues API
  * 
- * From: http://simplegeo.com/
- * {
- * 	"total":25,
- * 	"type":"FeatureCollection",
- * 	"features":
- * 		[{"geometry":
- * 			{	"type":"Point",
- * 				"coordinates":[-87.690362,42.037728]
- * 			},
- * 			"type":"Feature",
- * 			"id":"SG_2Op05JLFDH0SQDfqKYfJB5_42.037728_-87.690362@1291672243",
- * 			"properties":
- * 					{	"province":"IL",
- * 						"city":"Evanston",
- * 						"name":"Idg",
- * 						"tags": ["commercial","design","typesetting"],
- * 						"country":"US",
- * 						"phone":"+1 847 475 7772",
- * 						"href":"http://api.simplegeo.com/1.0/features/SG_2Op05JLFDH0SQDfqKYfJB5_42.037728_-87.690362@1291672243.json",
- * 						"address":"1327 Greenleaf St",
- * 						"owner":"simplegeo",
- * 						"classifiers":
- * 							[{"category":"Manufacturing",
- * 								"type":"Manufacturing & Wholesale Goods",
- * 								"subcategory":"Printing"}],
- * 						"postcode":"60202"}},
+ * http://developer.foursquare.com/venues/
+ * 
+ * 
+ * 
  */
-function getSimpleGeoPlaces(selectedLocation, range, category, query) {
-	var client = new simplegeo.PlacesClient('NXBFea3eNcBf3MbgjuTgCF6sSWyLQVKX');
-	placesCategory = category;
+function getPlaces(selectedLocation, category, query) {
 	listOfPlaces = [];
-	var placesOptions = {
-			radius : range,
-			category : category,
-			q: query
-	}
-	client.search(selectedLocation.lat(), selectedLocation.lng(), placesOptions, function(err, data) {processSimpleGeoPlacesResults(err, data)});	
+	query = "feed/places.php?lat=" + selectedLocation.lat() + "&lng=" + selectedLocation.lng() + "&category=" + category + "&query=" + query;
+	jx.load(query, function(data) {
+		processPlacesData(data);
+	}, "json");
 }
 
 /**
@@ -50,38 +23,60 @@ function getSimpleGeoPlaces(selectedLocation, range, category, query) {
  * @param jsonData -
  *          data returned
  */
-function processSimpleGeoPlacesResults(error, data) {
-	if (error) {
-		var output = "<tr><td>";
-		output += error;
-		output += "</td></tr>";
-		listOfPlaces[0] = output;
-	} else {
-		var i = 0;
-		var features = data.features;
+function processPlacesData(data) {
+	var output = "";
 
-		$.each(features, function(index, value) {
-			var properties = value.properties;
-			var coordinates = value.geometry.coordinates;
-			var output = "<tr onmouseover='highlightLngLatRow(this," + coordinates + ", \"images/" + placesCategory + ".png\")' onmouseout='normalRow(this)'>";
-			output += "<td>";
-			output += "<b>" + properties.name + "</b><br/>";
-			if (properties.phone) { output += "Tel: " + properties.phone + "<br/>"; } else { output += "Phone: Not Listed<br/>";}
-			if (properties.address) { output += "Address: " + properties.address + "," + properties.city + "<br/>"; } else { output += "Address: Not Listed<br/>";}
-			output += "<div title=\"Reposition to this location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToRepositionLngLat('" + value.geometry.coordinates	+ "')\">Go There!</div>&nbsp;|&nbsp;";
-			output += "<a href=\"";
-			output += "http://www.google.com/search?hl=en&q=%22" + properties.name + "%22&btnG=Google+Search";
-			output += "\" target=\"_blank\"><div title=\"Find out more\" class=\"item-subtext inline\" style=\"cursor: pointer;\">Google It!</div></a>";
+	if (data.response.groups[0] && data.response.groups[0].items) {
+		var nearbyPlaces = data.response.groups[0].items;
+		$.each(nearbyPlaces, function(index, value) {
+
+			latitude = value.location.lat;
+			longitude = value.location.lng;
+
+			var cleanedLocation = latitude + "," + longitude;
+			
+			var iconPath = "images/foursquare-icon.png";
+			var checkins = 0;
+
+			if (value.categories[0]) {
+				iconPath = value.categories[0].icon;
+			}
+			
+			output = "<tr data-latitude='" + latitude + "' data-longitude='" + longitude	+ "' data-image='" + 	iconPath + "' data-shadow-image=''><td>";
+			output += "<b>" + value.name + "</b><br/>";
+
+			if (value.categories[0]) {
+				output += "<span>" + value.categories[0].name + "</span><br/>";
+			}
+			
+			if (value.location.address) {			
+				output += value.location.address;
+			} else {
+				output += "No address listed.";
+			}
+			
+			output += "<br/>";
+			
+			if (value.stats.checkinsCount) {
+				checkins = value.stats.checkinsCount; 
+			}
+
+			output += "<div class='item-subtext inline'>" + checkins + " visits</div>";
+			output += "&nbsp;&nbsp;<div title='Reposition map to " + cleanedLocation	+ "' class='item-subtext-button inline' style='cursor: pointer;' onclick='useAddressToReposition(\"" + cleanedLocation + "\")'>Center</div>";
+			output += "&nbsp;&nbsp;<div title='Get directions to " + cleanedLocation + "' class='item-subtext-button inline' style='cursor: pointer;' onclick='getRouteToLocation(\"" + cleanedLocation + "\")'>Go</div>";
+			output += "&nbsp;&nbsp;<div title='Google this place' style='text-decoration:none' class='item-subtext-button inline' style='cursor: pointer;'><a href='http://www.google.com/search?q=" + value.name + "' target='_blank'>Google</a></div>";
 			output += "</td></tr>";
-			listOfPlaces[i] = output;
-			i++;
+			
+			listOfPlaces[index] = output;
 		});
 	}
+
 	if (listOfPlaces.length == 0) {
-		listOfPlaces[0] = "No places found, reasons for this include:<ul><li>No places matched the name you supplied or</li><li>No places were found matching the category you chose or</li><li>Even though we are continually adding new places, we may not have places for the current location you chose.</li></ul>";
+		listOfPlaces[0] = "No places found, try using a different word or phrase.";
 	} else {
 		placesFound = true;
 	}
+
 	updatePlacesDisplay();
 }
 
@@ -89,9 +84,16 @@ function processSimpleGeoPlacesResults(error, data) {
  * Updates the "Places" information
  */
 function updatePlacesLocationInformation() {
+	updatePlacesLocationInformationFromCategory("", "All Categories");
+}
+
+/**
+ * Updates the "Places" information
+ */
+function updatePlacesLocationInformationFromCategory(categoryId, categoryName) {
 	if (!(selectedLocation.lat() == 0 || selectedLocation.lng() == 0)) {
 		$("#places_stream").html("<img class='spinner' src='images/spinner.gif' alt='...' title='Looking for places of interest in the area.'/>");
-		getSimpleGeoPlaces(selectedLocation, 100, $("#places_category").val(), "");
+		getPlaces(selectedLocation, categoryId, $("#places_query").val());
 	}
 }
 
@@ -104,7 +106,13 @@ function updatePlacesDisplay(page) {
 		output += listOfPlaces[i];
 	}
 	output += "</table>";
+	output += "<div style='text-align=right'>Data by <a href='http://www.foursquare.com' target='_blank'>Foursquare</a></>";
 	$("#places_stream").html(output);
+	$("table tr", "#places_stream").hover(function() {
+		highlightRow($(this));
+	}, function() {
+		normalRow($(this));
+	});
 	updatePlacesFooter();
 }
 
@@ -112,5 +120,5 @@ function updatePlacesDisplay(page) {
  * Updates the footer information at the bottom of the places container
  */
 function updatePlacesFooter() {
-	$("#places_footer").html(placesFound?"<center>" + listOfPlaces.length + " places</center>" : "<center>No places</center>");
+	$("#places_footer").html(placesFound ? "<center>" + listOfPlaces.length + " places</center>" : "<center>No places</center>");
 }

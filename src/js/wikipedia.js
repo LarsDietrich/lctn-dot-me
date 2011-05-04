@@ -33,50 +33,42 @@ function getArticles(selectedLocation, range) {
  */
 function processWikiData(data) {
 	var shtml = '';
-	var _articles = data.geonames;
-	var limit = 15;
-	var wiki = "";
+	var articles = data.geonames;
+	var status = data.status;
+	var output = "";
 	var j = 0;
 	var point;
 
-	if (_articles.length < 15) {
-		limit = _articles.length;
-	}
+	if (articles) {
+		$.each(articles, function(index, value) {
 
-	if (_articles) {
-		for (i = 0; i < limit; i++) {
-			wiki = "<tr onmouseover='highlightRow(this," + _articles[i].lat + "," + _articles[i].lng
-					+ ", \"images/wikipedia_icon.png\")' onmouseout='normalRow(this)'><td>";
-			wiki += "<a target= '_blank' href='http://" + _articles[i].wikipediaUrl + "'>" + _articles[i].title + "</a>&nbsp;";
-			wiki += _articles[i].summary + "<br/>";
-			wiki += getWikiLocation(_articles[i]);
-			wiki += "</td></tr>";
-			listOfWikis[j] = wiki;
-			j++;
-		}
-		if (listOfWikis.length == 0) {
-			listOfWikis[0] = "No entries found, try a bigger search area";
+			  var cleanedLocation = Math.round(value.lat * 10000) / 10000 + "," + Math.round(value.lng * 10000) / 10000;
+
+				output = "<tr data-latitude=\"" + value.lat + "\" data-longitude=\"" + value.lng	+ "\" data-image=\"/images/wikipedia.png\" data-shadow-image=\"/images/wikipedia-shadow.png\">";
+				output += "<td><a target= '_blank' href='http://" + value.wikipediaUrl + "'>" + value.title + "</a>&nbsp;";
+				output += value.summary + "<br/>";
+				
+				output += "<div title=\"Reposition map to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
+				output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation + "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
+				
+				output += "</td></tr>";
+				listOfWikis[j] = output;
+				j++;
+		});
+	}	
+	
+	
+	if (listOfWikis.length == 0) {
+		if (status && (status.message.match("timeout") == "timeout")) {
+			listOfWikis[0] = "The lookup service timed out, retry or decrease the search range and retry.";
 		} else {
-			wikisFound = true;
+			listOfWikis[0] = "No entries found, try a bigger search area";
 		}
-		updateWikiDisplay();
+		wikisFound = false;
+	} else {
+		wikisFound = true;
 	}
-}
-
-/**
- * Converts the location information to a clickable link image. Clicking the
- * image will reposition the map.
- * 
- * @param _article -
- *          article with location information
- * @return - hyperlinked image
- */
-function getWikiLocation(_article) {
-	var result = Math.round(_article.lat * 10000) / 10000 + "," + Math.round(_article.lng * 10000) / 10000;
-	output = "<div title=\"Reposition map to article location\" class=\"item-subtext inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + result
-			+ "')\">Go There!</div>";
-
-	return output;
+	updateWikiDisplay();
 }
 
 /**
@@ -101,6 +93,12 @@ function updateWikiDisplay() {
 	}
 	output += "</table>";
 	$("#wiki_stream").html(output);
+	$("table tr", "#wiki_stream").hover(function() {
+		highlightRow($(this));
+	}, function() {
+		normalRow($(this));
+	});
+
 	updateWikiFooter();
 }
 

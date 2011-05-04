@@ -31,7 +31,7 @@ function getShortUrl($longUrl, $user) {
 	}
 	
 	$now = date("Y-m-d H:i:s");
-	$query = "insert into url (longurl, shorturl, openid, created) values ('" . $longUrl . "','" . $shortUrl . "','" . $user . "', '" . $now . "')";
+	$query = "insert into url (longurl, shorturl, userid, created) values ('" . $longUrl . "','" . $shortUrl . "','" . $user . "', '" . $now . "')";
 	$sql->execute($query);
 
 	return $shortUrl;
@@ -52,5 +52,21 @@ function longUrlExists($longUrl) {
 	}
 }
 
-
+///**
+// * Return the user id based on Facebook id,  if not found, creates a user record with facebook id.
+// * 
+// * @param $facebook - facebook id to check for
+// */
+//function getUserId($facebook) {
+//	$sql = new Sql();
+//	$query = "SELECT id FROM USER WHERE facebook = " . $facebook;
+//	$result = mysql_fetch_assoc($sql->execute($query));
+//	if (count($result) > 0) {
+//		return $result["id"];
+//	} else {
+//		$query = "INSERT USER (facebook) VALUES (" . $facebook . ")";
+//		$sql->execute($query);
+//		return getUserId($facebook);
+//	}
+//}
 ?>

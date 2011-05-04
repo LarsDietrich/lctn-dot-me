@@ -1,22 +1,112 @@
-<div class="topmenu">	
-	<ul class="topnav">
-	    <li><a href="about.php" rel="#overlay"><label class="config">About</label></a></li>
-	    <li><a href="contact/contact.php" rel="#overlay"><label class="config">Contact</label></a></li>
-	    <li><img src="/images/topnav_bg_divider.png"/></li>
-	    <li><a><label class="config" title="Try to find your current location, dependant on browser capabilities, may not always work or be accurate." onclick="findMe()">Find Me</label></a></li>
+<!-- http://www.jankoatwarpspeed.com/post/2009/01/19/Create-Vimeo-like-top-navigation.aspx -->
+<ul id="menu">
+    <li class="logo">
+        <img title="Built <?php echo date("l, dS F, Y @ h:ia", filemtime("index.php")); ?> GMT+2" style="float:left;" alt="" src="images/menu/menu_left.png"/>
+<!-- 
+        <ul id="main">
+            <li>Welcome to <b>LCTN.ME</b>. Find it, Share it!</li>
+        </ul>
+-->
+    </li>
+    <li class="searchContainer">
+        <div>
+        <input title="Enter an address or place name to search for (eg. Eiffel Tower or 22 1st Avenue) then click Find or press Enter" type="text" class="find-address" name="address" id="address" value="Enter an address here" onkeypress="if (event.keyCode == 13) { locateAndRefresh(true);}"/>
+        <img src="images/menu/magnifier.png" alt="Search" title="Find this location on the map" name="find" value="Find" onclick="locateAndRefresh(true);"/>
+        </div>
+<!-- 
+        <ul id="search">
+            <li><input id="search_google" type="checkbox" />Google Maps</li>
+            <li><input id="search_foursquare" type="checkbox" />Foursquare</li>
+        </ul>
+-->
+    </li>
 
-	    <li><img src="/images/topnav_bg_divider.png"/></li>
+    <li><span>View</span>
+        <ul id="view">
+	        <li>
+	            <img class="corner_inset_left" alt="" src="/images/menu/corner_inset_left.png"/>
+				<span id="route" class="config2" onclick="setConfigOption(this);">Directions</span>
+	            <img class="corner_inset_right" alt="" src="/images/menu/corner_inset_right.png"/>
+	        </li> 
+       		<li>
+       			<span onclick="setConfigOption(this);" id="general" class="config2" >Local</span>
+       		</li>
+			<li>
+				<span id="picture" class="config2" onclick="setConfigOption(this);">Photos</span>
+			</li>
+			<li>
+	 			<span id="places" class="config2" onclick="setConfigOption(this);">Places</span>
+			</li>
+			<li>
+				<span id="streetview" class="config2" onclick="setConfigOption(this);">Streetview</span>
+			</li>
+			<li>
+	            <span id="twitter" class="config2" onclick="setConfigOption(this);">Twitter</span>
+			</li>
+	 		<li>
+				<span id="webcam" class="config2" onclick="setConfigOption(this);">Webcams</span>
+	 		</li>
+			<li>
+				<span id="wiki" class="config2" onclick="setConfigOption(this);">Wikipedia</span>
+			</li>
+	        <li class="last">
+	            <img class="corner_left" alt="" src="/images/menu/corner_left.png"/>
+	            <img class="middle" alt="" src="/images/menu/dot.gif"/>
+	            <img class="corner_right" alt="" src="/images/menu/corner_right.png"/>
+	        </li>         
+        </ul>
+    </li>
+    
+    <li><span name="share" id="share" value="Share">Share</span>
+	    <ul>
+			<li>
+	            <img class="corner_inset_left" alt="" src="/images/menu/corner_inset_left.png"/>
+				<center>
+					<span onclick="shortenUrl(this);" data-baseurl="http://twitter.com/home/?status=">
+						<img class='social-button' src="images/twitter.png" title="Tweet this location to the world." alt="Twitter"></img>
+					</span>
+				</center>
+	            <img class="corner_inset_right" alt="" src="/images/menu/corner_inset_right.png"/>
+			</li>
 
-		<li><a><label onclick="setConfigOption(this);" id="general" title="Open to see some general information about the location. Currently shows weather, coordinates and time related information." class="config" >General</label></a></li>
-		<li><a><label title="Open this window to show you a street view of the chosen location. Not available everywhere." id="streetview" class="config" onclick="setConfigOption(this);">Streetview</label></a></li>
-<!-- 		<li><a><label title="Toggle the window showing places around the current location" id="places" class="config" onclick="setConfigOption(this);">Places</label></a></li>
--->	
-		<li><a><label title="Based on your location, will show you tweets posted for people that have enabled location based tweets. Filter on range and text." id="twitter" class="config" onclick="setConfigOption(this);">Twitter</label></a></li>
-		<li><a><label title="Open to see available webcams in the area, mostly still image but some time capture video is available. Filter by range." id="webcam" class="config" onclick="setConfigOption(this);">Webcams</label></a></li>
-		<li><a><label title="Open to see wikipedia articles in the area with short description, click to link through to actual article. Can filter by range." id="wiki" class="config" onclick="setConfigOption(this);">Wikipedia</label></a></li>
-		<li><a><label title="Open to get directions between two points, updates the map to show the route and gives you a friendly route description." id="route" class="config" onclick="setConfigOption(this);">Directions</label></a></li>
-		<?php if (isset($_COOKIE["fbs_179640572057712"])) {?>
-			<li><a><label title="Stuff you've done" id="user" class="config" onclick="setConfigOption(this);">User</label></a></li>
-		<?php }?>
-	</ul>
-</div>
+			<li>
+				<center>
+					<span onclick="shortenUrl(this);" data-baseurl="http://www.facebook.com/sharer.php?u=">
+						<img class='social-button' src="images/facebook.png" title="Share the location with your Facebook friends." alt="Facebook"></img>
+					</span>
+				</center>
+			</li>
+
+			<li>
+				<center>
+					<span onclick="shortenUrl(this);" data-baseurl="http://del.icio.us/post?url=">
+						<img class='social-button' src="images/delicious.png" title="Add the location to your Del.icio.us bookmarks." alt="Del.icio.us"></img>
+					</span>
+				</center>
+			</li>
+
+			<li>
+				<center>
+					<span onclick="shortenUrl(this);" data-baseurl="mailto:?subject=Have a look at this location&body=">
+						<img class='social-button' src="images/email.png" title="Email the location to a friend." alt="Send by Email"></img>
+					</span>
+				</center>
+			</li>
+			
+	        <li class="last">
+	            <img class="corner_left" alt="" src="/images/menu/corner_left.png"/>
+	            <img class="middle" alt="" src="/images/menu/dot.gif"/>
+	            <img class="corner_right" alt="" src="/images/menu/corner_right.png"/>
+	        </li>         
+	    </ul>
+    </li>
+    
+    <li>
+    	<span title="Try a best guess effort to reposition the map to where you are" onclick="findMe()">FindMe</span>
+    </li>
+    <li>
+		<a title="About lctn.me" href="about.php" rel="#overlay">About</a>
+    </li> 
+    <li><span >&nbsp;</span></li>
+	<img style="" alt="" src="images/menu/menu_right.png"/>
+</ul>

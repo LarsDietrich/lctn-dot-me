@@ -9,8 +9,14 @@
 	</span>
  	<div class="detail-padded">
 		<center>
-			From <input title="Where to get directions from" type="text" name="route_from" id="route_from" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
-			<input class="action-button" type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
+<!-- 
+			<input type="button" value="From" class="action-button" id="route_from_to_toggle" name="route_from_to_toggle" onclick='if ($("#route_from_to_toggle").val() == "From") {$("#route_from_to_toggle").val("To") } else {$("#route_from_to_toggle").val("From")};'/> 
+-->
+			From 
+			<input title="Where to get directions from" type="text" name="route_from" id="route_from" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
+			to 
+			<input title="Where to get directions to" type="text" name="route_to" id="route_to" onkeypress="if (event.keyCode == 13) { updateRouteInformation(); }"/>
+			<br/><input class="action-button" type="button" id="route_now" name="route_now" value="Go" onclick="updateRouteInformation();"/>
 			<input class="action-button" type="button" id="print_route" name="print_route" value="Print" onclick="$('#route_stream').jqprint()"/>
 		</center>
 	</div>

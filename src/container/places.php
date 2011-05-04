@@ -8,24 +8,16 @@
 		</div>
 	</span>
  	<div class="detail-padded">
-		<center>
 <!-- 
-			Search for
-			<input title="Name of place to search for (or part of the name)"  type="text" name="places_query" id="places_query" value="" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> 
-			in 
-			<input title="How big an area would you like to search for places?" class="short-text" type="text" name="places_range" id="places_range" value="5" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> km, 
+			Showing <div class="inline" id="places_category"><b>All Categories</b>. Click on a category in the list to use that category.</div>
 -->
-			I'm looking for  
-			<select name="places_category" id="places_category" onchange="updatePlacesLocationInformation();" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }">
-				<option value="Restaurant">somewhere to eat</option>
-				<option value="Hotel">somewhere to stay</option>
-				<option value="Travel">travel related stuff</option>
-			</select>
-			<input class="action-button" type="button" id="filter_now" name="filter_now" value="Go" onclick="currentWebcamPage = 1;updatePlacesLocationInformation();"/>
-		</center>
+			Show me places that contain word or phrase
+			<input title="Name of place to search for (or part of the name)"  type="text" name="places_query" id="places_query" value="" onkeypress="if (event.keyCode == 13) { updatePlacesLocationInformation(); }"/> 
+			<input class="action-button" type="button" id="filter_places_now" name="filter_places_now" value="Go" onclick="updatePlacesLocationInformation();"/>
+
 	</div>
 	<div class="detail-padded fixed-height-block-with-title">
-		<div id="places_stream">No places found, try a bigger search area</div>
+		<div id="places_stream">No places found</div>
 	</div>
 	<span>
 	<div class="footer-text fixed-height-footer">

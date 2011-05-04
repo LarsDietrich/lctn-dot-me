@@ -11,12 +11,13 @@ We support the following location based information
 </p>
 <ul>
 <li>Twitter - Shows all the tweets in the area, where people have opted to add location.</li>
-<li>Streetview (Google) - Not available everywhere but awesome where it is, shows you what the place looked like when Google last took a picture of it.</li>
+<li>Streetview (Google) - Shows you what the place looks like at street level. Not available everywhere but awesome where it is.</li>
 <li>Wikipedia - Shows you any wikipedia articles in the area. </li>
-<li>Places - Shows points of interest based on filter criteria, only supports limited areas (US & Canada), but more will be added later. </li>
+<li>Places - Shows points of interest in the area, and how many people have visited (or "checked in") to the place, based on Foursquare Places. </li>
 <li>Webcams - Shows webcams available in the area. </li>
-<li>General - Some general information about the area, like weather, you current coordinates and local time.</li>
+<li>Local - Some general information about the area, like weather, you current coordinates and local time.</li>
 <li>Directions - Displays a route from point A to point B.</li>
+<li>Photos - Shows pictures from Flickr, Instagram and Panoramio in the area.</li>
 </ul>
 
 <p>

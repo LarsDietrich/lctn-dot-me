@@ -1,93 +1,177 @@
-ul.topnav {
+/* menu */
+#menu {
+	margin: 0px;
+	padding: 0px;
 	list-style: none;
-	padding: 0 20px;
-	margin: 0;
+	color: #fff;
+	line-height: 45px;
+	display: inline-block;
 	float: left;
-	width: 96%;
-	background: #222;
-	font-size: 1.2em;
-	background: url(/images/topnav_bg.png) repeat-x;
-	filter: alpha(opacity = 9);
-	opacity: .9;
 	z-index: 1000;
+	left:25%;
+	position:fixed;
+	font-size: 12pt;
+	font-weight: bold;
 }
 
-.topmenu {
-	z-index: 1000;
-}
-
-ul.topnav li {
-	float: right;
-	margin: 0;
-	padding: 0 4px 0 0;
-	position: relative; /*--Declare X and Y axis base for sub navigation--*/
-	font-size: x-small;
-	z-index: 1000;
-}
-
-ul.topnav li a {
-	padding: 7px 5px;
-	color: #000;
-	display: block;
+#menu span {
+	color: #fff;
 	text-decoration: none;
-	float: left;
-	z-index: 1000;
 }
 
-ul.topnav li a:hover{
-	color: #B6D051;
-	z-index: 1000;
+#menu a {
+	color: #fff;
+	text-decoration: none;
 }
 
-ul.topnav li span { /*--Drop down trigger styles--*/
-	width: 17px;
-	height: 35px;
-	float: left;
-	background: url(/images/subnav_btn.gif) no-repeat center top;
-	z-index: 1000;
-}
-
-ul.topnav li ul.subnav {
-	list-style: none;
-	position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
-	left: 0; top: 35px;
-	background: #333;
-	margin: 0; padding: 0;
-	display: none;
-	float: left;
-	width: 170px;
-	border: 1px solid #111;
-	z-index: 1000;
-}
-
-ul.topnav li ul.subnav li ul.img li{
-	margin: 0; padding: 0;
-	border-top: 1px solid #AFD775; /*--Create bevel effect--*/
-	border-bottom: 1px solid #AFD775; /*--Create bevel effect--*/
-	clear: both;
-	width: 170px;
-	z-index: 1000;
-}
-
-html ul.topnav li ul.subnav li a {
-	float: left;
-	width: 145px;
-	background: #AFD775;
-	padding-left: 20px;
-	z-index: 1000;
-}
-
-html ul.topnav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
-	background: #AFD775;
-	z-index: 1000;
-}
-
-.container-image-tick {
-	width: 20px;
-	height: 20px;
-}
-
-.config {
+#menu>li {
+	background: #354242 none repeat scroll 0 0;
 	cursor: pointer;
-	font-size: 10pt;
+	float: left;
+	position: relative;
+	padding: 0px 10px;
+}
+
+#menu>li span:hover {
+	color: #B0D730;
+}
+
+#menu>li a:hover {
+	color: #B0D730;
+}
+
+#menu .logo {
+	background: transparent none repeat scroll 0% 0%;
+	padding: 0px;
+	background-color: Transparent;
+}
+
+/* sub-menus*/
+#menu ul {
+	padding: 0px;
+	margin: 0px;
+	display: block;
+	display: inline;
+}
+
+#menu li ul {
+	position: absolute;
+	left: -10px;
+	top: 0px;
+	margin-top: 45px;
+	width: 125px;
+	line-height: 16px;
+	background-color: #354242;
+	color: #fff; /* for IE */
+	display: none;
+}
+
+#menu li:hover ul {
+	display: block;
+ }
+
+#menu li ul li {
+	display: block;
+	margin: 5px 20px;
+	padding: 5px 0px;
+	border-top: dotted 1px #606060;
+	list-style-type: none;
+}
+
+#menu li ul li:first-child {
+	border-top: none;
+}
+
+#menu li ul li span {
+	display: block;
+	color: #fff;
+}
+
+#menu li ul li span:hover {
+	color: #B0D730;
+}
+
+#menu li ul li a {
+	display: block;
+	color: #fff;
+}
+
+#menu li ul li a:hover {
+	color: #B0D730;
+}
+
+/* main submenu */
+#menu #main {
+	left: 0px;
+	top: -20px;
+	padding-top: 20px;
+	background-color: #354242;
+	color: #fff;
+	z-index: 999;
+}
+
+/* search */
+.searchContainer div {
+	background-color: #fff;
+	display: inline;
+	padding: 5px;
+}
+
+.searchContainer input[type="text"] {
+	border: none;
+}
+
+.searchContainer img {
+	vertical-align: middle;
+}
+
+/* corners*/
+#menu .corner_inset_left {
+	position: absolute;
+	top: 0px;
+	left: -12px;
+}
+
+#menu .corner_inset_right {
+	position: absolute;
+	top: 0px;
+	left: 125px;
+}
+
+#menu .last {
+	background: transparent none repeat scroll 0% 0%;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	position: relative;
+	border: none;
+	height: 0px;
+}
+
+#menu .corner_left {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+
+#menu .corner_right {
+	position: absolute;
+	left: 107px;
+	top: 0px;
+}
+
+#menu .middle {
+	position: absolute;
+	left: 18px;
+	height: 20px;
+	width: 90px;
+	top: 0px;
+}
+
+.social-button {
+	height: 40px;
+	width: 40px;
+	border: 0px;
+	vertical-align: middle;
+	padding: 5px;
 }
