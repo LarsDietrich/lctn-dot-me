@@ -114,7 +114,7 @@ function load() {
 
 		
 		$("#startup").overlay({
-			top: 200,
+			top: 100,
 			mask: {
 				color: '#fff',
 				loadSpeed: 200,

@@ -386,7 +386,7 @@ input {
 }
 
 .action-button-wide {
-	width: 100px;
+	width: 110px;
 }
 
 .find-address {
@@ -409,7 +409,6 @@ input {
 #startup {
 	display: none;
 	padding: 5px 5px 5px 5px;
-	top: 100px;
 	width: 500px;
 	border: 3px solid #666;
 	border: 3px solid rgba(82, 82, 82, 0.698);
