@@ -249,14 +249,14 @@ function start(data) {
  */
 function findMe() {
 
-	setMessage("Accuracy not guaranteed.");
+	setMessage("Trying to find you...");
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var location = position.coords.latitude + "," + position.coords.longitude;
 			useAddressToReposition(location);
 		}, function(error) {
-			setMessage("Unable to find current location. " + error);
+			setMessage("Unable to find current location");
 		});
 	} else if (google.gears) {
 		var geo = google.gears.factory.create('beta.geolocation');
