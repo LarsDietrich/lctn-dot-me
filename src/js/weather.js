@@ -53,7 +53,7 @@ function getWeather(selectedLocation) {
 	jQuery(function() {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = "http://www.worldweatheronline.com/feed/weather.ashx?format=json&key=f7d8c40a98131239100311&q="
+		script.src = "http://free.worldweatheronline.com/feed/weather.ashx?format=json&key=f7d8c40a98131239100311&q="
 				+ selectedLocation.lat()
 				+ ","
 				+ selectedLocation.lng()
