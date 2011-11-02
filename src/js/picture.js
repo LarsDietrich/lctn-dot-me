@@ -172,28 +172,24 @@ function processPanoramioData(data) {
 
 	if (photos && (panoramioStart < maxPanoramioPics)) {
 		$.each(photos, function(index, value) {
-
 			var cleanedLocation = Math.round(value.latitude * 10000) / 10000 + "," + Math.round(value.longitude * 10000) / 10000;
-			
 			output = "<tr data-latitude=\"" + value.latitude + "\" data-longitude=\"" + value.longitude + "\" data-image=\"/images/camera.png\" data-shadow-image=\"/images/camera-shadow.png\">";
 			output += "<td width='20%'>";
 			output += "<div id='triggers'><img class='thumbnail' src='" + value.photo_file_url + "' rel='#picture_tag" + (index + startPosition) + "'/></div>";
-
 			output += "<div class='simple_overlay' id='picture_tag" + (index + startPosition) + "'>";
+			
 			output += "<img src='" + value.photo_file_url.replace("thumbnail", "medium") + "'/><br/>";
+			
 			output += "<span class='photo-footer'>Photo provided by <img style='height: 15px;padding-top: 5px;vertical-align: bottom; width: 95px;' src='/images/panoramio-logo.png'/>. Photos are under the copyright of their owners.</span>";
 			output += "</div>";
-			
 			output += "</td>";
 			output += "<td><b><a href='" + value.photo_url + "' target='_blank'>" + value.photo_title + "</a></b><br/>";
 			output += "Added by <a href='" + value.owner_url + "' target='_blank'>" + value.owner_name + "</a> on " + value.upload_date + "<br/>";
-			
 			output += "<div title=\"Reposition map to " + cleanedLocation
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"useAddressToReposition('" + cleanedLocation + "')\">Center</div>";
 			output += "&nbsp;&nbsp;<div title=\"Get directions to " + cleanedLocation
 					+ "\" class=\"item-subtext-button inline\" style=\"cursor: pointer;\" onclick=\"getRouteToLocation('" + cleanedLocation + "')\">Go</div>";
 			output += "</td></tr>";
-
 			listOfPicture[index + startPosition] = output;
 		});
 		
