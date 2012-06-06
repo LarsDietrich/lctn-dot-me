@@ -61,38 +61,40 @@
 	    <ul>
 			<li>
 	            <img class="corner_inset_left" alt="" src="/images/menu/corner_inset_left.png"/>
-				<center>
-					<span onclick="shortenUrl(this);" data-baseurl="http://twitter.com/home/?status=">
-						<img class='social-button' src="images/twitter.png" title="Tweet this location to the world." alt="Twitter"></img>
+					<span onclick="shortenUrl(this);" data-baseurl="http://twitter.com/home/?status=">Twitter</span>
+<!-- 						<img class='social-button' src="images/twitter.png" title="Tweet this location to the world." alt="Twitter"></img>
 					</span>
-				</center>
+-->
 	            <img class="corner_inset_right" alt="" src="/images/menu/corner_inset_right.png"/>
 			</li>
 
 			<li>
-				<center>
-					<span onclick="shortenUrl(this);" data-baseurl="http://www.facebook.com/sharer.php?u=">
-						<img class='social-button' src="images/facebook.png" title="Share the location with your Facebook friends." alt="Facebook"></img>
+			<span onclick="shortenUrl(this);" data-baseurl="http://www.facebook.com/sharer.php?u=">Facebook</span>
+<!-- 
+			<img class='social-button' src="images/facebook.png" title="Share the location with your Facebook friends." alt="Facebook"></img>
 					</span>
-				</center>
+-->
 			</li>
 
 			<li>
-				<center>
-					<span onclick="shortenUrl(this);" data-baseurl="http://del.icio.us/post?url=">
+					<span onclick="shortenUrl(this);" data-baseurl="http://del.icio.us/post?url=">Delicious</span>
+<!-- 
 						<img class='social-button' src="images/delicious.png" title="Add the location to your Del.icio.us bookmarks." alt="Del.icio.us"></img>
 					</span>
-				</center>
+-->
 			</li>
 
 			<li>
-				<center>
-					<span onclick="shortenUrl(this);" data-baseurl="mailto:?subject=Have a look at this location&body=">
-						<img class='social-button' src="images/email.png" title="Email the location to a friend." alt="Send by Email"></img>
+					<span onclick="shortenUrl(this);" data-baseurl="mailto:?subject=Have a look at this location&body=">Email</span>
+<!-- 
+					<img class='social-button' src="images/email.png" title="Email the location to a friend." alt="Send by Email"></img>
 					</span>
-				</center>
-			</li>
-			
+ -->
+ 			</li>
+ 			<li>
+					<span onclick="shortenUrl(this);" data-baseurl="">Local</span>
+ 			</li>
+ 			
 	        <li class="last">
 	            <img class="corner_left" alt="" src="/images/menu/corner_left.png"/>
 	            <img class="middle" alt="" src="/images/menu/dot.gif"/>
@@ -108,5 +110,4 @@
 		<a title="About lctn.me" href="about.php" rel="#overlay">About</a>
     </li> 
     <li><span >&nbsp;</span></li>
-	<img style="" alt="" src="images/menu/menu_right.png"/>
 </ul>

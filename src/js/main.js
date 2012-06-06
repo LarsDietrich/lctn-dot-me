@@ -1,5 +1,5 @@
 // current version of web app
-var version = "0.1.0";
+var version = "0.1.3";
 
 // logged in user id
 var user;
@@ -17,7 +17,7 @@ var selectedLocation;
 var positionMarker;
 
 // reference to the additional marker on the page, used to show
-// twtter/wiki/webcam etc
+// twitter/wiki/webcam etc
 // locations.
 var infoMarker;
 
@@ -839,25 +839,6 @@ function updateGeneralLocationInformation(address) {
 	output += ".";
 	document.getElementById("location_stream").innerHTML = output;
 }
-
-// /**
-// * Display an image fullscreen as an overlay.
-// *
-// * @param imageUrl -
-// * url of image to display
-// */
-// function fullscreenImage(imageUrl) {
-// var popup = $('#displaybox-no-opacity');
-// if (popup.css("display") == "none") {
-// popup.css("display", "");
-// popup.html("<img src=\"" + imageUrl+ "\" class=\"image-fullscreen\"/>");
-// setMessage("Click to close");
-// } else {
-// popup.css("display", "none");
-// popup.html("");
-// }
-// return false;
-// }
 
 /**
  * Tries to load an "option" from the sites cookie. If the option is found,
