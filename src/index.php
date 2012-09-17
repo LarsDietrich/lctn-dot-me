@@ -125,7 +125,6 @@
 		<script type="text/javascript" src="js/timezone.js"> </script>
 		<script type="text/javascript" src="js/route.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
-		<script type="text/javascript" src="js/menu.js"></script>
 <!-- 		
 		<script type="text/javascript" src="js/user.js"></script>
 		<script type="text/javascript" src="js/stats.js"></script>  
