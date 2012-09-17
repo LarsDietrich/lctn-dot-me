@@ -1,4 +1,4 @@
-lctn_dot_me
-===========
+lctn.me
+=======
 
-Web portal for Location Based Services allowing exploration and sharing of location specific data available across various public API's
+A a portal that aggregates location based information into a single place. You select a point on the planet and information is loaded relative to that point. You can then "share" this location with people via the social links supplied.
