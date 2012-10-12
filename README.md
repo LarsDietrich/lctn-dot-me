@@ -33,6 +33,6 @@ Installation
 
 Check the site.
 
-Please note, this is an experimental project on my side, I still need to do alot of cleanup and refactoring to make it of an acceptible standard.
+Please note, this is an experimental project on my side, I still need to do alot of cleanup and refactoring to make it of an acceptable standard.
 
 Feedback welcome :)
